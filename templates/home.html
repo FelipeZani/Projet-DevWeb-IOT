@@ -3,12 +3,22 @@
 
 <head>
   <title>Mon site Flask</title>
-  <link rel="stylesheet" type="text/css" href="../static/styles/home.css">
-  <script src="../static/scripts/home.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/home.css') }}">
+  <script src="{{ url_for('static', filename='scripts/home.js') }}"></script>
 </head>
 
 <body>
   <h1>Hello World</h1>
+  <p>Cette page est le freetour. <br>
+    Boutons : redirection -> connecter/s'inscrire <br>
+    Front end : présentation des fonctionnalités de la platforme.
+    On a aussi une liste des objets connectés disponibles proposés par la platforme (radiateurs, volets, enceintes...)
+    <br>
+    On peut les filtrer : batterie (oui/non), sécurité (ex: cameras), comfort (oui/non, ex: radiateur, volets),
+    connectique (wifi, bluethooth) etc
+  </p>
+
+  <button onclick="window.location.href='{{ url_for('signin') }}'">SINSCRIRE/SE CONNECTER</button>
 </body>
 
 </html>
