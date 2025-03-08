@@ -7,7 +7,8 @@
 </head>
 
 <body>
-  Vous etes bien inscrit/connecté
+  <p>Bonjour {{session['username']}}</p>
+  <a href="{{url_for('logout')}}">LOGOUT</a>
 </body>
 
 </html>
