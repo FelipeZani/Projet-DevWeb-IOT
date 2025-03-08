@@ -1,1 +1,1 @@
-ajouter limite minimum de caractere psw, user, etc..
+ajuster limite min password

@@ -79,7 +79,7 @@ def login():
             message = "Role is incorrect"
         elif birthdate > datetime.today().date():
             message = "You are not Marty McFly"
-        elif len(username) > 32 or len(email) > 64:
+        elif len(username) > 32 or len(username) < 3 or len(email) > 64 or len(email) < 3 or len(password) > 256  or len(password) < 0:
             message = "username is 32 chars max and email 64 chars max"
         else:
             hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
