@@ -1,0 +1,71 @@
+radiateur :
+	temparature actuelle
+	temp à atteindre
+	état (allumé/éteint)
+	connectivité (wifi/bluetooth/filaire)
+	batterie
+
+volet :
+	position (ouvert/fermé)
+	connectivité (wifi, bluetooth/filaire)
+	batterie
+
+enceinte :
+	état (allumé/éteint)
+	volume (%)
+	batterie
+	connectée (oui/non)
+
+machine cafe :
+	état (allumé/éteint)
+	connectivité (wifi/bluetooth/filaire)
+	nombre cafe faits
+
+lampe :
+	état
+	connectivité
+	duree vie restante (%)
+	luminosité (%)
+
+camera :
+	état
+	connectivité
+	résolution
+	batterie
+
+serrure :
+	état (ouvert/fermé)
+	connectivité
+	date derniere ouverture
+
+detecteur fumée :
+	niveau de  fumée 
+	état (normal/alarme)
+	connectivité
+	batterie
+
+balance :
+	état (allumé/éteint)
+	date dernier acces
+	connectivité
+	batterie
+
+frigo :
+	état
+	remplissage (%)
+	température
+	connectivité
+	porte ouverture
+
+four  :
+	état
+	température
+	connectivité
+	porte ouverture
+
+lave vaisselle :
+	état
+	porte ouverture
+	connectivité
+	nbr cycle lavages
+
