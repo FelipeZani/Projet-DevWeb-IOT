@@ -54,6 +54,7 @@ def login():
     if action == "signin":
             user = User.query.filter_by(username=username).first()
             if user and check_password_hash(user.password, password):
+                add_points(user.username, 1)
                 session["username"] = user.username
                 session["fname"] = user.fname
                 session["lname"] = user.lname
@@ -132,6 +133,7 @@ def profile():
 def user_profile(user_id):
     user = User.query.get(user_id)
     if user:
+        add_points(session["username"], 1)
         return render_template("user_profile.html", user=user)
     else:
         return redirect(url_for("profile"))
@@ -178,6 +180,15 @@ def change_email():
     db.session.commit()
 
     return redirect(url_for('profile', message="Email successfully changed"))
+
+def add_points(username, points):
+    user = User.query.filter_by(username=username).first()
+    
+    if not user:
+        return False 
+    
+    user.level += points
+    db.session.commit()
 
 
 if __name__ == "__main__":
