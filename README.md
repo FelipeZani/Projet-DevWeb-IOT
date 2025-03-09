@@ -1,6 +1,9 @@
 Done :
+
 sign in/up and logout
+
 profile viewer (self and others)
+
 profile modification (psw + email)
 
 
