@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Profile</title>
+</head>
+
+<body>
+  <p>Your infos</p><br>
+  <p>Username : {{ session["username"] }}</p>
+  <p>First Name : {{ session["fname"] }}</p>
+  <p>Last Name : {{ session["lname"] }}</p>
+  <p>Email : {{ session["email"] }}</p>
+  <p>Gender : {{ session["gender"] }}</p>
+  <p>Role : {{ session["role"] }}</p>
+  <p>Birthdate : {{ session["birthdate"] }}</p>
+  <p>Level : {{ session["level"] }}</p>
+
+  {% if request.args.get('message') %}
+  <p style="color:red">{{ request.args.get('message') }}</p>
+  {% endif %}
+  <form action="{{ url_for('change_email') }}" method="POST">
+    <input type="email" id="email" name="email" required placeholder="new email" minlength="3" maxlength="64">
+    <button type="submit">Change email</button>
+  </form>
+  <form action="{{ url_for('change_password') }}" method="POST">
+    <input type="password" id="current_password" name="current_password" required placeholder="current password"
+      minlength="0" maxlength="32">
+    <input type="password" id="new_password" name="new_password" required placeholder="new password" minlength="0"
+      maxlength="32">
+    <button type="submit">Change Password</button>
+  </form>
+
+
+  <h1>Below, the list of all users</h1>
+  <ul>
+    {% for user in users %}
+    <li>
+      {{ user.username }}
+      <a href="{{ url_for('user_profile', user_id=user.id) }}">View Profile</a>
+    </li>
+    {% else %}
+    <p>No users found</p>
+    {% endfor %}
+  </ul>
+</body>
+
+</html>

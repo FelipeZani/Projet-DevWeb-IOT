@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ user.username }}'s Profile</title>
+</head>
+
+<body>
+
+  <h1>{{ user.username }}'s Profile</h1>
+  <p>Username : {{ user.username }}</p>
+  <p>First Name : {{ user.fname }}</p>
+  <p>Last Name : {{ user.lname }}</p>
+  <p>Email : {{ user.email }}</p>
+  <p>Gender : {{ user.gender }}</p>
+  <p>Role : {{ user.role }}</p>
+  <p>Birthdate : {{ user.birthdate.strftime("%d-%m-%Y") }}</p> <!-- Format de la date -->
+  <p>Level : {{ user.level }}</p>
+
+  <br>
+  <a href="{{ url_for('profile') }}">Back to the users list</a>
+
+</body>
+
+</html>

@@ -7,6 +7,9 @@
 </head>
 
 <body>
+  {% if request.args.get('message') %}
+  <p style="color:red">{{ request.args.get('message') }}</p>
+  {% endif %}
 
   {% if message %}
   <div style="color: red;">
@@ -18,7 +21,7 @@
     <h3>SIGN IN</h3>
     <input type="text" id="username" name="username" required placeholder="username" minlength="3" maxlength="32">
     <br>
-    <input type="password" id="password" name="password" required placeholder="password" minlength="0" maxlength="256">
+    <input type="password" id="password" name="password" required placeholder="password" minlength="0" maxlength="32">
     <br>
     <button type="submit" name="action" value="signin">Sign in</button>
   </form>
@@ -29,7 +32,11 @@
     <h3>SIGN UP</h3>
     <input type="text" id="username" name="username" required placeholder="username" minlength="3" maxlength="32">
     <br>
-    <input type="password" id="password" name="password" required placeholder="password" minlength="0" maxlength="256">
+    <input type="text" id="fname" name="fname" required placeholder="first name" minlength="3" maxlength="32">
+    <br>
+    <input type="text" id="lname" name="lname" required placeholder="last name" minlength="3" maxlength="32">
+    <br>
+    <input type="password" id="password" name="password" required placeholder="password" minlength="0" maxlength="32">
     <br>
     <input id="email" name="email" placeholder="Email" required minlength="3" maxlength="64">
     <br>

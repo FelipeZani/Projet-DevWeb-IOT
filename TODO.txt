@@ -1,1 +1,1 @@
-ajuster limite min password
+ajuster limite min password dans signin.html et profile.html

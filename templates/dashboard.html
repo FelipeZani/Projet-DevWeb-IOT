@@ -7,8 +7,9 @@
 </head>
 
 <body>
-  <p>Bonjour {{session['username']}}</p>
-  <a href="{{url_for('logout')}}">LOGOUT</a>
+  <p>Bonjour {{session['fname']}} {{session["lname"]}}</p>
+  <a href="{{url_for('logout')}}">LOGOUT</a><br>
+  <a href="{{url_for('profile')}}">Profile</a>
 </body>
 
 </html>

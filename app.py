@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -16,12 +16,15 @@ db = SQLAlchemy(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), unique=True, nullable=False)
+    fname = db.Column(db.String(32), nullable=False)
+    lname = db.Column(db.String(32), nullable=False)
     email = db.Column(db.String(64), unique=True, nullable=False)
     gender = db.Column(db.String(6), nullable=False)
     role = db.Column(db.String(6), nullable=False)
     birthdate = db.Column(db.Date, nullable=False)
     level = db.Column(db.Integer, nullable=False)
     password = db.Column(db.String(256), nullable=False)
+    is_verified = db.Column(db.Boolean, default=False)
 
 # Routes
 @app.route("/")
@@ -52,9 +55,11 @@ def login():
             user = User.query.filter_by(username=username).first()
             if user and check_password_hash(user.password, password):
                 session["username"] = user.username
+                session["fname"] = user.fname
+                session["lname"] = user.lname
                 session["gender"] = user.gender
                 session["role"] = user.role
-                session["birthdate"] = user.birthdate
+                session["birthdate"] = user.birthdate.strftime("%Y-%m-%d")
                 session["level"] = user.level
                 session["email"] = user.email
                 return redirect(url_for('dashboard'))
@@ -62,13 +67,15 @@ def login():
                 message = "Incorrect username or password"
     
     elif action == "signup":
+        fname = request.form.get("fname")
+        lname = request.form.get("lname")
         email = request.form.get("email")
         gender = request.form.get("gender")
         role = request.form.get("role")
         birthdate_str = request.form.get("birthdate")
         birthdate = datetime.strptime(birthdate_str, "%Y-%m-%d").date()
-        if not username or not email or not password or not role or not birthdate_str or not gender:
-            message = "All fields must be selected"
+        if not username or not email or not password or not role or not birthdate_str or not gender or not fname or not lname:
+            message = "All fields must be filled"
         elif User.query.filter_by(username=username).first():
             message = "Username already taken"
         elif User.query.filter_by(email=email).first():
@@ -79,12 +86,14 @@ def login():
             message = "Role is incorrect"
         elif birthdate > datetime.today().date():
             message = "You are not Marty McFly"
-        elif len(username) > 32 or len(username) < 3 or len(email) > 64 or len(email) < 3 or len(password) > 256  or len(password) < 0:
-            message = "username is 32 chars max and email 64 chars max"
+        elif len(username) > 32 or len(username) < 3 or len(email) > 64 or len(email) < 3 or len(password) > 32  or len(password) < 0 or len(fname) < 3 or len(fname) > 32 or len(lname) < 3 or len(lname) > 32:
+            message = "username, first name and last name are 32 chars max, email is 64 chars max"
         else:
             hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
             new_user = User(
                 username=username, 
+                fname=fname,
+                lname=lname,
                 email=email, 
                 password=hashed_password,
                 gender = gender,
@@ -95,9 +104,11 @@ def login():
             db.session.add(new_user)
             db.session.commit()
             session["username"] = new_user.username
+            session["fname"] = new_user.fname
+            session["lname"] = new_user.lname
             session["gender"] = new_user.gender
             session["role"] = new_user.role
-            session["birthdate"] = new_user.birthdate
+            session["birthdate"] = new_user.birthdate.strftime("%Y-%m-%d")
             session["level"] = new_user.level
             session["email"] = new_user.email
             return redirect(url_for("dashboard"))
@@ -108,6 +119,66 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("home"))
+
+@app.route("/profile")
+def profile():
+    if 'username' in session:
+        users = User.query.filter(User.username != session["username"]).all()
+        return render_template("profile.html", users=users)
+    else :
+        return redirect(url_for("home"))
+    
+@app.route("/user/<int:user_id>")
+def user_profile(user_id):
+    user = User.query.get(user_id)
+    if user:
+        return render_template("user_profile.html", user=user)
+    else:
+        return redirect(url_for("profile"))
+
+@app.route("/change_password", methods=["POST"])
+def change_password():
+    if 'username' not in session:
+        return redirect(url_for('home'))
+
+    user = User.query.filter_by(username=session['username']).first()
+    current_password = request.form.get('current_password')
+    new_password = request.form.get('new_password')
+    
+    # Checks if the current password is correct
+    if not check_password_hash(user.password, current_password):
+        session.clear()
+        return redirect(url_for("signin", message="Old password is wrong. The password haven't been changed, please reconnect"))
+    
+    # makes sure new password is different from old one
+    if new_password == current_password:
+        session.clear()
+        return redirect(url_for("signin", message="New password must be different from old one, please reconnect"))
+    
+    # generates new password
+    user.password = generate_password_hash(new_password)
+    db.session.commit()
+    session.clear()
+    
+    return redirect(url_for("signin", message="Password sucessfully changed, please reconnect"))
+
+@app.route('/change_email', methods=['POST'])
+def change_email():
+    if 'username' not in session:
+        return redirect(url_for('home'))
+    
+    user = User.query.filter_by(username=session['username']).first()
+
+    new_email = request.form.get('email')
+
+    if User.query.filter_by(email=new_email).first():
+        return redirect(url_for('profile', message="Email already taken"))
+
+    user.email = new_email
+    db.session.commit()
+
+    return redirect(url_for('profile', message="Email successfully changed"))
+
 
 if __name__ == "__main__":
     with app.app_context():
