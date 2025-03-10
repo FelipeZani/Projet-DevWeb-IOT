@@ -184,7 +184,7 @@ def admin_panel():
     if 'username'not in session or session["level"] < 20 or not session["verified"]:
         return redirect(url_for("dashboard"))
     
-    users = users = User.query.filter(User.username != session["username"]).all()
+    users = User.query.filter(User.username != session["username"]).all()
     return render_template("admin_panel.html", users=users)
 
 @app.route("/verify_user/<int:user_id>", methods=["POST"])
@@ -197,8 +197,7 @@ def verify_user(user_id):
         user.is_verified = True
         db.session.commit()
     
-    users = users = User.query.filter(User.username != session["username"]).all()
-    return redirect(url_for("admin_panel", users=users))
+    return redirect(url_for("admin_panel"))
 
 @app.route("/delete_user/<int:user_id>", methods=["POST"])
 def delete_user(user_id):
@@ -209,9 +208,8 @@ def delete_user(user_id):
     if user:
         db.session.delete(user)
         db.session.commit()
-    
-    users = users = User.query.filter(User.username != session["username"]).all()
-    return redirect(url_for("admin_panel", users=users))
+
+    return redirect(url_for("admin_panel"))
 
 # Functions
 
