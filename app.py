@@ -56,7 +56,7 @@ def login():
             user = User.query.filter_by(username=username).first()
             if not user: # user doesnt exists
                 message = "Incorrect username or password"
-            if check_password_hash(user.password, password) and user.is_verified:
+            elif check_password_hash(user.password, password) and user.is_verified:
                 add_points(user.username, 1)
                 session["username"] = user.username
                 session["fname"] = user.fname
@@ -178,6 +178,15 @@ def change_email():
     db.session.commit()
 
     return redirect(url_for('profile', message="Email successfully changed"))
+
+@app.route("/admin_panel")
+def admin_panel():
+    if 'username'not in session and session["level"] < 20:
+        return redirect(url_for("dashboard"))
+    
+    return render_template("admin_panel.html")
+
+# Functions
 
 def add_points(username, points):
     user = User.query.filter_by(username=username).first()

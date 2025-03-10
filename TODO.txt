@@ -1,1 +1,6 @@
 ajuster limite min password dans signin.html et profile.html
+
+note :
+	0->9 : simple
+	10->19 : complexe
+	20+ : admin
