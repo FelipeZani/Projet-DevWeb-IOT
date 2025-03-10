@@ -9,7 +9,10 @@
 <body>
   <p>Hello {{session['fname']}} {{session["lname"]}}</p>
   <a href="{{url_for('logout')}}">LOGOUT</a><br>
-  <a href="{{url_for('profile')}}">Profile</a>
+  <a href="{{url_for('profile')}}">Profile</a><br>
+  {% if session["level"] >= 20 %}
+  <a href="{{url_for('admin_panel')}}">Admin Panel</a>
+  {% endif %}
 </body>
 
 </html>

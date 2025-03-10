@@ -138,7 +138,7 @@ def user_profile(user_id):
 
 @app.route("/change_password", methods=["POST"])
 def change_password():
-    if 'username' not in session:
+    if 'username' not in session or not session["verified"]:
         return redirect(url_for('home'))
 
     user = User.query.filter_by(username=session['username']).first()
@@ -164,7 +164,7 @@ def change_password():
 
 @app.route('/change_email', methods=['POST'])
 def change_email():
-    if 'username' not in session:
+    if 'username' not in session or not session["verified"]:
         return redirect(url_for('home'))
     
     user = User.query.filter_by(username=session['username']).first()
@@ -181,10 +181,37 @@ def change_email():
 
 @app.route("/admin_panel")
 def admin_panel():
-    if 'username'not in session and session["level"] < 20:
+    if 'username'not in session or session["level"] < 20 or not session["verified"]:
         return redirect(url_for("dashboard"))
     
-    return render_template("admin_panel.html")
+    users = users = User.query.filter(User.username != session["username"]).all()
+    return render_template("admin_panel.html", users=users)
+
+@app.route("/verify_user/<int:user_id>", methods=["POST"])
+def verify_user(user_id):
+    if 'username' not in session or session["level"] < 20 or not session["verified"]:
+        return redirect(url_for("dashboard"))
+
+    user = User.query.get(user_id)
+    if user:
+        user.is_verified = True
+        db.session.commit()
+    
+    users = users = User.query.filter(User.username != session["username"]).all()
+    return redirect(url_for("admin_panel", users=users))
+
+@app.route("/delete_user/<int:user_id>", methods=["POST"])
+def delete_user(user_id):
+    if 'username' not in session or session["level"] < 20 or not session["verified"]:
+        return redirect(url_for("dashboard"))
+
+    user = User.query.get(user_id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+    
+    users = users = User.query.filter(User.username != session["username"]).all()
+    return redirect(url_for("admin_panel", users=users))
 
 # Functions
 

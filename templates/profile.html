@@ -6,6 +6,7 @@
 </head>
 
 <body>
+  <a href="{{ url_for('dashboard')}}">Dashboard</a>
   <p>Your infos</p><br>
   <p>Username : {{ session["username"] }}</p>
   <p>First Name : {{ session["fname"] }}</p>
