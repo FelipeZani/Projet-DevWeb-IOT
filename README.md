@@ -1,7 +1,7 @@
 Attendus du module :<br>
 <del>• Inscription d’un utilisateur ;</del><br>
 <del>• Vérifier que l’utilisateur est un membre de la plateforme ;</del><br>
-• L’envoie d’un mail à l’utilisateur ; <br>
+• L’envoie d’un mail à l’utilisateur ;<br>
 • La validation de l’inscription ;<br>
 <del>• Vérifier le login/mot de passe lors de la connexion ;</del><br>
 <del>• Modifier le profil ;</del><br>
