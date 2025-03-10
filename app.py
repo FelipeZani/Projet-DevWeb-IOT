@@ -211,6 +211,60 @@ def delete_user(user_id):
 
     return redirect(url_for("admin_panel"))
 
+@app.route("/edit_user/<int:user_id>", methods=["GET", "POST"]) # GET is the form, POST is for processing new data
+def edit_user(user_id):
+    if 'username' not in session or session["level"] < 20 or not session["verified"]:
+        return redirect(url_for("dashboard"))
+
+    user = User.query.get(user_id)
+    
+    if not user:
+        return redirect(url_for("admin_panel"))
+
+    if request.method == "POST":
+        message = None 
+        fname = request.form.get("fname")
+        lname = request.form.get("lname")
+        email = request.form.get("email")
+        gender = request.form.get("gender")
+        role = request.form.get("role")
+        level = int(request.form.get("level"))
+        birthdate_str = request.form.get("birthdate")
+        birthdate = datetime.strptime(birthdate_str, "%Y-%m-%d").date() if birthdate_str else user.birthdate
+
+        if not email or not gender or not fname or not lname or not birthdate_str or not role or level is None:
+            message = "All fields must be filled"
+        elif User.query.filter_by(email=email).first() and email != user.email:
+            message = "Email already taken"
+        elif gender not in ["male", "female"]:
+            message = "Gender is incorrect"
+        elif role not in ["parent", "child"]:
+            message = "Role is incorrect"
+        elif birthdate > datetime.today().date():
+            message = "He is not Marty McFly"
+        elif level < 0:
+            message = "Level must be positive"
+        elif len(email) > 64 or len(email) < 3 or len(fname) < 3 or len(fname) > 32 or len(lname) < 3 or len(lname) > 32:
+            message = "Username, first name, and last name are 32 chars max, email is 64 chars max"
+        
+        if message: # if there is an error
+            return render_template("edit_user.html", user=user, message=message)
+        
+        # no error means we can update infos
+        user.fname = fname
+        user.lname = lname
+        user.email = email
+        user.gender = gender
+        user.role = role
+        user.birthdate = birthdate
+        user.level = level 
+        db.session.commit()
+        
+        return redirect(url_for("admin_panel"))
+
+    return render_template("edit_user.html", user=user)
+
+
 # Functions
 
 def add_points(username, points):
