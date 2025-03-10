@@ -55,8 +55,8 @@ o Vérifier l'intégrité des données de la plateforme. : `A VERIF A LA FIN -- 
 • Personnalisation de la plateforme<br>
 o Modifier l'apparence et la structure des modules pour répondre aux besoins des
 utilisateurs ;<br>
-o Configurer des règles de validation pour les inscriptions (par exemple,
-approbation manuelle).<br><br>
+<del>o Configurer des règles de validation pour les inscriptions (par exemple,
+approbation manuelle).</del><br><br>
 • Rapports Avancés<br>
 o Générer des rapports détaillés sur l'utilisation globale de la plateforme, avec
 exportation des données (CSV, PDF, etc.) ;<br>
