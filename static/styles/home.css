@@ -37,6 +37,7 @@ border-radius: 20px;
     margin: 20px;
 }
 .form-diag input ,
+.form-diag select,
 .form-diag button{
     height: 40px;
     margin-bottom: 20px;

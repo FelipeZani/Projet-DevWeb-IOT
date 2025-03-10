@@ -27,6 +27,9 @@ function handleDiagFormOptions(isLoginSelected) {
   }
 }
 
+
+
+
 const dialog = document.querySelector("dialog")
 const logInBtnFrm = document.getElementById("logInFrmBtn") 
 const signUpBtnFrm = document.getElementById("signUpFrmBtn") 
