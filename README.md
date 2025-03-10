@@ -11,10 +11,10 @@ o La recherche d’information doit contenir au moins deux (2) filtres.<br>
 • Rechercher et consulter les objets connectés enregistrés sur la plateforme ;<br>
 o La recherche d’information doit contenir au moins deux (2) filtres.<br>
 <del>• La possibilité de changer le niveau du profil utilisateur ;</del><br><br>
-• Gérer le nombre d’accès des utilisateurs à la plateforme ;<br>
-• Gérer le nombre d’actions faites par les utilisateurs ;<br>
-• Mettre à jour les données précédentes (accès et actions) pour chaque utilisateur et
-chaque accès à la plateforme<br><br>
+<del>• Gérer le nombre d’accès des utilisateurs à la plateforme ;<br></del>
+<del>• Gérer le nombre d’actions faites par les utilisateurs ;<br></del>
+<del>• Mettre à jour les données précédentes (accès et actions) pour chaque utilisateur et
+chaque accès à la plateforme<br><br></del>
 • Gestion des objets connectés<br>
 o Ajouter un nouvel objet connecté sur la plateforme ;<br>
 o Solliciter (à l’administrateur) la suppression d’un objet connecté ;<br>
