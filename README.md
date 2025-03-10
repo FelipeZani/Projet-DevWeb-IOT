@@ -35,12 +35,12 @@ o Générer des statistiques sur l'utilisation des objets et des services pour o
 la gestion des ressources ;<br>
 o Générer des rapports sur l’utilisation des services et objets connectés ;<br>
 o Accéder aux historiques des données des objets connectés.<br><br>
-• Gestion des utilisateurs<br>
+<del>• Gestion des utilisateurs</del><br>
 <del>o Ajouter, modifier ou supprimer des utilisateurs ;<br></del>
 <del>o Attribuer ou révoquer des niveaux d'accès aux utilisateurs ;<br></del>
 <del>o Superviser les points accumulés par les utilisateurs et ajuster manuellement les
 niveaux en cas de besoin ;</del><br>
-o Consulter les historiques de connexion et d'actions des utilisateurs.<br><br>
+<del>o Consulter les historiques de connexion</del><strong> et d'actions des utilisateurs.</strong><br><br>
 • Gestion des objets et des outils/services<br>
 o Ajouter ou supprimer des catégories d'objets et d’outils/services ;<br>
 o Ajouter ou supprimer des objets et des outils/services ;<br>

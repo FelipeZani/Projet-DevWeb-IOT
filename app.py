@@ -8,7 +8,7 @@ app= Flask(__name__)
 app.secret_key = "xdhZ5enkMV4oBBBlR9ElADGbKPOba42gRtGVbiqnFrY4lRp3ez0DYh1oTmCqmTNxDlOrOrkPGcxhCzZEdH4W21OE2eCpkkMH2NRU"
 
 # SQL Alchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -25,6 +25,11 @@ class User(db.Model):
     level = db.Column(db.Integer, nullable=False)
     password = db.Column(db.String(256), nullable=False)
     is_verified = db.Column(db.Boolean, default=False)
+
+class LoginHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(32), nullable=False)
+    login_time = db.Column(db.DateTime, default=datetime.today, nullable=False)
 
 # Routes
 @app.route("/")
@@ -57,7 +62,6 @@ def login():
             if not user: # user doesnt exists
                 message = "Incorrect username or password"
             elif check_password_hash(user.password, password) and user.is_verified:
-                add_points(user.username, 1)
                 session["username"] = user.username
                 session["fname"] = user.fname
                 session["lname"] = user.lname
@@ -67,6 +71,8 @@ def login():
                 session["level"] = user.level
                 session["email"] = user.email
                 session["verified"] = 1
+                add_points(user.username, 1)
+                log_user_login(user.username)
                 return redirect(url_for('dashboard'))
             elif not user.is_verified:
                 message = "You are not in the family yet, please wait for admin to accept you"
@@ -264,6 +270,17 @@ def edit_user(user_id):
 
     return render_template("edit_user.html", user=user)
 
+@app.route("/view_login_history/<int:user_id>")
+def view_login_history(user_id):
+    if 'username' not in session or session["level"] < 20 or not session["verified"]:
+        return redirect(url_for("dashboard"))
+    
+    user = User.query.get(user_id)
+    if user:
+        history = LoginHistory.query.filter_by(username=user.username).order_by(LoginHistory.login_time.desc()).all()
+        return render_template("view_login_history.html", history=history, user=user)
+    else:
+        return redirect(url_for("admin_panel"))
 
 # Functions
 
@@ -277,6 +294,10 @@ def add_points(username, points):
     db.session.commit()
     return True
 
+def log_user_login(username):
+    login_history = LoginHistory(username=username)
+    db.session.add(login_history)
+    db.session.commit()
 
 if __name__ == "__main__":
     with app.app_context():
