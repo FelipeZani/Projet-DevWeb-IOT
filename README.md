@@ -5,8 +5,8 @@ Attendus du module :<br>
 • La validation de l’inscription ;<br>
 <del>• Vérifier le login/mot de passe lors de la connexion ;</del><br>
 <del>• Modifier le profil ;</del><br>
-<del>• Consulter le profil des autres membres ;</del><br>
-• Rechercher et consulter les outils/services variés proposés par la plateforme ;<br><br>
+<del>• Consulter le profil des autres membres ;</del><br><br>
+• Rechercher et consulter les outils/services variés proposés par la plateforme ;<br>
 o La recherche d’information doit contenir au moins deux (2) filtres.<br>
 • Rechercher et consulter les objets connectés enregistrés sur la plateforme ;<br>
 o La recherche d’information doit contenir au moins deux (2) filtres.<br>
