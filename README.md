@@ -48,10 +48,10 @@ o Ajouter ou supprimer des objets et des outils/services ;<br>
 o Définir les règles de fonctionnement globales des objets et des outils/services (par
 exemple, priorités énergétiques, gestion des alertes, etc.).<br><br>
 • Sécurité et maintenance<br>
-o Mettre à jour le système de gestion des accès (par exemple, mise à jour des mots
-de passe administrateurs) ;<br>
-o Effectuer des sauvegardes régulières de la base de données ;<br>
-o Vérifier l'intégrité des données de la plateforme.<br><br>
+<del>o Mettre à jour le système de gestion des accès (par exemple, mise à jour des mots
+de passe administrateurs) ;</del><br>
+<del>o Effectuer des sauvegardes régulières de la base de données ;<br></del>
+o Vérifier l'intégrité des données de la plateforme. : `A VERIF A LA FIN -- pour l'instant cest bon`<br><br>
 • Personnalisation de la plateforme<br>
 o Modifier l'apparence et la structure des modules pour répondre aux besoins des
 utilisateurs ;<br>

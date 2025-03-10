@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import os
 
 app= Flask(__name__)
 # Makes sure user can't modify cookie and can't give him admin rights or other bad things ;)
@@ -281,6 +282,38 @@ def view_login_history(user_id):
         return render_template("view_login_history.html", history=history, user=user)
     else:
         return redirect(url_for("admin_panel"))
+
+@app.route("/kill_admins", methods=["POST"]) # Removes admin rights of  everyone
+def kill_admins():
+    if 'username' not in session or session["level"] < 20 or not session["verified"]:
+        return redirect(url_for("dashboard"))
+    
+    users = User.query.filter(User.level >= 20, User.username != session["username"]).all()
+    
+    for user in users:
+        user.level = 0
+        db.session.commit()
+    
+    return redirect(url_for("admin_panel"))
+
+@app.route("/backup_db", methods=["POST"])
+def backup_db():
+    db_path = 'instance/database.db'
+    backup_filename = f"backup_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.db"
+    backup_path = f"backups/{backup_filename}"
+    
+    try:
+        if not os.path.exists('backups'):
+            os.makedirs('backups')
+        with open(db_path, 'rb') as source_db:
+            with open(backup_path, 'wb') as backup_db:
+                backup_db.write(source_db.read())
+        return redirect(url_for('admin_panel', message="Sucessfully backed up database"))
+    except :
+        return redirect(url_for('admin_panel', message="Error while backing up"))
+    
+    return redirect(url_for('admin_panel'))
+
 
 # Functions
 
