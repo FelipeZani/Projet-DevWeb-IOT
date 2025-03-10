@@ -1,16 +1,16 @@
-Attendus du module :
+Attendus du module :<br>
 <del>• Inscription d’un utilisateur ;</del><br>
 <del>• Vérifier que l’utilisateur est un membre de la plateforme ;</del><br>
 • L’envoie d’un mail à l’utilisateur ;
 • La validation de l’inscription ;
-• Vérifier le login/mot de passe lors de la connexion ;
-• Modifier le profil ;
-• Consulter le profil des autres membres ;
+<del>• Vérifier le login/mot de passe lors de la connexion ;</del><br>
+<del>• Modifier le profil ;</del><br>
+<del>• Consulter le profil des autres membres ;</del><br>
 • Rechercher et consulter les outils/services variés proposés par la plateforme ;
 o La recherche d’information doit contenir au moins deux (2) filtres.
 • Rechercher et consulter les objets connectés enregistrés sur la plateforme ;
 o La recherche d’information doit contenir au moins deux (2) filtres.
-• La possibilité de changer le niveau du profil utilisateur ;
+<del>• La possibilité de changer le niveau du profil utilisateur ;</del><br>
 • Gérer le nombre d’accès des utilisateurs à la plateforme ;
 • Gérer le nombre d’actions faites par les utilisateurs ;
 • Mettre à jour les données précédentes (accès et actions) pour chaque utilisateur et
