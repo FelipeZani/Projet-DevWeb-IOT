@@ -1,0 +1,52 @@
+dialog{
+    height: 500px;
+    width: 500px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.button-signup {
+padding: 7px 30px;
+text-decoration: none;
+font-size: 20px;
+border-radius: 20px;
+}
+
+.ls-buttons{
+    display: flex;
+    justify-content: center;
+    
+}
+.ls-buttons button{
+    width:30%;
+    height: 45px;
+    background-color: #eeeeee;
+    color: #6b6b6b;
+    cursor: pointer;
+
+}
+.ls-button-activated{
+    background-color: #acd9ef !important;
+    color: #4f74b0 !important;
+}
+
+.ls-buttons>button{
+    margin: 20px;
+}
+.form-diag input ,
+.form-diag button{
+    height: 40px;
+    margin-bottom: 20px;
+    width: 70%;
+}
+.form-diag{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    color: #4f4f4f;
+
+}
+

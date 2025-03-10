@@ -29,8 +29,11 @@ class User(db.Model):
 # Routes
 @app.route("/")
 def home():
-    return render_template("home.html")
 
+    return render_template("home.html")
+@app.route("/testing")
+def testing():
+    return render_template("testing.html")
 @app.route("/signin")
 def signin():
     return render_template("signin.html")
