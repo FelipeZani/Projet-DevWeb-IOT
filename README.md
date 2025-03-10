@@ -40,8 +40,8 @@ o Accéder aux historiques des données des objets connectés.<br><br>
 <del>o Attribuer ou révoquer des niveaux d'accès aux utilisateurs ;<br></del>
 <del>o Superviser les points accumulés par les utilisateurs et ajuster manuellement les
 niveaux en cas de besoin ;</del><br>
-<del>o Consulter les historiques de connexion</del><strong> ```diff 
-- et d'actions des utilisateurs.
+<del>o Consulter les historiques de connexion</del><strong> ```html 
+<p style="color:red">et d'actions des utilisateurs.</p>
 ```<br><br>
 • Gestion des objets et des outils/services<br>
 o Ajouter ou supprimer des catégories d'objets et d’outils/services ;<br>
