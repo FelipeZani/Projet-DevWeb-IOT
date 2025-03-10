@@ -33,12 +33,13 @@ def home():
 
 @app.route("/signin")
 def signin():
+    session.clear() # avoid creating new account while still having session infos
     return render_template("signin.html")
 
 @app.route("/dashboard")
 def dashboard():
     # Is connected ?
-    if 'username' in session:
+    if 'username' in session and session["verified"]:
         return render_template("dashboard.html")
     else:
         return redirect(url_for("home"))
@@ -53,7 +54,9 @@ def login():
     
     if action == "signin":
             user = User.query.filter_by(username=username).first()
-            if user and check_password_hash(user.password, password):
+            if not user: # user doesnt exists
+                message = "Incorrect username or password"
+            if check_password_hash(user.password, password) and user.is_verified:
                 add_points(user.username, 1)
                 session["username"] = user.username
                 session["fname"] = user.fname
@@ -63,7 +66,10 @@ def login():
                 session["birthdate"] = user.birthdate.strftime("%Y-%m-%d")
                 session["level"] = user.level
                 session["email"] = user.email
+                session["verified"] = 1
                 return redirect(url_for('dashboard'))
+            elif not user.is_verified:
+                message = "You are not in the family yet, please wait for admin to accept you"
             else:
                 message = "Incorrect username or password"
     
@@ -81,9 +87,9 @@ def login():
             message = "Username already taken"
         elif User.query.filter_by(email=email).first():
             message = "Email already taken"
-        elif gender != "male" and gender != "female":
+        elif gender not in ["male", "female"]:
             message = "Gender is incorrect"
-        elif role != "parent" and role != "child":
+        elif role not in ["parent", "child"]:
             message = "Role is incorrect"
         elif birthdate > datetime.today().date():
             message = "You are not Marty McFly"
@@ -101,19 +107,11 @@ def login():
                 role=role,
                 birthdate=birthdate,
                 level=0,
+                is_verified=0,
             )
             db.session.add(new_user)
             db.session.commit()
-            session["username"] = new_user.username
-            session["fname"] = new_user.fname
-            session["lname"] = new_user.lname
-            session["gender"] = new_user.gender
-            session["role"] = new_user.role
-            session["birthdate"] = new_user.birthdate.strftime("%Y-%m-%d")
-            session["level"] = new_user.level
-            session["email"] = new_user.email
-            return redirect(url_for("dashboard"))
-    
+            message = "Wait for the administrator to accept you in the family"
     return render_template("signin.html", message=message)
 
 @app.route("/logout")
@@ -123,8 +121,8 @@ def logout():
 
 @app.route("/profile")
 def profile():
-    if 'username' in session:
-        users = User.query.filter(User.username != session["username"]).all()
+    if 'username' in session and session["verified"]:
+        users = User.query.filter(User.username != session["username"], User.is_verified == 1).all()
         return render_template("profile.html", users=users)
     else :
         return redirect(url_for("home"))
@@ -132,7 +130,7 @@ def profile():
 @app.route("/user/<int:user_id>")
 def user_profile(user_id):
     user = User.query.get(user_id)
-    if user:
+    if user and user.is_verified:
         add_points(session["username"], 1)
         return render_template("user_profile.html", user=user)
     else:
@@ -189,6 +187,7 @@ def add_points(username, points):
     
     user.level += points
     db.session.commit()
+    return True
 
 
 if __name__ == "__main__":
