@@ -43,7 +43,7 @@ niveaux en cas de besoin ;</del><br>
 <del>o Consulter les historiques de connexion</del> `et d'actions des utilisateurs.`
 <br><br>
 • Gestion des objets et des outils/services<br>
-o Ajouter ou supprimer des catégories d'objets et d’outils/services ;<br>
+<del>o Ajouter ou supprimer des catégories d'objets et d’outils/services ;</del><br>
 o Ajouter ou supprimer des objets et des outils/services ;<br>
 o Définir les règles de fonctionnement globales des objets et des outils/services (par
 exemple, priorités énergétiques, gestion des alertes, etc.).<br><br>
