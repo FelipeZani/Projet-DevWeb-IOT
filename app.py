@@ -311,8 +311,6 @@ def backup_db():
         return redirect(url_for('admin_panel', message="Sucessfully backed up database"))
     except :
         return redirect(url_for('admin_panel', message="Error while backing up"))
-    
-    return redirect(url_for('admin_panel'))
 
 
 # Functions
