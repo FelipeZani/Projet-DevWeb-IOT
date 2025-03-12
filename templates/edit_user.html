@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Edit user</title>
+</head>
+
+<body>
+  {% if message %}
+  <div style="color: red; font-weight: bold;">
+    <p>{{ message }}</p>
+  </div>
+  {% endif %}
+  <h2>Edit {{ user.username }}'s profile</h2>
+  <form method="POST">
+    <label>First name :</label>
+    <input type="text" name="fname" value="{{ user.fname }}" required minlength="3" maxlength="32">
+    <br>
+
+    <label>Last name:</label>
+    <input type="text" name="lname" value="{{ user.lname }}" required minlength="3" maxlength="32">
+    <br>
+
+    <label>Email:</label>
+    <input type="email" name="email" value="{{ user.email }}" required minlength="3" maxlength="64">
+    <br>
+
+    <label>Gender:</label>
+    <select name="gender">
+      <option value="male" {% if user.gender=='male' %}selected{% endif %}>male</option>
+      <option value="female" {% if user.gender=='female' %}selected{% endif %}>female</option>
+    </select>
+    <br>
+
+    <label>Role:</label>
+    <select name="role">
+      <option value="parent" {% if user.role=='parent' %}selected{% endif %}>parent</option>
+      <option value="child" {% if user.role=='child' %}selected{% endif %}>child</option>
+    </select>
+    <br>
+
+    <label>Level (simple, complex, admin: 0, 10, 20):</label>
+    <input type="number" name="level" value="{{ user.level }}" required min="0">
+    <br>
+    <label for="birthdate">Birthdate</label>
+    <input type="date" id="birthdate" name="birthdate" value="{{ user.birthdate }}" required>
+    <br>
+
+    <button type="submit">Save</button>
+  </form>
+  <a href="{{ url_for('admin_panel') }}">Back to admin panel</a>
+</body>
+
+</html>

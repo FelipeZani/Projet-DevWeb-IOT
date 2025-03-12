@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login history</title>
+</head>
+
+<body>
+  <h1>Login History</h1>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Login Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in history %}
+      <tr>
+        <td>{{ entry.username }}</td>
+        <td>{{ entry.login_time }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{{ url_for('admin_panel') }}">Back to Admin Panel</a>
+</body>

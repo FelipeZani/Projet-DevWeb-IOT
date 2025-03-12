@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Create an object</title>
+</head>
+
+<body>
+  <h1>Create a new object</h1>
+  <form action="{{ url_for('new_object') }}" method="post">
+    <label for="table_name">Object type:</label>
+    <input type="text" id="table_name" name="table_name" required pattern="^[a-zA-Z_][a-zA-Z0-9_]*$"
+      title="Only letters, numbers, and underscores. Can not start with a number.">
+
+    <div id="fields">
+      <div class="field">
+        <label>Field Name:</label>
+        <input type="text" name="field_names[]" required pattern="^[a-zA-Z_][a-zA-Z0-9_]*$"
+          title="Only letters, numbers, and underscores. Can not start with a number.">
+        <label>Field Type:</label>
+        <select name="field_types[]">
+          <option value="String">String</option>
+          <option value="Integer">Integer</option>
+          <option value="Boolean">Boolean</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="button" onclick="addField()">Add Field</button>
+    <button type="submit">Create Table</button>
+  </form>
+  <a href=" {{ url_for('admin_panel') }}">Go back</a>
+
+  <script>
+    function addField() {
+      let fieldsDiv = document.getElementById("fields");
+      let newField = document.createElement("div");
+      newField.classList.add("field");
+      newField.innerHTML = `
+            <label>Field Name:</label>
+            <input type="text" name="field_names[]" required 
+                   pattern="^[a-zA-Z_][a-zA-Z0-9_]*$" title="Only letters, numbers, and underscores. Can not start with a number.">
+            <label>Field Type:</label>
+            <select name="field_types[]">
+                <option value="String">String</option>
+                <option value="Integer">Integer</option>
+                <option value="Boolean">Boolean</option>
+            </select>
+            <button type="button" onclick="removeField(this)">Remove</button>
+        `;
+      fieldsDiv.appendChild(newField);
+    }
+
+    function removeField(button) {
+      button.parentElement.remove();
+    }
+  </script>
+
+</body>
+
+</html>

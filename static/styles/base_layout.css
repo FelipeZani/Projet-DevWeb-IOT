@@ -10,6 +10,14 @@
     background-color: #2463eb;
     border: none;
     color: white;
+    width: 100%;
+    height: 100%;
+  }
+  .button-signup {
+    padding: 7px 30px;
+    text-decoration: none;
+    font-size: 20px;
+    border-radius: 20px;
     cursor: pointer;
   }
   .custom-ul button{

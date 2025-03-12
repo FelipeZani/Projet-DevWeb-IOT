@@ -6,6 +6,7 @@
 </head>
 
 <body>
+  <a href="{{ url_for('dashboard')}}">Dashboard</a>
   <p>Your infos</p><br>
   <p>Username : {{ session["username"] }}</p>
   <p>First Name : {{ session["fname"] }}</p>
@@ -32,7 +33,7 @@
   </form>
 
 
-  <h1>Below, the list of all users</h1>
+  <h1>Below, the list of all users in family</h1>
   <ul>
     {% for user in users %}
     <li>
