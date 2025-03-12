@@ -16,7 +16,7 @@ o La recherche d’information doit contenir au moins deux (2) filtres.<br>
 <del>• Mettre à jour les données précédentes (accès et actions) pour chaque utilisateur et
 chaque accès à la plateforme<br><br></del>
 • Gestion des objets connectés<br>
-o Ajouter un nouvel objet connecté sur la plateforme ;<br>
+<del>o Ajouter un nouvel objet connecté sur la plateforme ;<br></del>
 o Solliciter (à l’administrateur) la suppression d’un objet connecté ;<br>
 o Modifier les informations et attributs d'un objet connecté (nom, description,
 statut, paramètres, etc.) ;
