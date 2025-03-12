@@ -17,18 +17,24 @@
   {{super()}}
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/home.css') }}">
   <script defer src="{{ url_for('static', filename='scripts/home.js') }}"></script>  
+  <script src="https://smtpjs.com/v3/smtp.js"></script>
   <style type="text/css"></style>
 {%endblock%}
 
 
-{%block list%}
+  {%block list%}
   <ul class="custom-ul">
-    {% for li in nav_list%}
-      <li><a href="{{li.url}}">{{li.name}}</a></li>
-    {%endfor%}
-    <li><button class="button-signup custom-button" onclick="document.querySelector('dialog').showModal()">Signup</button></li>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Our solution</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#" onclick="openDiag(true)">Login</a></li>
+    <li>
+      <button class="button-signup custom-button" onclick="openDiag(false);">Signup</button>
+    </li>
   </ul>
-{%endblock%}
+  {%endblock%}
+
 
 {%block content%}
   <a href="{{ url_for('signin')}}">SIGN IN, SIGN UP</a>
@@ -36,11 +42,11 @@
   <dialog class="dialog">
     <div class="ls-buttons">
       <button class="custom-button" id="logInFrmBtn" onclick="handleDiagFormOptions(true)">Login</button>
-      <button class="custom-button" id="signUpFrmBtn"  onclick="handleDiagFormOptions(false)">Signup</button>
+      <button class="custom-button" id="signUpFrmBtn"  onclick=" ;handleDiagFormOptions(false)">Signup</button>
     </div>
 
     <form  class="form-diag" id="logInFrm" method="POST" action="{{url_for('login')}}">
-      <h3>SIGN IN</h3>
+      <h3>LOG IN</h3>
       <input type="text" id="username" name="username" required placeholder="username" minlength="3" maxlength="32">
       <br>
       <input type="password" id="password" name="password" required placeholder="password" minlength="0" maxlength="32">
@@ -50,13 +56,20 @@
 
   <form class="form-diag" id="signUpFrm" method="POST" action="{{url_for('login')}}">
     <h3>SIGN UP</h3>
-    <input type="text" id="username" name="username" required placeholder="username" minlength="3" maxlength="32">
+    <input type="text" id="username" class="sup-uname" name="username" required placeholder="username" minlength="3" maxlength="32">
     <br>
-    <input type="text" id="fname" name="fname" required placeholder="first name" minlength="3" maxlength="32">
+    <input type="text" id="fname" name="fname" class="sup-fname" required placeholder="first name" minlength="3" maxlength="32">
     <br>
-    <input type="text" id="lname" name="lname" required placeholder="last name" minlength="3" maxlength="32">
+    <input type="text" id="lname" name="lname"  class="sup-lname" required placeholder="last name" minlength="3" maxlength="32">
     <br>
-    <input type="password" id="password" name="password" required placeholder="password" minlength="0" maxlength="32">
+    <input type="password" id="signup-password" name="password" required placeholder="password" minlength="0" maxlength="32">
+    <br>
+    <div id="power-container">
+      <div id="power-border" >
+        <div id="contet-load"></div>
+      </div>
+    </div>
+    
     <br>
     <input id="email" name="email" placeholder="Email" required minlength="3" maxlength="64">
     <br>
@@ -78,10 +91,13 @@
     <br>
 
     <label for="birthdate">Birthdate:</label>
-    <input type="date" id="birthdate" name="birthdate" required>
+    <input type="date" id="birthdate" name="birthdate" min="1920-01-01" max="2007-12-31" required>
 
     <br>
     <button type="submit" name="action" value="signup"  class="custom-button">Sign up</button>
+
+    
+
   </form>
   </dialog>
   
