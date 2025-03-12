@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from static.application_modules.mailing import mailling
+
+
 
 app= Flask(__name__)
 # Makes sure user can't modify cookie and can't give him admin rights or other bad things ;)

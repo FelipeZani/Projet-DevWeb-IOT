@@ -32,14 +32,13 @@ function handleDiagFormOptions(isLoginSelected) {
 }
 
 
-
 //password Verification
 
 let password = document.getElementById("signup-password")
 let power = document.getElementById("contet-load")
 password.oninput = function () {
-  let strength = 0;
-  let value = password.value;
+  let strength = 0
+  let value = password.value
   
   let colorPower = {
       0: "#c4c4c4",
@@ -48,7 +47,7 @@ password.oninput = function () {
       50: "#F2B84F",
       75: "#BDE952",
       100: "#3ba62f"
-  };
+  }
 
   // Case: Empty password
   if (value.length === 0) {
@@ -58,7 +57,7 @@ password.oninput = function () {
       if (value.match(/[a-z]+/)) strength += 15
       if (value.match(/[A-Z]+/)) strength += 25
       if (value.match(/[0-9]+/)) strength += 25
-      if (value.match(/[$@#&!]+/)) strength += 25
+      if (value.match(/[$@#&!€]+/)) strength += 25
   }
 
   // Ensure max strength is 100%
@@ -69,30 +68,20 @@ password.oninput = function () {
   power.style.backgroundColor = colorPower[strength]
 }
 
-function sendingMailVerification(){
-  if(signUpValidation()){
-    
-  }
-}
-
-function signUpValidation(){
-
-  return true
-}
-
-
-
 const dialog = document.querySelector("dialog")
 const logInBtnFrm = document.getElementById("logInFrmBtn") 
 const signUpBtnFrm = document.getElementById("signUpFrmBtn") 
 const logInFrm = document.getElementById("logInFrm") 
 const signUpFrm = document.getElementById("signUpFrm") 
-let strength = 0;
+let strength = 0
 
 dialog.addEventListener("click", onClick)
 
 
-
+document.querySelector("form").addEventListener("submit", function (event) {
+  signUpValidation()
+  event.preventDefault() // Prevent form submission if validation fails
+})
 
 
 
