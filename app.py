@@ -47,11 +47,25 @@ def signin():
 
 @app.route("/dashboard")
 def dashboard():
-    # Is connected ?
-    if 'username' in session and session["verified"]:
-        return render_template("dashboard.html")
-    else:
+    if 'username' not in session or not session["verified"]:
         return redirect(url_for("home"))
+
+    inspector = inspect(db.engine)
+    tables = [table for table in inspector.get_table_names() if table not in ["user", "login_history"]]
+    objects = {}
+
+    metadata.reflect(bind=db.engine)
+
+    with db.engine.connect() as conn:
+        for table_name in tables:
+            table = metadata.tables.get(table_name)
+            if table is not None:
+                query = table.select()
+                result = conn.execute(query).fetchall()
+                objects[table_name] = [dict(row._mapping) for row in result]
+
+    return render_template("dashboard.html", objects=objects)
+
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -386,6 +400,69 @@ def remove_object():
     all_tables = [table for table in inspector.get_table_names() if table not in ['user', 'login_history']]
 
     return render_template("remove_object.html", tables=all_tables)
+
+@app.route("/add_object", methods=["GET", "POST"])
+def add_object():
+    if 'username' not in session:
+        return redirect(url_for("login"))
+
+    inspector = inspect(db.engine)
+    tables = [table for table in inspector.get_table_names() if table not in ["user", "login_history"]]
+    columns = []
+
+    if request.method == "POST":
+        table_name = request.form.get("table_name")
+        if not table_name or table_name not in tables:
+            return render_template("add_object.html", tables=tables, message="Invalid table selected.", columns=[])
+
+        metadata.reflect(bind=db.engine)
+        table = metadata.tables.get(table_name)
+
+        if table is None:
+            return render_template("add_object.html", tables=tables, message="Table not found.", columns=[])
+
+        columns = [{"name": col.name, "type": str(col.type)} for col in table.columns if col.name != "id"]
+
+        if "submit" in request.form:
+            data = {}
+            for col in columns:
+                value = request.form.get(col["name"])
+                if "BOOLEAN" in col["type"]:
+                    data[col["name"]] = value == "True" # converts str True to Bool True
+                else:
+                    data[col["name"]] = value
+
+            with db.engine.connect() as conn:
+                conn.execute(table.insert().values(**data))
+                conn.commit()
+
+            return redirect(url_for('dashboard', message="Sucessfully added object"))
+
+    return render_template("add_object.html", tables=tables, columns=columns)
+
+
+
+@app.route("/delete_object/<table_name>/<int:object_id>", methods=["POST"])
+def delete_object(table_name, object_id):
+    if 'username' not in session:
+        return redirect(url_for("login"))
+
+    inspector = inspect(db.engine)
+    if table_name not in inspector.get_table_names():
+        return redirect(url_for("dashboard", message="Invalid table"))
+
+    metadata.reflect(bind=db.engine)
+    table = metadata.tables.get(table_name)
+
+    if table is None:
+        return redirect(url_for("dashboard", message="Table not found"))
+
+    with db.engine.connect() as conn:
+        query = table.delete().where(table.c.id == object_id)
+        conn.execute(query)
+        conn.commit()
+
+    return redirect(url_for("dashboard"))
 
 
 # Functions
