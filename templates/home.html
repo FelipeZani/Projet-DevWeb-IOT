@@ -1,24 +1,118 @@
-<!DOCTYPE html>
-<html>
 
-<head>
-  <title>Mon site Flask</title>
+
+<!-- Page's variable area-->
+  {% set nav_list = [
+    {"name" :"Home", "url":"#"},
+    {"name" :"About", "url":"#"},
+    {"name" :"Our solution", "url":"#"},
+    {"name" :"Pricing", "url":"#"},
+    {"name" :"Login", "url":"#"},
+  ]%}
+<!-- Page area-->
+{% extends "base_layout.html"%}
+
+{% block title%}Home Page{%endblock%}
+
+{%block head%}
+  {{super()}}
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/home.css') }}">
-  <script src="{{ url_for('static', filename='scripts/home.js') }}"></script>
-</head>
+  <script defer src="{{ url_for('static', filename='scripts/home.js') }}"></script>  
+  <script src="https://smtpjs.com/v3/smtp.js"></script>
+  <style type="text/css"></style>
+{%endblock%}
 
-<body>
-  <h1>Hello World</h1>
-  <p>Cette page est le freetour. <br>
-    Boutons : redirection -> connecter/s'inscrire <br>
-    Front end : présentation des fonctionnalités de la platforme.
-    On a aussi une liste des objets connectés disponibles proposés par la platforme (radiateurs, volets, enceintes...)
-    <br>
-    On peut les filtrer : batterie (oui/non), sécurité (ex: cameras), comfort (oui/non, ex: radiateur, volets),
-    connectique (wifi, bluethooth) etc
-  </p>
 
+  {%block list%}
+  <ul class="custom-ul">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Our solution</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#" onclick="openDiag(true)">Login</a></li>
+    <li>
+      <button class="button-signup custom-button" onclick="openDiag(false);">Signup</button>
+    </li>
+  </ul>
+  {%endblock%}
+
+
+{%block content%}
   <a href="{{ url_for('signin')}}">SIGN IN, SIGN UP</a>
-</body>
 
-</html>
+  <dialog class="dialog">
+    <div class="ls-buttons">
+      <button class="custom-button" id="logInFrmBtn" onclick="handleDiagFormOptions(true)">Login</button>
+      <button class="custom-button" id="signUpFrmBtn"  onclick=" ;handleDiagFormOptions(false)">Signup</button>
+    </div>
+
+    <form  class="form-diag" id="logInFrm" method="POST" action="{{url_for('login')}}">
+      <h3>LOG IN</h3>
+      <input type="text" id="username" name="username" required placeholder="username" minlength="3" maxlength="32">
+      <br>
+      <input type="password" id="password" name="password" required placeholder="password" minlength="0" maxlength="32">
+      <br>
+      <button type="submit" name="action" value="signin" class="custom-button" >Log in</button>
+    </form>
+
+  <form class="form-diag" id="signUpFrm" method="POST" action="{{url_for('login')}}">
+    <h3>SIGN UP</h3>
+    <input type="text" id="username" class="sup-form" name="username" required placeholder="username" minlength="3" maxlength="32">
+    <br>
+    <input type="text" id="fname" name="fname" class="sup-form" required placeholder="first name" minlength="3" maxlength="32">
+    <br>
+    <input type="text" id="lname" name="lname"  class="sup-form" required placeholder="last name" minlength="3" maxlength="32">
+    <br>
+    <input type="password" id="signup-password" name="password" title="Only letters, numbers and $@#&!€ are acepted" required placeholder="password" minlength="0" maxlength="32">
+    
+
+    <br>
+    <div id="power-container">
+      <div id="power-border" >
+        <div id="contet-load"></div>
+      </div>
+    </div>
+    
+    <br>
+    <input id="email" name="email" placeholder="Email" class="sup-form" required minlength="3" maxlength="64" onclick="verifySup">
+    <br>
+
+    <select id="gender" name="gender" required>
+      <option value="" disabled selected>Select your gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+
+    <br>
+
+    <select id="role" name="role" class="sup-form" required>
+      <option value="" disabled selected>Select your role</option>
+      <option value="parent">Parent</option>
+      <option value="child">Child</option>
+    </select>
+
+    <br>
+
+    <label for="birthdate">Birthdate:</label>
+    <input type="date" id="birthdate" name="birthdate" class="sup-form" min="1920-01-01" max="2007-12-31" required>
+
+    <br>
+    <button type="submit" name="action" value="signup"  class="custom-button" onclick="signUpValidation()">Sign up</button>
+
+    
+
+  </form>
+  </dialog>
+  
+  
+
+
+  
+{%endblock%}
+
+
+{%block footer_li%}
+  {% for li in nav_list%}
+    <li><a href="{{li.url}}">{{li.name}}</a></li>
+  {%endfor%}
+{%endblock%}
+

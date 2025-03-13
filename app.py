@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Integer, String, Boolean, MetaData, inspect, text
 from datetime import datetime
+from static.application_modules.mailing import mailling
 import os
 import re
 
@@ -43,8 +44,11 @@ class DelSuggestion(db.Model):
 # Routes
 @app.route("/")
 def home():
-    return render_template("home.html")
 
+    return render_template("home.html")
+@app.route("/testing")
+def testing():
+    return render_template("testing.html")
 @app.route("/signin")
 def signin():
     session.clear() # avoid creating new account while still having session infos
