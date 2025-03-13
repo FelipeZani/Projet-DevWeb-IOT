@@ -66,6 +66,31 @@
     </tr>
     {% endfor %}
   </table>
+
+  <h2>Deletion suggestions</h2>
+  {% if suggestions %}
+  <table border="1">
+    <tr>
+      <th>Object type</th>
+      <th>user</th>
+      <th>Action</th>
+    </tr>
+    {% for suggestion in suggestions %}
+    <tr>
+      <td>{{ suggestion.table_name }}</td>
+      <td>{{ suggestion.username }}</td>
+      <td>
+        <form action="{{ url_for('delete_table') }}" method="post">
+          <input type="hidden" name="table_name" value="{{ suggestion.table_name }}">
+          <button type="submit" onclick="return confirm('Delete this table and all objects in it ?');">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p>No object deletion for now</p>
+  {% endif %}
 </body>
 
 </html>

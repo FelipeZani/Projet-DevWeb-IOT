@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Table, Column, Integer, String, Boolean, MetaData, inspect
+from sqlalchemy import Table, Column, Integer, String, Boolean, MetaData, inspect, text
 from datetime import datetime
 import os
 import re
@@ -35,6 +35,11 @@ class LoginHistory(db.Model):
     username = db.Column(db.String(32), nullable=False)
     login_time = db.Column(db.DateTime, default=datetime.today, nullable=False)
 
+class DelSuggestion(db.Model):
+    id = Column(Integer, primary_key=True)
+    table_name = Column(String, nullable=False)
+    username = Column(String, nullable=False)
+
 # Routes
 @app.route("/")
 def home():
@@ -51,7 +56,7 @@ def dashboard():
         return redirect(url_for("home"))
 
     inspector = inspect(db.engine)
-    tables = [table for table in inspector.get_table_names() if table not in ["user", "login_history"]]
+    tables = [table for table in inspector.get_table_names() if table not in ["user", "login_history", "del_suggestion"]]
     objects = {}
 
     metadata.reflect(bind=db.engine)
@@ -208,8 +213,9 @@ def admin_panel():
     if 'username'not in session or session["level"] < 20 or not session["verified"]:
         return redirect(url_for("dashboard"))
     
+    suggestions = DelSuggestion.query.all()
     users = User.query.filter(User.username != session["username"]).all()
-    return render_template("admin_panel.html", users=users)
+    return render_template("admin_panel.html", users=users, suggestions=suggestions)
 
 @app.route("/verify_user/<int:user_id>", methods=["POST"])
 def verify_user(user_id):
@@ -397,7 +403,7 @@ def remove_object():
             return render_template("remove_object.html", message="Table does not exist.")
 
     inspector = inspect(db.engine)
-    all_tables = [table for table in inspector.get_table_names() if table not in ['user', 'login_history']]
+    all_tables = [table for table in inspector.get_table_names() if table not in ['user', 'login_history', 'del_suggestion']]
 
     return render_template("remove_object.html", tables=all_tables)
 
@@ -407,7 +413,7 @@ def add_object():
         return redirect(url_for("login"))
 
     inspector = inspect(db.engine)
-    tables = [table for table in inspector.get_table_names() if table not in ["user", "login_history"]]
+    tables = [table for table in inspector.get_table_names() if table not in ["user", "login_history", 'del_suggestion']]
     columns = []
 
     if request.method == "POST":
@@ -464,6 +470,41 @@ def delete_object(table_name, object_id):
 
     return redirect(url_for("dashboard"))
 
+@app.route("/suggest_delete", methods=["POST"])
+def suggest_delete():
+    if "username" not in session or not session["verified"]:
+        return redirect(url_for("home"))
+
+    table_name = request.form.get("table_name")
+    if not table_name:
+        return redirect(url_for("dashboard", message="Invalid table name"))
+
+    suggestion = DelSuggestion(table_name=table_name, username=session["username"])
+    db.session.add(suggestion)
+    db.session.commit()
+
+    return redirect(url_for("dashboard", message="Delete suggestion sent !"))
+
+@app.route("/delete_table", methods=["POST"])
+def delete_table():
+    if "level" not in session or session["level"] < 20 or not session["verified"]:
+        return redirect(url_for("dashboard"))
+
+    table_name = request.form.get("table_name")
+    if not table_name:
+        return redirect(url_for("admin_panel", message="Table name missing"))
+
+    try:
+        with db.engine.connect() as conn:
+            conn.execute(text(f"DROP TABLE IF EXISTS {table_name}"))
+            conn.commit()
+
+        DelSuggestion.query.filter_by(table_name=table_name).delete()
+        db.session.commit()
+
+        return redirect(url_for("admin_panel", message="Deleted table successfully"))
+    except Exception as e:
+        return redirect(url_for("admin_panel", message=f"Error: {str(e)}"))
 
 # Functions
 def add_points(username, points):

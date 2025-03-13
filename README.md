@@ -17,7 +17,7 @@ o La recherche d’information doit contenir au moins deux (2) filtres.<br>
 chaque accès à la plateforme<br><br></del>
 • Gestion des objets connectés<br>
 <del>o Ajouter un nouvel objet connecté sur la plateforme ;<br></del>
-o Solliciter (à l’administrateur) la suppression d’un objet connecté ;<br>
+<del>o Solliciter (à l’administrateur) la suppression d’un objet connecté ;<br></del>
 o Modifier les informations et attributs d'un objet connecté (nom, description,
 statut, paramètres, etc.) ;
 o Contrôler l'état d'un objet (activer/désactiver, mettre à jour).<br><br>
@@ -44,7 +44,7 @@ niveaux en cas de besoin ;</del><br>
 <br><br>
 • Gestion des objets et des outils/services<br>
 <del>o Ajouter ou supprimer des catégories d'objets et d’outils/services ;</del><br>
-o Ajouter ou supprimer des objets et des outils/services ;<br>
+<del>o Ajouter ou supprimer des objets et des outils/services ;<br></del>
 o Définir les règles de fonctionnement globales des objets et des outils/services (par
 exemple, priorités énergétiques, gestion des alertes, etc.).<br><br>
 • Sécurité et maintenance<br>
