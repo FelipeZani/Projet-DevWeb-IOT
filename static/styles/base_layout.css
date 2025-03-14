@@ -16,9 +16,10 @@
     cursor: pointer;
 
   }
-  .custom-button:disabled{
-    opacity: 0.6 !important;
-    cursor: not-allowed !important;
+  .custom-button.disabled{
+    opacity: 0.6 ;
+    cursor: not-allowed;
+    
 
   }
   .button-signup {

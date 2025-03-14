@@ -81,7 +81,7 @@
     
     <input type="text" id="lname" name="lname"  class="sup-form lname" required placeholder="last name" minlength="3" maxlength="32">
     
-    <input type="password" id="signup-password" name="password" title="Only letters, numbers and $@#&!€ are accepted"  autocomplete="off" required placeholder="password" minlength="6" maxlength="32">
+    <input type="password" id="signup-password" name="password" title="Only letters, numbers and $@#&!€ are accepted" required placeholder="password" minlength="6" maxlength="32" oninput="checkPassword()">
   
     <div id="power-container">
       <div id="power-border" >
@@ -106,7 +106,7 @@
     <label for="birthdate">Birthdate:</label>
     <input type="date" id="birthdate" name="birthdate" class="sup-form" min="1920-01-01" max="2007-12-31" required>
     
-    <button type="submit" name="action" value="signup"  class="custom-button" id="sub-btn" oninput="checkPassword()">Sign up</button>
+    <button type="submit" name="action" value="signup"  class="custom-button" id="sub-btn">Sign up</button>
 
   </form>
   </dialog>

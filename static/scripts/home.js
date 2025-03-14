@@ -1,12 +1,12 @@
 // var section
 const dialog = document.querySelector("dialog")
 const logInBtnFrm = document.getElementById("logInFrmBtn") 
-const signUpBtnFrm = document.getElementById("signUpFrmBtn") 
+const signUpBtnFrm = document.getElementById("signUpFrmBtn")
+const signUpSubFrm = document.getElementById("sub-btn") 
 const logInFrm = document.getElementById("logInFrm") 
 const signUpFrm = document.getElementById("signUpFrm")
 
 let strength = checkStrength(signUpFrm['password'].value)
-console.log(strength)
 let password = document.getElementById("signup-password")
 let power = document.getElementById("contet-load")
 
@@ -25,15 +25,6 @@ function openDiag(shownUpForm){
 }
 
 //LS Form
-function checkPassword (){
-  let submitBtn = document.getElementById("sub-btn")
-
-  if(strength != 100){
-    submitBtn.disabled = true
-  }else{
-    submitBtn.disabled = false
-  }
-}
 function handleDiagFormOptions(isLoginSelected) {
   if (isLoginSelected) {
 
@@ -66,9 +57,9 @@ function checkStrength(value){
   return newStregthValue
 }
 password.oninput = function () {
-  let strength = 0
-  let value = password.value
   
+  let value = password.value
+
   let colorPower = {
       0: "#c4c4c4",
       10: "#D73F40",
@@ -83,6 +74,13 @@ password.oninput = function () {
       strength = 0
   } else {
       strength = checkStrength(value)
+  }
+
+  if(strength != 100){
+    signUpSubFrm.classList.add("disabled")
+  }else{
+    signUpSubFrm.classList.remove("disabled")
+
   }
 
   // Ensure max strength is 100%
@@ -101,3 +99,4 @@ password.oninput = function () {
 
 
 
+//custom elements
