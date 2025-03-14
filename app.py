@@ -129,10 +129,10 @@ def login():
             list_messages.append({'gender':message})
         if role not in ["parent", "child"]:
             message = "Role is incorrect"
-            list_messages.append(message)
+            list_messages.append({'role':message})
         if birthdate > datetime.today().date():
             message = "You are not Marty McFly"
-            list_messages.append(message)
+            list_messages.append({'nif':message})
         elif len(username) > 32 or len(username) < 3 or len(email) > 64 or len(email) < 3 or len(password) > 32  or len(password) < 0 or len(fname) < 3 or len(fname) > 32 or len(lname) < 3 or len(lname) > 32:
             message = "username, first name and last name are 32 chars max, email is 64 chars max"
             list_messages.append({"sup-form":message})

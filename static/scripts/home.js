@@ -4,14 +4,15 @@ const logInBtnFrm = document.getElementById("logInFrmBtn")
 const signUpBtnFrm = document.getElementById("signUpFrmBtn") 
 const logInFrm = document.getElementById("logInFrm") 
 const signUpFrm = document.getElementById("signUpFrm")
- 
-let strength = 0
+
+let strength = checkStrength(signUpFrm['password'].value)
+console.log(strength)
 let password = document.getElementById("signup-password")
 let power = document.getElementById("contet-load")
 
-dialog.addEventListener("click", onClick)
 
 //Dialog
+dialog.addEventListener("click", onClick)
 function onClick(event) {
   if (event.target === dialog) {
     dialog.close() 
@@ -23,7 +24,16 @@ function openDiag(shownUpForm){
   document.querySelector('dialog').showModal()
 }
 
-//Switching between Login SignUp
+//LS Form
+function checkPassword (){
+  let submitBtn = document.getElementById("sub-btn")
+
+  if(strength != 100){
+    submitBtn.disabled = true
+  }else{
+    submitBtn.disabled = false
+  }
+}
 function handleDiagFormOptions(isLoginSelected) {
   if (isLoginSelected) {
 
@@ -46,8 +56,15 @@ function handleDiagFormOptions(isLoginSelected) {
 
 
 //password Verification
-
-
+function checkStrength(value){
+  let newStregthValue = 0
+  if (value.length > 6) newStregthValue += 10
+  if (value.match(/[a-z]+/)) newStregthValue += 15
+  if (value.match(/[A-Z]+/)) newStregthValue += 25
+  if (value.match(/[0-9]+/)) newStregthValue += 25
+  if (value.match(/[$@#&!€]+/)) newStregthValue += 25
+  return newStregthValue
+}
 password.oninput = function () {
   let strength = 0
   let value = password.value
@@ -65,11 +82,7 @@ password.oninput = function () {
   if (value.length === 0) {
       strength = 0
   } else {
-      if (value.length > 6) strength += 10
-      if (value.match(/[a-z]+/)) strength += 15
-      if (value.match(/[A-Z]+/)) strength += 25
-      if (value.match(/[0-9]+/)) strength += 25
-      if (value.match(/[$@#&!€]+/)) strength += 25
+      strength = checkStrength(value)
   }
 
   // Ensure max strength is 100%
