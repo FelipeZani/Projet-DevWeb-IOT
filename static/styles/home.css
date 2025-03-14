@@ -74,6 +74,8 @@ border-radius: 20px;
 }
 
 
-
+.incorect-input-field{
+    border: 2px solid red;
+}
 
 

@@ -71,18 +71,23 @@ def dashboard():
     return render_template("dashboard.html", objects=objects)
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/", methods=["POST","GET"])
 def login():
-    message = None 
+    message = None
+    list_messages = []
+ 
     # Collect infos from form
     username = request.form.get("username")
     password = request.form.get("password")
     action = request.form.get("action")
     
+
     if action == "signin":
+            
             user = User.query.filter_by(username=username).first()
             if not user: # user doesnt exists
                 message = "Incorrect username or password"
+                list_messages.append({'sin-form':message})    
             elif check_password_hash(user.password, password) and user.is_verified:
                 session["username"] = user.username
                 session["fname"] = user.fname
@@ -98,9 +103,10 @@ def login():
                 return redirect(url_for('dashboard'))
             elif not user.is_verified:
                 message = "You are not in the family yet, please wait for admin to accept you"
+                list_messages.append({'nif':message})
             else:
                 message = "Incorrect username or password"
-    
+                list_messages.append({'sin-form':message}) #add something here 
     elif action == "signup":
         fname = request.form.get("fname")
         lname = request.form.get("lname")
@@ -111,19 +117,26 @@ def login():
         birthdate = datetime.strptime(birthdate_str, "%Y-%m-%d").date()
         if not username or not email or not password or not role or not birthdate_str or not gender or not fname or not lname:
             message = "All fields must be filled"
-        elif User.query.filter_by(username=username).first():
+            list_messages.append({'sup-form':message})
+        if User.query.filter_by(username=username).first():
             message = "Username already taken"
-        elif User.query.filter_by(email=email).first():
+            list_messages.append({'susername':message})
+        if User.query.filter_by(email=email).first():
             message = "Email already taken"
-        elif gender not in ["male", "female"]:
+            list_messages.append({'email':message})
+        if gender not in ["male", "female"]:
             message = "Gender is incorrect"
-        elif role not in ["parent", "child"]:
+            list_messages.append({'gender':message})
+        if role not in ["parent", "child"]:
             message = "Role is incorrect"
-        elif birthdate > datetime.today().date():
+            list_messages.append(message)
+        if birthdate > datetime.today().date():
             message = "You are not Marty McFly"
+            list_messages.append(message)
         elif len(username) > 32 or len(username) < 3 or len(email) > 64 or len(email) < 3 or len(password) > 32  or len(password) < 0 or len(fname) < 3 or len(fname) > 32 or len(lname) < 3 or len(lname) > 32:
             message = "username, first name and last name are 32 chars max, email is 64 chars max"
-        else:
+            list_messages.append({"sup-form":message})
+        if len(list_messages) == 0:
             hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
             new_user = User(
                 username=username, 
@@ -139,8 +152,7 @@ def login():
             )
             db.session.add(new_user)
             db.session.commit()
-            message = "Wait for the administrator to accept you in the family"
-    return render_template("signin.html", message=message)
+    return render_template("home.html", message=list_messages)
 
 @app.route("/logout")
 def logout():
@@ -261,7 +273,7 @@ def edit_user(user_id):
         birthdate = datetime.strptime(birthdate_str, "%Y-%m-%d").date() if birthdate_str else user.birthdate
 
         if not email or not gender or not fname or not lname or not birthdate_str or not role or level is None:
-            message = "All fields must be filled"
+            message = "All fields must be œfilled"
         elif User.query.filter_by(email=email).first() and email != user.email:
             message = "Email already taken"
         elif gender not in ["male", "female"]:

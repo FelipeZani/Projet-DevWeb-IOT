@@ -1,13 +1,15 @@
 
 
-<!-- Page's variable area-->
-  {% set nav_list = [
+<!-- Page's variable area in case you need to gen automatic header/footer content-->
+  {% set nav_list = [ 
     {"name" :"Home", "url":"#"},
     {"name" :"About", "url":"#"},
     {"name" :"Our solution", "url":"#"},
     {"name" :"Pricing", "url":"#"},
     {"name" :"Login", "url":"#"},
   ]%}
+  
+
 <!-- Page area-->
 {% extends "base_layout.html"%}
 
@@ -15,10 +17,27 @@
 
 {%block head%}
   {{super()}}
+
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/home.css') }}">
-  <script defer src="{{ url_for('static', filename='scripts/home.js') }}"></script>  
-  <script src="https://smtpjs.com/v3/smtp.js"></script>
-  <style type="text/css"></style>
+  <link rel="shortcut icon" href="#">
+
+  <script defer src="{{ url_for('static', filename='scripts/home.js') }}"></script>
+  <script defer type="text/javascript">
+
+    const msgClassList = [] //getting data from the server and storing them into variables for later styling
+    const msgList = []
+    {% if message is defined and message|length>0%}
+      {% for index in range(message|length) :%}
+        {% for key in message[index]: %}
+          msgClassList.push({{key|tojson}})
+          msgList.push({{message[index][key]|tojson}})
+        {%endfor%}
+      {%endfor%}
+      console.log(msgList)
+    {% else: %} 
+      console.log("Your enrollement was accepted, wait for an admin to add you to your family")
+    {%endif%}
+  </script>
 {%endblock%}
 
 
@@ -38,43 +57,39 @@
 
 {%block content%}
   <a href="{{ url_for('signin')}}">SIGN IN, SIGN UP</a>
-
+  {{message}}
   <dialog class="dialog">
     <div class="ls-buttons">
       <button class="custom-button" id="logInFrmBtn" onclick="handleDiagFormOptions(true)">Login</button>
-      <button class="custom-button" id="signUpFrmBtn"  onclick=" ;handleDiagFormOptions(false)">Signup</button>
+      <button class="custom-button" id="signUpFrmBtn"  onclick="handleDiagFormOptions(false)">Signup</button>
     </div>
 
     <form  class="form-diag" id="logInFrm" method="POST" action="{{url_for('login')}}">
       <h3>LOG IN</h3>
-      <input type="text" id="username" name="username" required placeholder="username" minlength="3" maxlength="32">
-      <br>
-      <input type="password" id="password" name="password" required placeholder="password" minlength="0" maxlength="32">
-      <br>
+      <input type="text" id="username" name="username" class="sin-form" required placeholder="username" minlength="3" maxlength="32">
+      
+      <input type="password" id="password" name="password" class="sin-form" required placeholder="password" minlength="0" maxlength="32">
+      
       <button type="submit" name="action" value="signin" class="custom-button" >Log in</button>
     </form>
 
   <form class="form-diag" id="signUpFrm" method="POST" action="{{url_for('login')}}">
     <h3>SIGN UP</h3>
-    <input type="text" id="username" class="sup-form" name="username" required placeholder="username" minlength="3" maxlength="32">
-    <br>
-    <input type="text" id="fname" name="fname" class="sup-form" required placeholder="first name" minlength="3" maxlength="32">
-    <br>
-    <input type="text" id="lname" name="lname"  class="sup-form" required placeholder="last name" minlength="3" maxlength="32">
-    <br>
-    <input type="password" id="signup-password" name="password" title="Only letters, numbers and $@#&!€ are acepted" required placeholder="password" minlength="0" maxlength="32">
+    <input type="text" id="username" name="username" class="sup-form susername" required placeholder="username" minlength="3" maxlength="32">
     
-
-    <br>
+    <input type="text" id="fname" name="fname" class="sup-form fname" required placeholder="first name" minlength="3" maxlength="32">
+    
+    <input type="text" id="lname" name="lname"  class="sup-form lname" required placeholder="last name" minlength="3" maxlength="32">
+    
+    <input type="password" id="signup-password" name="password" title="Only letters, numbers and $@#&!€ are accepted" required placeholder="password" minlength="6" maxlength="32">
+  
     <div id="power-container">
       <div id="power-border" >
         <div id="contet-load"></div>
       </div>
     </div>
-    
-    <br>
-    <input id="email" name="email" placeholder="Email" class="sup-form" required minlength="3" maxlength="64" onclick="verifySup">
-    <br>
+
+    <input id="email" name="email" placeholder="Email" class="sup-form" required minlength="3" maxlength="64">
 
     <select id="gender" name="gender" required>
       <option value="" disabled selected>Select your gender</option>
@@ -82,31 +97,20 @@
       <option value="female">Female</option>
     </select>
 
-    <br>
-
     <select id="role" name="role" class="sup-form" required>
       <option value="" disabled selected>Select your role</option>
       <option value="parent">Parent</option>
       <option value="child">Child</option>
     </select>
 
-    <br>
-
     <label for="birthdate">Birthdate:</label>
     <input type="date" id="birthdate" name="birthdate" class="sup-form" min="1920-01-01" max="2007-12-31" required>
-
-    <br>
-    <button type="submit" name="action" value="signup"  class="custom-button" onclick="signUpValidation()">Sign up</button>
-
     
+    <button type="submit" name="action" value="signup"  class="custom-button">Sign up</button>
 
   </form>
   </dialog>
-  
-  
 
-
-  
 {%endblock%}
 
 

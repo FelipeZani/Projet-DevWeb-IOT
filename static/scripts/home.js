@@ -1,3 +1,16 @@
+// var section
+const dialog = document.querySelector("dialog")
+const logInBtnFrm = document.getElementById("logInFrmBtn") 
+const signUpBtnFrm = document.getElementById("signUpFrmBtn") 
+const logInFrm = document.getElementById("logInFrm") 
+const signUpFrm = document.getElementById("signUpFrm")
+ 
+let strength = 0
+let password = document.getElementById("signup-password")
+let power = document.getElementById("contet-load")
+
+dialog.addEventListener("click", onClick)
+
 //Dialog
 function onClick(event) {
   if (event.target === dialog) {
@@ -34,8 +47,7 @@ function handleDiagFormOptions(isLoginSelected) {
 
 //password Verification
 
-let password = document.getElementById("signup-password")
-let power = document.getElementById("contet-load")
+
 password.oninput = function () {
   let strength = 0
   let value = password.value
@@ -67,23 +79,6 @@ password.oninput = function () {
   power.style.width = strength>0? strength + "%" : (strength+1)+"%"
   power.style.backgroundColor = colorPower[strength]
 }
-
-const dialog = document.querySelector("dialog")
-const logInBtnFrm = document.getElementById("logInFrmBtn") 
-const signUpBtnFrm = document.getElementById("signUpFrmBtn") 
-const logInFrm = document.getElementById("logInFrm") 
-const signUpFrm = document.getElementById("signUpFrm") 
-let strength = 0
-
-dialog.addEventListener("click", onClick)
-
-
-document.querySelector("form").addEventListener("submit", function (event) {
-  signUpValidation()
-  event.preventDefault() // Prevent form submission if validation fails
-})
-
-
 
 
 

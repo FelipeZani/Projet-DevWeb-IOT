@@ -2,8 +2,11 @@
     background-color: #ecf3fe;
     position: relative;
     font-family: "Lucida Console", "Courier New", monospace;
-    width: 100%;
     height: 300dvh;
+  }
+
+  body:has(input[type=checkbox]:checked) {
+    overflow-y: hidden;
   }
 
   .custom-button{
@@ -52,6 +55,7 @@
     padding: 0;
     margin: 0;
     align-items: center;
+    
   }
   
   .custom-ul li {
@@ -85,9 +89,10 @@
       order: 1;
       margin-right: 20px;
     }
-
+    
    nav .custom-ul {
       position: fixed;
+      z-index: 1;
       top: 80px;
       right: -100%;
       background-color: white;
@@ -115,6 +120,7 @@
     }
     #footer-info ul{
       display: block;
+
     }
 
   }
@@ -138,9 +144,9 @@
     bottom: 0;
     display: block;
     background-color: white;
-    width: 100vw;
     text-align: center;
     padding-top: 30px;
+    width: 100%;
     
   }
   #footer-info{
