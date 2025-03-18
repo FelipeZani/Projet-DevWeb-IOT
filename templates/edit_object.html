@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Edit Object</title>
+</head>
+
+<body>
+	<h1>Edit Object n°{{ object_id }} in {{ table_name }}</h1>
+	<form action="{{ url_for('edit_object') }}" method="post">
+		<input type="hidden" name="table_name" value="{{ table_name }}">
+		<input type="hidden" name="object_id" value="{{ object_data['id'] }}">
+
+		{% for col in columns_info %}
+		{% if col.name != "id" %}
+		<label for="{{ col.name }}">{{ col.name }}</label>
+
+		{% if col.type == "number" %}
+		<input type="number" name="{{ col.name }}" id="{{ col.name }}" value="{{ object_data[col.name] }}">
+
+		{% elif col.type == "boolean" %}
+		<select name="{{ col.name }}" id="{{ col.name }}">
+			<option value="1" {% if object_data[col.name]==True %}selected{% endif %}>True</option>
+			<option value="0" {% if object_data[col.name]==False %}selected{% endif %}>False</option>
+		</select>
+
+		{% else %}
+		<input type="text" name="{{ col.name }}" id="{{ col.name }}" value="{{ object_data[col.name] }}">
+		{% endif %}
+
+		<br>
+		{% endif %}
+		{% endfor %}
+
+		<button type="submit">Save Changes</button>
+	</form>
+
+	<a href="{{ url_for('dashboard') }}">Cancel</a>
+</body>
+
+</html>
