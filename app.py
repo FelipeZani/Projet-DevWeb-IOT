@@ -44,11 +44,12 @@ class DelSuggestion(db.Model):
 # Routes
 @app.route("/")
 def home():
-
     return render_template("home.html")
+
 @app.route("/testing")
 def testing():
     return render_template("testing.html")
+
 @app.route("/signin")
 def signin():
     session.clear() # avoid creating new account while still having session infos
