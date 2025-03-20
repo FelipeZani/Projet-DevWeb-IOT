@@ -21,7 +21,7 @@ chaque accès à la plateforme<br><br></del>
 <del>o Modifier les informations et attributs d'un objet connecté (nom, description,
 statut, paramètres, etc.) ;</del>
 <del>o Contrôler l'état d'un objet (activer/désactiver, mettre à jour).</del><br><br>
-• Configuration des services<br>
+• Configuration des services<br> ( je m'en occupe )
 o Associer des objets connectés à des pièces ou zones spécifiques ;<br>
 o Configurer les paramètres d'utilisation des objets connectés (par ex. température
 cible pour un thermostat, horaire de fonctionnement pour une lumière).<br><br>
