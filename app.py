@@ -46,9 +46,7 @@ class DelSuggestion(db.Model):
 def home():
 
     return render_template("home.html")
-@app.route("/testing")
-def testing():
-    return render_template("testing.html")
+
 @app.route("/signin")
 def signin():
     session.clear() # avoid creating new account while still having session infos
@@ -76,7 +74,7 @@ def dashboard():
     return render_template("dashboard.html", objects=objects)
 
 
-@app.route("/", methods=["POST","GET"])
+@app.route("/login", methods=["POST","GET"])
 def login():
     message = None
     list_messages = []
@@ -153,7 +151,7 @@ def login():
                 role=role,
                 birthdate=birthdate,
                 level=0,
-                is_verified=0,
+                is_verified=1,
             )
             db.session.add(new_user)
             db.session.commit()

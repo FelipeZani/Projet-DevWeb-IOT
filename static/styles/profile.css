@@ -1,0 +1,141 @@
+#profile-container{
+    display: flex;
+    justify-content: center;
+}
+.custom-container{
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+#edit-info-button,
+#cancel-info-button{
+    padding: 13px 40px;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.red-btn{
+    background-color: red;
+}
+
+.change-info-form{
+    display: flex;
+    flex-direction: column;
+    color: #4f4f4f;
+    margin-bottom: 20px;
+}
+.change-info-form input{
+    height: 40px;
+    max-width: 276.5px;
+}
+.change-info-form button{
+    margin-top: 10px;
+    height: 40px;
+    max-width: 285px;
+}
+.red-btn{
+    background-color: red;
+}
+.hide{
+   display: none;
+}
+.hide-form{
+    visibility: hidden;
+}
+
+#family-container>ul{
+    list-style: none;
+    padding: 0;
+}
+#family-container>ul li{
+    margin-bottom: 5px;
+    background-color: #84a8f7;
+    height: 40px;
+
+}
+
+
+#account-info{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin:0 2% 0 2%;
+}
+#account-info>div{
+    display: grid;
+    grid-template-rows:1fr 1fr;
+}
+
+#user-info-container>div label:first-of-type{
+    font-size: small;
+    color: rgb(114, 114, 114);
+    margin-top: 5px;
+  
+}
+
+#user-info-container{
+    border-left-style: solid;
+    border-left-width: 2px;
+        padding-left: 5px;
+}
+#user-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 70%;
+    align-items: center;
+}
+#change-info-container{
+    width: 50%;
+}   
+#user-banner{
+    text-align: center;
+}
+
+#family-container{
+    grid-column: span 2;
+    text-align: center;
+
+}
+#family-container ul{
+    margin-left: 3%;
+    margin-right: 3%;
+    overflow: auto;
+}
+
+#separator-family-container{
+    width:100%;
+    grid-column: span 2;
+}
+.family-banner{
+    font-size: x-large;
+}
+
+@media (max-width: 768px) {
+    #profile-container{
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+    #user-container{
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #change-info-container{
+        margin: 0 auto;
+        
+    }
+    #user-info-container{
+        border-left-style: none;
+        border-left-width: 0;
+        padding-left: 0;
+    }
+    
+    .hide-form{
+        visibility: collapse;
+    }
+    hr{
+        display: none;
+    }
+}

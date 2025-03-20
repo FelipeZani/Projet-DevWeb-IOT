@@ -91,12 +91,3 @@ password.oninput = function () {
   power.style.backgroundColor = colorPower[strength]
 }
 
-
-
-
-
-
-
-
-
-//custom elements

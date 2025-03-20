@@ -71,7 +71,6 @@ border-radius: 20px;
     transition: 0.5s width ease-out;
 }
 
-
 .incorect-input-field{
     border: 2px solid red;
 }

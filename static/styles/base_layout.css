@@ -16,6 +16,7 @@
     cursor: pointer;
 
   }
+
   .custom-button.disabled{
     opacity: 0.6 ;
     cursor: not-allowed;
@@ -88,6 +89,16 @@
   #check {
     display: none;
   }
+  /* Form functions*/
+
+  .form-diag input ,
+  .form-diag select,
+  .form-diag button{
+    height: 40px;
+    margin-bottom: 20px;
+    width: 70%;
+  }
+
 
   @media (max-width: 768px) {
     .checkbtn {
@@ -112,7 +123,7 @@
       box-shadow: 2px 4px 8px rgba(0,0,0,.2);
 
     }
-  
+    
     nav .custom-ul> li {
       margin: 20px 0;
     }
@@ -159,3 +170,5 @@
     display: flex;
     justify-content: center;
   }
+
+  
