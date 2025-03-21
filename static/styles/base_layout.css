@@ -5,7 +5,10 @@
     height: 300dvh;
   }
 
-  body:has(input[type=checkbox]:checked) {
+  body:has(input[type=checkbox]:checked),
+  body:has(#signUpFrmBtn:focus),
+  body:has(#logInFrmBtn:focus)
+  {
     overflow-y: hidden;
   }
 
@@ -14,6 +17,7 @@
     border: none;
     color: white;
     cursor: pointer;
+    border-radius: 10px;
 
   }
 

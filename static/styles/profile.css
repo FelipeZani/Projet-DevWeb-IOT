@@ -28,12 +28,17 @@
 .change-info-form input{
     height: 40px;
     max-width: 276.5px;
+    border: 0.2px solid gray;
+    margin-bottom: 2px;
+    background-color: #E8F0FE;
+
 }
 .change-info-form button{
     margin-top: 10px;
     height: 40px;
     max-width: 285px;
 }
+
 .red-btn{
     background-color: red;
 }
@@ -73,11 +78,6 @@
   
 }
 
-#user-info-container{
-    border-left-style: solid;
-    border-left-width: 2px;
-        padding-left: 5px;
-}
 #user-container{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -85,7 +85,11 @@
     align-items: center;
 }
 #change-info-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
     width: 50%;
+    column-gap: 20px;
 }   
 #user-banner{
     text-align: center;
@@ -102,12 +106,8 @@
     overflow: auto;
 }
 
-#separator-family-container{
-    width:100%;
-    grid-column: span 2;
-}
-.family-banner{
-    font-size: x-large;
+.family-banner, #user-info-container label {
+    font-size: large;
 }
 
 @media (max-width: 768px) {

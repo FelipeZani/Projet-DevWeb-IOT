@@ -31,16 +31,16 @@ function handleDiagFormOptions(isLoginSelected) {
     logInBtnFrm.classList.add("ls-button-activated") 
     signUpBtnFrm.classList.remove("ls-button-activated") 
     
-    logInFrm.style.visibility = "visible"   
-    signUpFrm.style.visibility = "collapse"  
+    logInFrm.style.display = "flex"   
+    signUpFrm.style.display = "none"  
 
   } else {
     
     logInBtnFrm.classList.remove("ls-button-activated") 
     signUpBtnFrm.classList.add("ls-button-activated") 
     
-    logInFrm.style.visibility = "collapse"   
-    signUpFrm.style.visibility = "visible"
+    logInFrm.style.display = "none"   
+    signUpFrm.style.display = "flex"
 
   }
 }

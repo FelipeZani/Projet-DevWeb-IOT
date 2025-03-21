@@ -6,6 +6,7 @@ function displayForm(button, index) {
 
     let formList = document.getElementsByClassName('change-info-form');
     let displayChanges = document.getElementsByClassName('display-changes');
+    let formArray = Array.from(formList);
 
     if (!button || !displayChanges[index]) {
         console.error('Invalid button or display-changes element');
@@ -17,7 +18,6 @@ function displayForm(button, index) {
     button.classList.add('hide');
     displayChanges[index].classList.remove('hide');
 
-    let formArray = Array.from(formList);
 
     if (index === 1) {
         formArray.forEach(element => {

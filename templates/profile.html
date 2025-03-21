@@ -91,14 +91,15 @@
           <label>Level</label>
           <label>{{session["level"]}}</label>
         </div>
+        <button class="custom-button display-changes" id="edit-info-button" onclick="displayForm(this,1)">Edit info</button>
+        <button class="custom-button red-btn display-changes hide" id="cancel-info-button" onclick="displayForm(this,0)">Cancel</button>
       </div>
 
       {% if request.args.get('message') %}
         <p style="color:red">{{ request.args.get('message') }}</p>
       {% endif %}
         
-      <button class="custom-button display-changes" id="edit-info-button" onclick="displayForm(this,1)">Edit info</button>
-      <button class="custom-button red-btn display-changes hide" id="cancel-info-button" onclick="displayForm(this,0)">Cancel</button>
+
       <div id="change-info-container">
         <form action="{{ url_for('change_email') }}" method="POST" class="change-info-form hide-form" >
       
@@ -125,7 +126,6 @@
       
      
     </div>
-    <hr id="separator-family-container"/>
     <div id="family-container">
       <h2>Your family list</h2>
       <ul>
