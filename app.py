@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for,jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Integer, String, Boolean, MetaData, inspect, text
@@ -73,72 +73,67 @@ def dashboard():
     return render_template("dashboard.html", objects=objects)
 
 
-@app.route("/login", methods=["POST","GET"])
+
+@app.route("/login", methods=["POST"])
 def login():
-    message = None
-    list_messages = []
- 
-    # Collect infos from form
-    username = request.form.get("username")
-    password = request.form.get("password")
-    action = request.form.get("action")
+    # Collect form data from the frontend
+    data = request.get_json()  # Getting data from the front
+    username = data.get("username")
+    password = data.get("password")
+    action = data.get("action")
     
+    # List for storing messages
+    list_messages = []
 
     if action == "signin":
-            
-            user = User.query.filter_by(username=username).first()
-            if not user: # user doesnt exists
-                message = "Incorrect username or password"
-                list_messages.append({'sin-form':message})    
-            elif check_password_hash(user.password, password) and user.is_verified:
-                session["username"] = user.username
-                session["fname"] = user.fname
-                session["lname"] = user.lname
-                session["gender"] = user.gender
-                session["role"] = user.role
-                session["birthdate"] = user.birthdate.strftime("%Y-%m-%d")
-                session["level"] = user.level
-                session["email"] = user.email
-                session["verified"] = 1
-                add_points(user.username, 1)
-                log_user_login(user.username)
-                return redirect(url_for('dashboard'))
-            elif not user.is_verified:
-                message = "You are not in the family yet, please wait for admin to accept you"
-                list_messages.append({'nif':message})
-            else:
-                message = "Incorrect username or password"
-                list_messages.append({'sin-form':message}) #add something here 
+        user = User.query.filter_by(username=username).first()
+        if not user:  # User does not exist
+            list_messages.append({'sin-form': "Incorrect username or password"})
+        elif check_password_hash(user.password, password) and user.is_verified:
+            # Set session variables
+            session["username"] = user.username
+            session["fname"] = user.fname
+            session["lname"] = user.lname
+            session["gender"] = user.gender
+            session["role"] = user.role
+            session["birthdate"] = user.birthdate.strftime("%Y-%m-%d")
+            session["level"] = user.level
+            session["email"] = user.email
+            session["verified"] = 0
+
+            # Return a success message and redirect URL
+            return jsonify({"success": True, "redirect": url_for('dashboard')}), 200
+        elif not user.is_verified:
+            list_messages.append({'nif': "You are not in the family yet, please wait for admin to accept you"})
+        else:
+            list_messages.append({'sin-form': "Incorrect username or password"})
+    
     elif action == "signup":
-        fname = request.form.get("fname")
-        lname = request.form.get("lname")
-        email = request.form.get("email")
-        gender = request.form.get("gender")
-        role = request.form.get("role")
-        birthdate_str = request.form.get("birthdate")
+        fname = data.get("fname") 
+        lname = data.get("lname")
+        email = data.get("email")
+        gender = data.get("gender")
+        role = data.get("role")
+        birthdate_str = data.get("birthdate")
         birthdate = datetime.strptime(birthdate_str, "%Y-%m-%d").date()
+
+        # Validate fields
         if not username or not email or not password or not role or not birthdate_str or not gender or not fname or not lname:
-            message = "All fields must be filled"
-            list_messages.append({'sup-form':message})
+            list_messages.append({'sup-form': "All fields must be filled"})
         if User.query.filter_by(username=username).first():
-            message = "Username already taken"
-            list_messages.append({'susername':message})
+            list_messages.append({'susername': "Username already taken"})
         if User.query.filter_by(email=email).first():
-            message = "Email already taken"
-            list_messages.append({'email':message})
+            list_messages.append({'email': "Email already taken"})
         if gender not in ["male", "female"]:
-            message = "Gender is incorrect"
-            list_messages.append({'gender':message})
+            list_messages.append({'gender': "Gender is incorrect"})
         if role not in ["parent", "child"]:
-            message = "Role is incorrect"
-            list_messages.append({'role':message})
+            list_messages.append({'role': "Role is incorrect"})
         if birthdate > datetime.today().date():
-            message = "You are not Marty McFly"
-            list_messages.append({'nif':message})
+            list_messages.append({'nif': "You are not Marty McFly"})
         elif len(username) > 32 or len(username) < 3 or len(email) > 64 or len(email) < 3 or len(password) > 32  or len(password) < 0 or len(fname) < 3 or len(fname) > 32 or len(lname) < 3 or len(lname) > 32:
-            message = "username, first name and last name are 32 chars max, email is 64 chars max"
-            list_messages.append({"sup-form":message})
-        if len(list_messages) == 0:
+            list_messages.append({"sup-form": "Username, first name, last name, and email should have specified max lengths"})
+        
+        if not list_messages:
             hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
             new_user = User(
                 username=username, 
@@ -146,15 +141,19 @@ def login():
                 lname=lname,
                 email=email, 
                 password=hashed_password,
-                gender = gender,
+                gender=gender,
                 role=role,
                 birthdate=birthdate,
                 level=0,
-                is_verified=1,
+                is_verified=0,  
             )
             db.session.add(new_user)
             db.session.commit()
-    return render_template("home.html", message=list_messages)
+            return jsonify({"success": True, "message": "User registered successfully!"}), 200
+        
+    # If validation failed, return error messages to frontend
+    return jsonify({"success": False, "messages": list_messages}),401
+
 
 @app.route("/logout")
 def logout():

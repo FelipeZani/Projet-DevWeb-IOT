@@ -22,22 +22,6 @@
   <link rel="shortcut icon" href="#">
 
   <script defer src="{{ url_for('static', filename='scripts/home.js') }}"></script>
-  <script defer type="text/javascript">
-
-    const msgClassList = [] //getting data from the server and storing them into variables for later styling
-    const msgList = []
-    {% if message is defined and message|length>0%}
-      {% for index in range(message|length) :%}
-        {% for key in message[index]: %}
-          msgClassList.push({{key|tojson}})
-          msgList.push({{message[index][key]|tojson}})
-        {%endfor%}
-      {%endfor%}
-      console.log(msgList)
-    {% else: %} 
-      console.log("Your enrollement was accepted, wait for an admin to add you to your family")
-    {%endif%}
-  </script>
 {%endblock%}
 
 
@@ -70,18 +54,18 @@
       
       <input type="password" id="password" name="password" class="sin-form" required placeholder="password" minlength="0" maxlength="32">
       
-      <button type="submit" name="action" value="signin" class="custom-button" >Log in</button>
+      <button type="button" name="action" value="signin" class="custom-button" onclick="checkLogIn()">Log in</button>
     </form>
 
   <form class="form-diag" id="signUpFrm" method="POST" action="{{url_for('login')}}">
     <h3>SIGN UP</h3>
-    <input type="text" id="username" name="username" class="sup-form susername" required placeholder="username" minlength="3" maxlength="32">
+    <input type="text" id="susername" name="username" class="sup-form susername" required placeholder="username" minlength="3" maxlength="32" title="Special characters are not allowed">
     
-    <input type="text" id="fname" name="fname" class="sup-form fname" required placeholder="first name" minlength="3" maxlength="32">
+    <input type="text" id="fname" name="fname" class="sup-form fname" required placeholder="first name" minlength="3" maxlength="32" title="Special characters are not allowed">
     
-    <input type="text" id="lname" name="lname"  class="sup-form lname" required placeholder="last name" minlength="3" maxlength="32">
+    <input type="text" id="lname" name="lname"  class="sup-form lname" required placeholder="last name" minlength="3" maxlength="32" title="Special characters are not allowed">
     
-    <input type="password" id="signup-password" name="password" title="Only letters, numbers and $@#&!€ are accepted" required placeholder="password" minlength="6" maxlength="32" oninput="checkPassword()">
+    <input type="password" id="signup-password" name="password" title="Only letters, numbers and $@#&!€ are accepted" required placeholder="password" minlength="6" maxlength="32">
   
     <div id="power-container">
       <div id="power-border" >
@@ -106,7 +90,7 @@
     <label for="birthdate">Birthdate:</label>
     <input type="date" id="birthdate" name="birthdate" class="sup-form" min="1920-01-01" max="2007-12-31" required>
     
-    <button type="submit" name="action" value="signup"  class="custom-button" id="sub-btn">Sign up</button>
+    <button type="button" name="action" value="signup"  class="custom-button" id="sub-btn" onclick="checkSignUp()">Sign up</button>
 
   </form>
   </dialog>
