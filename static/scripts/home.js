@@ -32,6 +32,7 @@ function handleDiagFormOptions(isLoginSelected) {
     logInBtnFrm.classList.add("ls-button-activated") 
     signUpBtnFrm.classList.remove("ls-button-activated") 
     
+    signUpFrm.reset()
     logInFrm.style.display = "flex"   
     signUpFrm.style.display = "none"  
 
@@ -40,6 +41,7 @@ function handleDiagFormOptions(isLoginSelected) {
     logInBtnFrm.classList.remove("ls-button-activated") 
     signUpBtnFrm.classList.add("ls-button-activated") 
     
+    logInFrm.reset()
     logInFrm.style.display = "none"   
     signUpFrm.style.display = "flex"
 
@@ -94,7 +96,6 @@ password.oninput = function () {
 
 //check Login/signup and submiting through http request
 function checkLogIn(){
-  
   let userNameLength = logInFrm["username"].value.length
   let passWordLength = logInFrm["password"].value.length
   let isOperationValid = true
@@ -110,8 +111,10 @@ function checkLogIn(){
     isOperationValid = false
   
   }
+
   if(isOperationValid){ 
     sendLoginRequest(logInFrm["username"],logInFrm["password"])
+
   }else{
     return;
   }
@@ -136,7 +139,6 @@ function checkSignUp(){
       
   }
   if(isOperationValid){
-    alert("Sign up is being sent")
     sendSignUpRequest(signUpFrm["susername"].value,signUpFrm["signup-password"].value, signUpFrm["fname"].value, signUpFrm["lname"].value
       ,signUpFrm["email"].value, signUpFrm["gender"].value,signUpFrm["role"].value,signUpFrm["birthdate"].value)
 
@@ -167,6 +169,7 @@ function sendSignUpRequest(  username,password,fname,lname,email,gender,role,bir
   .then(data => {
     if (data.success) {
       alert("Your account was successfully created, you shall wait for an admin to add you to the family")
+      signUpFrm.reset()
     } else {
       // Display error messages
       data.messages.forEach(message => {
@@ -184,6 +187,7 @@ function sendSignUpRequest(  username,password,fname,lname,email,gender,role,bir
 }
 
 function sendLoginRequest(username, password) {
+
   fetch("/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

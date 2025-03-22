@@ -99,7 +99,7 @@ def login():
             session["birthdate"] = user.birthdate.strftime("%Y-%m-%d")
             session["level"] = user.level
             session["email"] = user.email
-            session["verified"] = 0
+            session["verified"] = 1
 
             # Return a success message and redirect URL
             return jsonify({"success": True, "redirect": url_for('dashboard')}), 200
