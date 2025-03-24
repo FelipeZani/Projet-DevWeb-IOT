@@ -90,6 +90,7 @@ def dashboard():
     return render_template("dashboard.html", objects=objects)
 
 
+#Pour le login
 @app.route("/login", methods=["POST"])
 def login():
     # Collect form data from the frontend
@@ -651,4 +652,4 @@ def log_user_login(username):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run()
+    app.run(debug=True)
