@@ -2,10 +2,14 @@ from flask import Flask, render_template, request, redirect, session, url_for,js
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Integer, String, Boolean, MetaData, inspect, text
+from static.application_modules.mailing.mailling import add_dict_confirmation_list,accounts_to_confirm,send_mail
+from flask_mailman import Mail
 from datetime import datetime
-from static.application_modules.mailing import mailling
+from time import time
 import os
 import re
+import uuid
+
 
 app= Flask(__name__)
 # Makes sure user can't modify cookie and can't give him admin rights or other bad things ;)
@@ -16,6 +20,19 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 metadata = MetaData()
+
+
+
+# Config Mailman
+app.config['MAIL_SERVER'] = "smtp.gmail.com"
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = "projetweb.iot@gmail.com"
+app.config['MAIL_PASSWORD'] = "kpdm hdvx jtic fvul"
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+mail = Mail(app)
+
 
 # Database model
 class User(db.Model):
@@ -73,7 +90,6 @@ def dashboard():
     return render_template("dashboard.html", objects=objects)
 
 
-
 @app.route("/login", methods=["POST"])
 def login():
     # Collect form data from the frontend
@@ -107,7 +123,6 @@ def login():
             list_messages.append({'nif': "You are not in the family yet, please wait for admin to accept you"})
         else:
             list_messages.append({'sin-form': "Incorrect username or password"})
-    
     elif action == "signup":
         fname = data.get("fname") 
         lname = data.get("lname")
@@ -134,26 +149,62 @@ def login():
             list_messages.append({"sup-form": "Username, first name, last name, and email should have specified max lengths"})
         
         if not list_messages:
+            
+            #creating a dict structure to store the users data, and an index to in order to implement mail confirmation system:
+            # user is sent a mail containing link (tokien validation), click on it will trigger the validation of the mail
             hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-            new_user = User(
-                username=username, 
-                fname=fname,
-                lname=lname,
-                email=email, 
-                password=hashed_password,
-                gender=gender,
-                role=role,
-                birthdate=birthdate,
-                level=0,
-                is_verified=0,  
-            )
-            db.session.add(new_user)
-            db.session.commit()
-            return jsonify({"success": True, "message": "User registered successfully!"}), 200
+            
+            user_sup_data = { #user data dict
+                "username":username, 
+                "fname":fname,
+                "lname":lname,
+                "email" : email, 
+                "password" : hashed_password,
+                "gender": gender,
+                "role" : role,
+                "birthdate" : birthdate,  
+            }
+
+            user_id = str(uuid.uuid4())[0:12] #get the first 12 characters of the id 
+            
+            add_dict_confirmation_list(user_id,user_sup_data)
+            
+            send_mail(email,fname,user_id)
+           
+            return jsonify({"success":True,"message":"Confirmation Mail Sent"}),200
         
     # If validation failed, return error messages to frontend
     return jsonify({"success": False, "messages": list_messages}),401
 
+#After clicking on the link user will have its token verified, in case of success added to the data base
+@app.route("/signup/<userid>")
+def confirm_email(userid):
+
+    try:   
+        user_data = accounts_to_confirm[userid]
+        new_user = User(
+            username = user_data["username"], 
+            fname = user_data["fname"],
+            lname = user_data["lname"],
+            email = user_data["email"], 
+            password = user_data["password"],
+            gender = user_data["gender"],
+            role = user_data["role"],
+            birthdate = user_data["birthdate"],
+            level=0,
+            is_verified=0,  
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+        
+        del accounts_to_confirm[userid]
+
+        return render_template("home.html"), 200
+    
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"success": False, "message": "Invalid registration token!\n Error: "}), 400
 
 @app.route("/logout")
 def logout():
@@ -600,4 +651,4 @@ def log_user_login(username):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    app.run()

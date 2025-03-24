@@ -9,7 +9,7 @@ const signUpFrm = document.getElementById("signUpFrm")
 let strength = checkStrength(signUpFrm['password'].value)
 let password = document.getElementById("signup-password")
 let power = document.getElementById("contet-load")
-let invalidInputs = document.getElementsByClassName("incorect-input-field")
+let invalidInputs = document.getElementsByClassName("incorrect-input-field")
 
 
 //Dialog
@@ -102,12 +102,12 @@ function checkLogIn(){
   
   if( userNameLength <= 0){
     
-    logInFrm["username"].classList.add('incorect-input-field')
+    logInFrm["username"].classList.add('incorrect-input-field')
     isOperationValid = false
   }
   if( passWordLength <= 0){
     
-    logInFrm["password"].classList.add('incorect-input-field')
+    logInFrm["password"].classList.add('incorrect-input-field')
     isOperationValid = false
   
   }
@@ -115,9 +115,9 @@ function checkLogIn(){
   if(isOperationValid){ 
     sendLoginRequest(logInFrm["username"],logInFrm["password"])
 
-  }else{
-    return;
   }
+
+  return
   
 }
 
@@ -132,7 +132,7 @@ function checkSignUp(){
 
     if(signupInputList[i].value.length <= 0){
       
-      signupInputList[i].classList.add("incorect-input-field")
+      signupInputList[i].classList.add("incorrect-input-field")
 
       isOperationValid = false
     }
@@ -154,7 +154,7 @@ function sendSignUpRequest(  username,password,fname,lname,email,gender,role,bir
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      username :   username,
+      username :username,
       password:password,
       fname:fname,
       lname:lname,
@@ -168,20 +168,25 @@ function sendSignUpRequest(  username,password,fname,lname,email,gender,role,bir
   .then(response=>response.json())
   .then(data => {
     if (data.success) {
-      alert("Your account was successfully created, you shall wait for an admin to add you to the family")
+      
       signUpFrm.reset()
+      
+      dialog.close()
+      
+      alert("We sent you a confirmation email. Please wait for an admin to add you to the family.")
+
     } else {
       // Display error messages
       data.messages.forEach(message => {
       for (let key in message) {     
-          document.getElementById(key).classList.add("incorect-input-field")
+          document.getElementById(key).classList.add("incorrect-input-field")
           alert(message[key])
         }
       })
     }
   })
   .catch(error => {
-      console.error("Error:", error);
+      console.error("Error:", error)
   })
 
 }
@@ -208,14 +213,13 @@ function sendLoginRequest(username, password) {
             
             for (let key in message) {
                 
-              alert(message[key]);
+              alert(message[key])
             
             }
-
-          });
+          })
           
-          username.classList.add('incorect-input-field')
-          password.classList.add('incorect-input-field')
+          username.classList.add('incorrect-input-field')
+          password.classList.add('incorrect-input-field')
       }
   })
   .catch(error => {
@@ -229,7 +233,7 @@ function sendLoginRequest(username, password) {
 //Login Signup Input eventListeners
 
 document.addEventListener("click", function(event) {
-  if (event.target.classList.contains("incorect-input-field")) {
-    event.target.classList.remove("incorect-input-field");
+  if (event.target.classList.contains("incorrect-input-field")) {
+    event.target.classList.remove("incorrect-input-field");
   }
 });
