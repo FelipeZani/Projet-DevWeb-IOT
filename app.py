@@ -73,7 +73,7 @@ def dashboard():
     return render_template("dashboard.html", objects=objects)
 
 
-
+#Pour le login
 @app.route("/login", methods=["POST"])
 def login():
     # Collect form data from the frontend
