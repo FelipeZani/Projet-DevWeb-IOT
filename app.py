@@ -22,6 +22,9 @@ db = SQLAlchemy(app)
 metadata = MetaData()
 
 
+with app.app_context():
+    db.create_all()
+
 
 # Config Mailman
 app.config['MAIL_SERVER'] = "smtp.gmail.com"
@@ -57,6 +60,21 @@ class DelSuggestion(db.Model):
     id = Column(Integer, primary_key=True)
     table_name = Column(String, nullable=False)
     username = Column(String, nullable=False)
+
+class Room(db.Model):
+    __tablename__ = 'rooms'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    objects = db.relationship('Object', backref='room', cascade='all, delete-orphan')
+
+class Object(db.Model):
+    __tablename__ = 'objects'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    type = db.Column(db.String(100))
+    description = db.Column(db.Text)
+    room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'), nullable=False)
+
 
 # Routes
 @app.route("/")
@@ -471,6 +489,7 @@ def remove_object():
 
     return render_template("remove_object.html", tables=all_tables)
 
+#add_objet
 @app.route("/add_object", methods=["GET", "POST"])
 def add_object():
     if 'username' not in session:
@@ -567,6 +586,83 @@ def delete_table():
         return redirect(url_for("admin_panel", message="Deleted table successfully"))
     except Exception as e:
         return redirect(url_for("admin_panel", message=f"Error: {str(e)}"))
+
+""" 
+@app.route("/test_max", methods=["GET","POST"])
+def config_maison():
+
+    if 'username' not in session or not session["verified"]:
+        return redirect(url_for("dashboard"))
+    
+    return render_template("config_maison.html")
+"""
+
+@app.route("/config_maison", methods=["GET"])
+def config_maison():
+    rooms = Room.query.all()
+    return render_template("config_maison.html", rooms=rooms, selected_room=None)
+
+@app.route('/create_piece', methods=['POST'])
+def create_piece():
+    name = request.form.get('new_room')
+    if name:
+        new_room = Room(name=name)
+        db.session.add(new_room)
+        db.session.commit()
+        rooms = Room.query.all()
+    return redirect(url_for('config_maison'))
+
+@app.route('/select_piece', methods=['GET'])
+def select_piece():
+    room_id = request.args.get('room_id')
+    selected_room = Room.query.get(room_id)
+    rooms = Room.query.all()
+    return render_template("config_maison.html", rooms=rooms, selected_room=selected_room)
+
+@app.route('/add_object2', methods=['POST'])
+def add_object2():
+    room_id = request.form.get('room_id')
+    name = request.form.get('object_name')
+    type_ = request.form.get('object_type')
+    description = request.form.get('object_description')
+
+    if room_id and name:
+        new_object = Object(
+            name=name,
+            type=type_,
+            description=description,
+            room_id=room_id
+        )
+        db.session.add(new_object)
+        db.session.commit()
+
+    return redirect(url_for('select_piece', room_id=room_id))
+
+
+@app.route('/delete_object2', methods=['POST'])
+def delete_object2():
+    object_id = request.form.get('object_id')
+    room_id = request.form.get('room_id')
+
+    obj = Object.query.get(object_id)
+    if obj:
+        db.session.delete(obj)
+        db.session.commit()
+
+    return redirect(url_for('select_piece', room_id=room_id))
+
+
+@app.route('/delete_room2', methods=['POST'])
+def delete_room2():
+    room_id = request.form.get('room_id')
+    print("ID de la pièce à supprimer :", room_id)  # DEBUG
+
+    room = Room.query.get(room_id)
+    if room:
+        db.session.delete(room)
+        db.session.commit()
+
+    return redirect(url_for('config_maison'))
 
 @app.route("/edit_object", methods=["GET", "POST"])
 def edit_object():
