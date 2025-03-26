@@ -1,30 +1,57 @@
-#profile-container{
-    display: flex;
-    justify-content: center;
-}
+
 .custom-container{
     background-color: white;
     border-radius: 10px;
     margin-top: 20px;
+    padding-top: 2px;
 }
 
+#user-container{
+    width: 70%;
+    display: block;
+    
+}
+
+#profile-container{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+} 
+
+#edit-info-button-container{
+
+    grid-template-rows: 1fr !important;
+    margin: 10px 0;
+
+}
+#account-info{
+    padding: 10px;
+}
+
+#account-info>div{
+    display: grid;
+    grid-template-rows:1fr 1fr;
+    align-items: end;
+    justify-content: center;
+
+}
+
+#user-info-container>div label:first-of-type{
+    font-size: small;
+    color: rgb(114, 114, 114);
+}
 #edit-info-button,
 #cancel-info-button{
     padding: 13px 40px;
-    border-radius: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-.red-btn{
-    background-color: red;
+    max-width: 150px;
 }
 
 .change-info-form{
     display: flex;
     flex-direction: column;
     color: #4f4f4f;
-    margin-bottom: 20px;
 }
+
 .change-info-form input{
     height: 40px;
     max-width: 276.5px;
@@ -39,103 +66,76 @@
     max-width: 285px;
 }
 
+#family-container>ul{
+    list-style: none;
+    padding: 0; /* Remove paddig added by default by the ul tag*/
+   
+}
+.family-banner{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0  max(20px, 8dvw)
+}
+
+#change-info-form-container{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    justify-items: center;
+    grid-row-gap: 20px;
+    min-width: 380px;
+}
+
+.hide-form,
+.hide{
+    display: none;
+}
 .red-btn{
     background-color: red;
 }
-.hide{
-   display: none;
+
+ul li.family-banner{
+    font-size: max(x-large,60px);
 }
-.hide-form{
-    visibility: hidden;
+.bi.bi-person{
+    height: min(3em,60px);
+    
 }
 
-#family-container>ul{
-    list-style: none;
-    padding: 0;
-}
-#family-container>ul li{
-    margin-bottom: 5px;
-    background-color: #84a8f7;
-    height: 40px;
+@media (min-width: 768px) {
+    #account-info{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 20px;
+        row-gap: 10px;
+        align-items: end;
+        justify-items: center;
+    }
 
-}
+    .hide-form{
+        visibility: hidden;
+        display: inherit;
+    }
 
-
-#account-info{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin:0 2% 0 2%;
-}
-#account-info>div{
-    display: grid;
-    grid-template-rows:1fr 1fr;
-}
-
-#user-info-container>div label:first-of-type{
-    font-size: small;
-    color: rgb(114, 114, 114);
-    margin-top: 5px;
-  
-}
-
-#user-container{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 70%;
-    align-items: center;
-}
-#change-info-container{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: end;
-    width: 50%;
-    column-gap: 20px;
-}   
-#user-banner{
-    text-align: center;
-}
-
-#family-container{
-    grid-column: span 2;
-    text-align: center;
-
-}
-#family-container ul{
-    margin-left: 3%;
-    margin-right: 3%;
-    overflow: auto;
-}
-
-.family-banner, #user-info-container label {
-    font-size: large;
-}
-
-@media (max-width: 768px) {
-    #profile-container{
-        display: flex;
-        justify-content: center;
-        text-align: center;
+    ul li.family-banner{
+        font-size: x-large;
     }
     #user-container{
-        width: 90%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 20px;
+    }
+    #family-container{
+        grid-column: 1/span 2;
+    }
+    #edit-info-button-container{
+        margin:inherit;
+    }
+    #change-info-form-container{
         display: flex;
-        flex-direction: column;
-    }
-
-    #change-info-container{
-        margin: 0 auto;
-        
-    }
-    #user-info-container{
-        border-left-style: none;
-        border-left-width: 0;
-        padding-left: 0;
+        justify-content: space-around;
+        align-items: end;
+        margin-bottom: 5px;
     }
     
-    .hide-form{
-        visibility: collapse;
-    }
-    hr{
-        display: none;
-    }
 }
