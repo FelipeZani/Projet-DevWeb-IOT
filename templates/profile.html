@@ -21,9 +21,11 @@
 <ul class="custom-ul">
   <li><a href="{{ url_for('dashboard')}}">DashBoard</a></li>
   <li><a href="#">Devices</a></li>
-  <li>
-    <a href="{{url_for('logout')}}"><button class="button-signup custom-button">LogOut</button></a>
-  </li>
+  <li><a href="{{ url_for('profile') }}">Profile</a></li>
+  <li><a href="{{url_for('logout')}}">
+      <button class="button-signup custom-button">LogOut</button>
+    </a></li>
+
 </ul>
 
 {%endblock%}

@@ -13,6 +13,8 @@
 <ul class="custom-ul">
   <li><a href="{{ url_for('dashboard')}}">DashBoard</a></li>
   <li><a href="#">Devices</a></li>
+  <li><a href="{{ url_for('profile') }}">Profile</a></li>
+
   <li>
     <a href="{{url_for('logout')}}"><button class="button-signup custom-button">LogOut</button></a>
   </li>
@@ -34,7 +36,6 @@
       <p>Gender : {{ user.gender }}</p>
       <p>Role : {{ user.role }}</p>
       <p>Birthdate : {{ user.birthdate.strftime("%d-%m-%Y") }}</p> <!-- Format de la date -->
-      <a href="{{ url_for('profile') }}">Back to profile</a>
       <p>Level : {{ user.level }}</p>
     </div>
   </div>
