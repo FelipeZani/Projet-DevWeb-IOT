@@ -1,3 +1,12 @@
+{% set nav_list = [ 
+    {"name" :"Home", "url":"#"},
+    {"name" :"About", "url":"#"},
+    {"name" :"Our solution", "url":"#"},
+    {"name" :"Pricing", "url":"#"},
+    {"name" :"Login", "url":"#"},
+  ]%}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,12 +66,9 @@
             <section id="footer-info">
                 
                 <ul class="custom-ul">
-                    {%block footer_li%}
-                    <li class="nav-li"><a href="#">Lorem</a></li>
-                    <li><a href="#">Ipsum</a></li>
-                    <li><a href="#">Memento</a></li>
-                    <li><a href="#">Mori</a></li>
-                    {%endblock%}
+                    {% for li in nav_list%}
+                    <li><a href="{{li.url}}" title="check this profile">{{li.name}}</a></li>
+                  {%endfor%}
                 </ul>
             </section>
 

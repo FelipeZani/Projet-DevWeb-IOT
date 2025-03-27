@@ -78,11 +78,13 @@
   .custom-ul li a,
   a:visited {
     color: #2463eb;
-    text-decoration: none;
     transition: color 0.3s;
   }
   a:hover{
     color:#a7c1f7;
+  }
+  a{
+    text-decoration: none;
   }
   
   .custom-ul li a:hover {
@@ -149,14 +151,6 @@
       display: block;
 
     }
-    footer{
-      position:relative !important;
-    }
-    @media(orientation: landscape){
-      footer{
-        position:relative !important;
-      }
-    }
   
 
   }
@@ -190,4 +184,9 @@
     justify-content: center;
   }
 
-  
+  .custom-container{
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding-top: 2px;
+}

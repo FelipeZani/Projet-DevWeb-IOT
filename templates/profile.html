@@ -1,15 +1,5 @@
 
 
-<!-- Page's variable area in case you need to gen automatic header/footer content-->
-{% set nav_list = [ 
-  {"name" :"Home", "url":"#"},
-  {"name" :"About", "url":"#"},
-  {"name" :"Our solution", "url":"#"},
-  {"name" :"Pricing", "url":"#"},
-  {"name" :"Login", "url":"#"},
-]%}
-
-
 <!-- Page area-->
 {% extends "base_layout.html"%}
 
@@ -30,7 +20,6 @@
 
 <ul class="custom-ul">
   <li><a href="{{ url_for('dashboard')}}">DashBoard</a></li>
-  <li><a href="#">FindUsers</a></li>
   <li><a href="#">Devices</a></li>
   <li>
     <a href="{{url_for('logout')}}"><button class="button-signup custom-button">LogOut</button></a>
@@ -161,7 +150,5 @@
 
 
 {%block footer_li%}
-  {% for li in nav_list%}
-    <li><a href="{{li.url}}" title="check this profile">{{li.name}}</a></li>
-  {%endfor%}
+  {{super()}}
 {%endblock%}

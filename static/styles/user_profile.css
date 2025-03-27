@@ -1,0 +1,22 @@
+#info-member-container{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+.bi.bi-person-circle{
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+
+}
+#info-member-container div{
+    padding: 20px;
+}
+
+@media (min-width: 768px){
+    .bi.bi-person-circle{
+        height: 128px;
+        width: 128px;
+    
+    }
+}
