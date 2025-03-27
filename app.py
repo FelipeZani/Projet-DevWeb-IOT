@@ -211,7 +211,7 @@ def confirm_email(userid):
             role = user_data["role"],
             birthdate = user_data["birthdate"],
             level=0,
-            is_verified=1,  
+            is_verified=0,
         )
 
         db.session.add(new_user)
