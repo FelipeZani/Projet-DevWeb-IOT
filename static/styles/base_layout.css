@@ -3,7 +3,8 @@
     background-color: #ecf3fe;
     position: relative;
     font-family: "Lucida Console", "Courier New", monospace;
-    height: 90dvh;
+    height: 100dvh;
+    padding: 0;
   }
 
   /* Blocking the scroll when the menu bar is on */
@@ -151,7 +152,11 @@
       display: block;
 
     }
-  
+    
+    footer{
+      display: inline-block;
+      position: relative !important;
+    }
 
   }
 
