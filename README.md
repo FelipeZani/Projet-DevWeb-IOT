@@ -6,10 +6,10 @@ Attendus du module :<br>
 <del>• Vérifier le login/mot de passe lors de la connexion ;</del><br>
 <del>• Modifier le profil ;</del><br>
 <del>• Consulter le profil des autres membres ;</del><br><br>
-• Rechercher et consulter les outils/services variés proposés par la plateforme ;<br>
+<del>• Rechercher et consulter les outils/services variés proposés par la plateforme ;<br>
 o La recherche d’information doit contenir au moins deux (2) filtres.<br>
 • Rechercher et consulter les objets connectés enregistrés sur la plateforme ;<br>
-o La recherche d’information doit contenir au moins deux (2) filtres.<br>
+o La recherche d’information doit contenir au moins deux (2) filtres.<br></del>
 <del>• La possibilité de changer le niveau du profil utilisateur ;</del><br><br>
 <del>• Gérer le nombre d’accès des utilisateurs à la plateforme ;<br></del>
 <del>• Gérer le nombre d’actions faites par les utilisateurs ;<br></del>

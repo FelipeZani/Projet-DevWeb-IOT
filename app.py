@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Integer, String, Boolean, MetaData, inspect, text
 from static.application_modules.mailing.mailling import add_dict_confirmation_list,accounts_to_confirm,send_mail
 from flask_mailman import Mail
+from sqlalchemy.orm import joinedload
 from datetime import datetime
 from time import time
 import os
@@ -88,25 +89,34 @@ def signin():
 
 @app.route("/dashboard")
 def dashboard():
-    if 'username' not in session or not session["verified"]:
-        return redirect(url_for("home"))
+    if 'username' not in session or not session.get("verified"): # Vérifie aussi verified
+        # Si l'utilisateur n'est pas connecté ou vérifié, redirige vers la page d'accueil
+        return redirect(url_for("home", message="Veuillez vous connecter pour accéder au tableau de bord."))
 
-    inspector = inspect(db.engine)
-    tables = [table for table in inspector.get_table_names() if table not in ["user", "login_history", "del_suggestion"]]
-    objects = {}
+    # Récupérer les pièces pour le filtre
+    rooms = Room.query.order_by(Room.name).all()
 
-    metadata.reflect(bind=db.engine)
+    # Récupérer tous les objets avec leurs informations de pièce (eager loading)
+    objects_query = Object.query.options(joinedload(Object.room)).order_by(Object.name).all()
 
-    with db.engine.connect() as conn:
-        for table_name in tables:
-            table = metadata.tables.get(table_name)
-            if table is not None:
-                query = table.select()
-                result = conn.execute(query).fetchall()
-                objects[table_name] = [dict(row._mapping) for row in result]
+    # Préparer les données des objets pour le JavaScript (JSON)
+    objects_data = []
+    for obj in objects_query:
+        objects_data.append({
+            "id": obj.id,
+            "name": obj.name,
+            "type": obj.type or "N/A", # Fournir une valeur par défaut si None
+            "description": obj.description or "", # Fournir une valeur par défaut si None
+            "room_id": obj.room_id,
+            "room_name": obj.room.name if obj.room else "Pièce inconnue" # Gérer le cas où la pièce n'existe plus
+        })
 
-    return render_template("dashboard.html", objects=objects)
+    # Convertir en JSON pour le script dans le template
+    import json
+    objects_json = json.dumps(objects_data)
 
+    # Rendre le template avec les données nécessaires
+    return render_template("dashboard.html", rooms=rooms, objects_json=objects_json)
 
 #Pour le login
 @app.route("/login", methods=["POST"])

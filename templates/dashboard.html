@@ -1,22 +1,232 @@
-<!DOCTYPE html>
+{% extends "base_layout.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard</title>
-</head>
+{% block head %}
+{{ super() }}
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/dashboard.css') }}">
+{% endblock %}
 
-<body>
-  <p>Hello {{ session['fname'] }} {{ session["lname"] }}</p>
-  <a href="{{ url_for('add_object') }}"><button>Add object</button></a><br>
-  <a href="{{ url_for('logout') }}">LOGOUT</a><br>
-  <a href="{{ url_for('profile') }}">Profile</a><br>
+{% block title %}Tableau de Bord{% endblock %}
 
-  {% if session["level"] >= 20 %}
-  <a href="{{ url_for('admin_panel') }}">Admin Panel</a><br>
+{% block list %}
+{# Navigation spécifique au Dashboard #}
+<ul class="custom-ul">
+  {# MODIFIÉ: Lien Dashboard retiré car on est déjà dessus ? À toi de voir #}
+  <li><a href="{{ url_for('config_maison') }}">Gérer la Maison</a></li>
+  {% if session.get("level", 0) >= 20 %}
+  <li><a href="{{ url_for('admin_panel') }}">Panneau Admin</a></li>
   {% endif %}
+  <li><a href="{{ url_for('profile') }}">Profil</a></li>
+  <li>
+    <a href="{{url_for('logout')}}"><button class="button-signup custom-button">Déconnexion</button></a>
+  </li>
+</ul>
+{% endblock %}
 
-  <a href="{{ url_for('config_maison') }}">manage maison</a>
+{% block content %}
+<div class="custom-container">
+  <h1>Tableau de Bord</h1>
+  <p>Bienvenue, {{ session.get("fname", "Utilisateur") }} !</p>
 
-</body>
+  {# Section pour la recherche et la consultation des objets connectés #}
+  <section class="dashboard-section">
+    <h2>Objets Connectés Enregistrés</h2>
+    <form id="filter-form" onsubmit="event.preventDefault();">
+      <div class="filter-group">
+        <label for="room-filter">Filtrer par Pièce :</label>
+        <select id="room-filter" name="room_filter">
+          <option value="">Toutes les pièces</option>
+          {% for room in rooms %}
+          <option value="{{ room.id }}">{{ room.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="type-filter">Filtrer par Type (contient) :</label>
+        <input type="text" id="type-filter" name="type_filter" placeholder="Ex: Lampe, Capteur...">
+      </div>
+      <div class="filter-group">
+        <label for="name-filter">Filtrer par Nom (contient) :</label>
+        <input type="text" id="name-filter" name="name_filter" placeholder="Ex: Bureau, Salon...">
+      </div>
+    </form>
+    <p id="object-placeholder" class="placeholder-message">
+      Utilisez les filtres ci-dessus pour rechercher des objets.
+    </p>
+    <div id="object-list-container"></div>
+  </section>
 
-</html>
+  {# Section pour la recherche de fonctionnalités #}
+  <section class="dashboard-section" id="feature-search-section">
+    <h2>Recherche de Fonctionnalités</h2>
+
+    {# AJOUT: Boutons Radio pour filtrer les fonctionnalités Admin #}
+    <div class="radio-filter-group">
+      <span>Afficher :</span>
+      <input type="radio" id="admin-filter-all" name="admin-filter-radio" value="all" checked>
+      <label for="admin-filter-all">Toutes les fonctionnalités</label>
+
+      <input type="radio" id="admin-filter-hide" name="admin-filter-radio" value="hide">
+      <label for="admin-filter-hide">Cacher fonctionnalités Admin</label>
+    </div>
+
+    <input type="search" id="feature-search" placeholder="Rechercher une fonction (ex: profil, maison, admin...)">
+
+    {# Message d'attente pour les fonctionnalités #}
+    <p id="feature-placeholder" class="placeholder-message">
+      Commencez à taper pour rechercher une fonctionnalité.
+    </p>
+
+    {# Conteneur pour la liste (initiallement caché par CSS) #}
+    <div id="feature-list">
+      {# AJOUT: Classe admin-feature pour les liens admin pertinents #}
+      <a href="{{ url_for('profile') }}" class="feature-item">Voir mon Profil Utilisateur</a>
+      <a href="{{ url_for('profile') }}" class="feature-item">Changer mon mot de passe</a> {# Assure-toi que ces liens
+      pointent vers la bonne section/page si nécessaire #}
+      <a href="{{ url_for('profile') }}" class="feature-item">Changer mon email</a>
+      <a href="{{ url_for('profile') }}" class="feature-item">Voir ma famille</a>
+      <a href="{{ url_for('config_maison') }}" class="feature-item">Configurer la Maison (Pièces et Objets)</a>
+      {% if session.get("level", 0) >= 20 %}
+      <a href="{{ url_for('admin_panel') }}" class="feature-item admin-feature">Accéder au Panneau Administrateur</a>
+      {# Si tu ajoutes d'autres liens admin ici, ajoute aussi la classe admin-feature #}
+      {% endif %}
+      <a href="{{ url_for('logout') }}" class="feature-item">Se Déconnecter</a>
+    </div>
+  </section>
+
+</div><!-- End custom-container -->
+
+{# Script pour charger les données des objets #}
+<script type="application/json" id="objects-data">
+    {{ objects_json|safe }}
+</script>
+
+{# Script pour les filtres et la recherche #}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // --- Logique de Filtrage des Objets (INCHANGÉE) ---
+    const objectsData = JSON.parse(document.getElementById('objects-data').textContent);
+    const roomFilter = document.getElementById('room-filter');
+    const typeFilter = document.getElementById('type-filter');
+    const nameFilter = document.getElementById('name-filter');
+    const objectListContainer = document.getElementById('object-list-container');
+    const objectPlaceholder = document.getElementById('object-placeholder');
+
+    function filterAndDisplayObjects() {
+      const selectedRoomId = roomFilter.value;
+      const typeQuery = typeFilter.value.toLowerCase().trim();
+      const nameQuery = nameFilter.value.toLowerCase().trim();
+      const filtersActive = selectedRoomId || typeQuery || nameQuery;
+
+      if (!filtersActive) {
+        objectListContainer.style.display = 'none';
+        objectPlaceholder.style.display = 'block';
+        return;
+      }
+      objectListContainer.style.display = 'block';
+      objectPlaceholder.style.display = 'none';
+      const filteredObjects = objectsData.filter(obj => {
+        const roomMatch = !selectedRoomId || obj.room_id == selectedRoomId;
+        const typeMatch = !typeQuery || (obj.type && obj.type.toLowerCase().includes(typeQuery));
+        const nameMatch = !nameQuery || (obj.name && obj.name.toLowerCase().includes(nameQuery));
+        return roomMatch && typeMatch && nameMatch;
+      });
+      displayObjects(filteredObjects);
+    }
+
+    function displayObjects(objects) {
+      objectListContainer.innerHTML = '';
+      if (objects.length === 0) {
+        objectListContainer.innerHTML = '<p style="text-align: center; color: #888; padding: 15px;">Aucun objet ne correspond aux filtres actuels.</p>';
+        return;
+      }
+      objects.forEach(obj => {
+        const item = document.createElement('div');
+        item.className = 'object-item';
+        item.innerHTML = `
+                    <h3>${obj.name}</h3>
+                    <p><strong>Type :</strong> ${obj.type}</p>
+                    <p><strong>Pièce :</strong> ${obj.room_name}</p>
+                    ${obj.description ? `<small><strong>Description :</strong> ${obj.description}</small>` : ''}
+                `;
+        objectListContainer.appendChild(item);
+      });
+    }
+    roomFilter.addEventListener('change', filterAndDisplayObjects);
+    typeFilter.addEventListener('input', filterAndDisplayObjects);
+    nameFilter.addEventListener('input', filterAndDisplayObjects);
+
+    // --- Logique de Recherche de Fonctionnalités (MODIFIÉE) ---
+    const featureSearch = document.getElementById('feature-search');
+    const featureList = document.getElementById('feature-list');
+    const featureItems = featureList.querySelectorAll('.feature-item');
+    const featurePlaceholder = document.getElementById('feature-placeholder');
+    const adminFilterRadios = document.querySelectorAll('input[name="admin-filter-radio"]'); // Récupère les radios
+
+    // Fonction pour appliquer les filtres et gérer la visibilité
+    function applyFeatureFiltersAndVisibility() {
+      const query = featureSearch.value.toLowerCase().trim();
+      const adminFilterValue = document.querySelector('input[name="admin-filter-radio"]:checked').value;
+      const hideAdmin = adminFilterValue === 'hide';
+
+      // **CONDITION CLÉ MODIFIÉE** : La liste est visible SEULEMENT si la recherche N'EST PAS vide
+      if (!query) {
+        featureList.style.display = 'none';       // Cache la liste
+        featurePlaceholder.style.display = 'block'; // Affiche le placeholder
+        // Optionnel: Réinitialise l'affichage interne des items pour la prochaine recherche
+        featureItems.forEach(item => { item.style.display = 'block'; });
+        return; // Important: Sortir ici
+      }
+
+      // Si on arrive ici, c'est que query n'est pas vide : on affiche la liste
+      featureList.style.display = 'block';
+      featurePlaceholder.style.display = 'none';
+
+      // Applique les filtres (texte + admin) aux éléments de la liste *maintenant visible*
+      let matchFound = false;
+      featureItems.forEach(item => {
+        const itemText = item.textContent.toLowerCase();
+        const isAdminFeature = item.classList.contains('admin-feature');
+
+        // Condition texte
+        const textMatch = itemText.includes(query); // Doit correspondre à la recherche (puisque query n'est pas vide)
+
+        // Condition admin
+        const adminFilterMatch = !hideAdmin || !isAdminFeature;
+
+        // Afficher si les deux conditions sont vraies
+        if (textMatch && adminFilterMatch) {
+          item.style.display = 'block';
+          matchFound = true;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      // Optionnel : Gérer le cas où la liste est visible mais aucun item ne correspond
+      if (!matchFound) {
+        // Tu peux ajouter un message à l'intérieur de #feature-list si tu veux
+        // Exemple: if (!featureList.querySelector('.no-match-message')) { featureList.insertAdjacentHTML('beforeend', '<p class="no-match-message" style="text-align:center; color:#888;">Aucun résultat.</p>'); }
+      } else {
+        // Enlever le message "aucun résultat" s'il existe
+        // const noMatchMsg = featureList.querySelector('.no-match-message');
+        // if (noMatchMsg) noMatchMsg.remove();
+      }
+    }
+
+    // Écouteur pour la barre de recherche : déclenche la fonction complète
+    featureSearch.addEventListener('input', applyFeatureFiltersAndVisibility);
+
+    // Écouteurs pour les boutons radio : déclenchent AUSSI la fonction complète
+    // La fonction vérifiera si la recherche est vide et agira en conséquence.
+    adminFilterRadios.forEach(radio => {
+      radio.addEventListener('change', applyFeatureFiltersAndVisibility);
+    });
+
+    // Appel initial pour s'assurer que tout est caché au début
+    applyFeatureFiltersAndVisibility();
+
+  });
+</script>
+
+{% endblock %}
