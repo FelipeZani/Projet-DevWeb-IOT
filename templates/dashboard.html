@@ -104,7 +104,7 @@
 {# Script pour les filtres et la recherche #}
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // --- Logique de Filtrage des Objets (INCHANGÉE) ---
+    // Filtrage des Objets
     const objectsData = JSON.parse(document.getElementById('objects-data').textContent);
     const roomFilter = document.getElementById('room-filter');
     const typeFilter = document.getElementById('type-filter');
@@ -156,29 +156,26 @@
     typeFilter.addEventListener('input', filterAndDisplayObjects);
     nameFilter.addEventListener('input', filterAndDisplayObjects);
 
-    // --- Logique de Recherche de Fonctionnalités (MODIFIÉE) ---
+    // Recherche de Fonctionnalités
     const featureSearch = document.getElementById('feature-search');
     const featureList = document.getElementById('feature-list');
     const featureItems = featureList.querySelectorAll('.feature-item');
     const featurePlaceholder = document.getElementById('feature-placeholder');
     const adminFilterRadios = document.querySelectorAll('input[name="admin-filter-radio"]'); // Récupère les radios
 
-    // Fonction pour appliquer les filtres et gérer la visibilité
     function applyFeatureFiltersAndVisibility() {
       const query = featureSearch.value.toLowerCase().trim();
       const adminFilterValue = document.querySelector('input[name="admin-filter-radio"]:checked').value;
       const hideAdmin = adminFilterValue === 'hide';
 
-      // **CONDITION CLÉ MODIFIÉE** : La liste est visible SEULEMENT si la recherche N'EST PAS vide
       if (!query) {
         featureList.style.display = 'none';       // Cache la liste
-        featurePlaceholder.style.display = 'block'; // Affiche le placeholder
-        // Optionnel: Réinitialise l'affichage interne des items pour la prochaine recherche
+        featurePlaceholder.style.display = 'block';
         featureItems.forEach(item => { item.style.display = 'block'; });
-        return; // Important: Sortir ici
+        return;
       }
 
-      // Si on arrive ici, c'est que query n'est pas vide : on affiche la liste
+      // si on arrive ici, c'est que query n'est pas vide : on affiche la liste
       featureList.style.display = 'block';
       featurePlaceholder.style.display = 'none';
 
@@ -194,7 +191,6 @@
         // Condition admin
         const adminFilterMatch = !hideAdmin || !isAdminFeature;
 
-        // Afficher si les deux conditions sont vraies
         if (textMatch && adminFilterMatch) {
           item.style.display = 'block';
           matchFound = true;
@@ -202,16 +198,6 @@
           item.style.display = 'none';
         }
       });
-
-      // Optionnel : Gérer le cas où la liste est visible mais aucun item ne correspond
-      if (!matchFound) {
-        // Tu peux ajouter un message à l'intérieur de #feature-list si tu veux
-        // Exemple: if (!featureList.querySelector('.no-match-message')) { featureList.insertAdjacentHTML('beforeend', '<p class="no-match-message" style="text-align:center; color:#888;">Aucun résultat.</p>'); }
-      } else {
-        // Enlever le message "aucun résultat" s'il existe
-        // const noMatchMsg = featureList.querySelector('.no-match-message');
-        // if (noMatchMsg) noMatchMsg.remove();
-      }
     }
 
     // Écouteur pour la barre de recherche : déclenche la fonction complète

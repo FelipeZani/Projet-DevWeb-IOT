@@ -89,33 +89,31 @@ def signin():
 
 @app.route("/dashboard")
 def dashboard():
-    if 'username' not in session or not session.get("verified"): # Vérifie aussi verified
-        # Si l'utilisateur n'est pas connecté ou vérifié, redirige vers la page d'accueil
+    if 'username' not in session or not session.get("verified"):
         return redirect(url_for("home", message="Veuillez vous connecter pour accéder au tableau de bord."))
 
     # Récupérer les pièces pour le filtre
     rooms = Room.query.order_by(Room.name).all()
 
-    # Récupérer tous les objets avec leurs informations de pièce (eager loading)
+    # Récupérer tous les objets avec leurs informations de pièce
     objects_query = Object.query.options(joinedload(Object.room)).order_by(Object.name).all()
 
-    # Préparer les données des objets pour le JavaScript (JSON)
+    # JSON
     objects_data = []
     for obj in objects_query:
         objects_data.append({
             "id": obj.id,
             "name": obj.name,
-            "type": obj.type or "N/A", # Fournir une valeur par défaut si None
-            "description": obj.description or "", # Fournir une valeur par défaut si None
+            "type": obj.type or "N/A",
+            "description": obj.description or "",
             "room_id": obj.room_id,
-            "room_name": obj.room.name if obj.room else "Pièce inconnue" # Gérer le cas où la pièce n'existe plus
+            "room_name": obj.room.name if obj.room else "Pièce inconnue"
         })
 
-    # Convertir en JSON pour le script dans le template
+    # Convertir en JSON
     import json
     objects_json = json.dumps(objects_data)
 
-    # Rendre le template avec les données nécessaires
     return render_template("dashboard.html", rooms=rooms, objects_json=objects_json)
 
 #Pour le login
