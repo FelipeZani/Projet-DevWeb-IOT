@@ -1,0 +1,253 @@
+/* static/styles/admin_panel.css */
+
+/* General Styles within the container */
+.admin-container h1,
+.admin-container h2 {
+	color: #333;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+}
+
+.admin-container h1 {
+	margin-top: 0;
+}
+
+.admin-container h2 {
+	margin-top: 30px;
+	/* More space before sections */
+	font-size: 1.4em;
+}
+
+.admin-container p {
+	line-height: 1.6;
+	color: #555;
+}
+
+.admin-container>p:first-of-type {
+	/* First paragraph (greeting) */
+	font-size: 1.1em;
+	margin-bottom: 20px;
+}
+
+/* Admin Actions Section */
+.admin-actions {
+	background-color: #f8f9fa;
+	padding: 15px;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	margin-bottom: 30px;
+	display: flex;
+	/* Use flexbox for layout */
+	flex-wrap: wrap;
+	/* Allow items to wrap */
+	gap: 10px;
+	/* Space between items */
+	align-items: center;
+	/* Align items vertically */
+}
+
+.admin-actions a,
+.admin-actions form {
+	margin: 0;
+	/* Remove default margins if any */
+}
+
+/* Apply custom-button style to buttons in this section */
+.admin-actions .custom-button {
+	padding: 8px 15px;
+	/* Slightly smaller buttons */
+}
+
+/* Specific button styling */
+.admin-actions form[action*="backup_db"] .custom-button {
+	background-color: #17a2b8;
+	/* Info color */
+}
+
+.admin-actions form[action*="backup_db"] .custom-button:hover {
+	background-color: #138496;
+}
+
+.admin-actions form[action*="kill_admins"] .custom-button {
+	background-color: #dc3545;
+	/* Danger color */
+	border-color: #dc3545;
+}
+
+.admin-actions form[action*="kill_admins"] .custom-button:hover {
+	background-color: #c82333;
+	border-color: #bd2130;
+}
+
+
+/* Error/Message Styling */
+.flash-message {
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: #721c24;
+	/* Dark red text */
+	background-color: #f8d7da;
+	/* Light red background */
+	border-color: #f5c6cb;
+	/* Red border */
+}
+
+/* Table Styling */
+.admin-table-container {
+	overflow-x: auto;
+	/* Allow horizontal scroll on small screens */
+	margin-top: 15px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+.admin-table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: #fff;
+	/* White background for table */
+}
+
+.admin-table th,
+.admin-table td {
+	border-bottom: 1px solid #ddd;
+	padding: 12px 15px;
+	text-align: left;
+	vertical-align: middle;
+	/* Align content vertically centered */
+	white-space: nowrap;
+	/* Prevent text wrapping in cells initially */
+}
+
+/* Allow wrapping for specific columns if needed */
+/* .admin-table td:nth-child(2) { white-space: normal; } */
+
+.admin-table th {
+	background-color: #f8f9fa;
+	font-weight: bold;
+	color: #495057;
+	white-space: normal;
+	/* Allow header text to wrap */
+}
+
+.admin-table tbody tr:hover {
+	background-color: #f1f1f1;
+}
+
+.admin-table tr:last-child td {
+	border-bottom: none;
+}
+
+/* Table Actions Column */
+.admin-table td:last-child {
+	/* Actions column */
+	white-space: nowrap;
+	/* Keep buttons on one line if possible */
+	text-align: right;
+	/* Align actions to the right */
+}
+
+.admin-table td form,
+.admin-table td a {
+	display: inline-block;
+	/* Align forms/links horizontally */
+	margin: 0 3px;
+	/* Small space between actions */
+	vertical-align: middle;
+	/* Align vertically */
+}
+
+/* Apply base button style */
+.admin-table .custom-button {
+	padding: 5px 10px;
+	/* Smaller buttons for table actions */
+	font-size: 0.9em;
+	border-radius: 5px;
+}
+
+/* Specific Action Button Colors */
+.admin-table form[action*="verify_user"] .custom-button {
+	background-color: #28a745;
+	/* Success color */
+}
+
+.admin-table form[action*="verify_user"] .custom-button:hover {
+	background-color: #218838;
+}
+
+.admin-table form[action*="delete_user"] .custom-button,
+.admin-table form[action*="delete_table"] .custom-button {
+	background-color: #dc3545;
+	/* Danger color */
+}
+
+.admin-table form[action*="delete_user"] .custom-button:hover,
+.admin-table form[action*="delete_table"] .custom-button:hover {
+	background-color: #c82333;
+}
+
+.admin-table a[href*="edit_user"] .custom-button,
+.admin-table a[href*="view_login_history"] .custom-button {
+	background-color: #6c757d;
+	/* Secondary color */
+}
+
+.admin-table a[href*="edit_user"] .custom-button:hover,
+.admin-table a[href*="view_login_history"] .custom-button:hover {
+	background-color: #5a6268;
+}
+
+
+/* No suggestions paragraph */
+.no-suggestions {
+	color: #666;
+	font-style: italic;
+	margin-top: 15px;
+	padding: 15px;
+	background-color: #f8f9fa;
+	border: 1px solid #eee;
+	border-radius: 5px;
+	text-align: center;
+}
+
+#back-to-dashboard {
+	color: white;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+
+	.admin-table th,
+	.admin-table td {
+		padding: 10px 8px;
+		/* Consider allowing wrapping on smaller screens if needed */
+		/* white-space: normal; */
+	}
+
+	.admin-table td:last-child {
+		text-align: left;
+		/* Align actions left on small screens maybe? */
+	}
+
+	.admin-actions {
+		flex-direction: column;
+		/* Stack actions vertically */
+		align-items: stretch;
+		/* Stretch items full width */
+	}
+
+	.admin-actions a,
+	.admin-actions form {
+		width: 100%;
+		/* Make buttons/forms full width */
+	}
+
+	.admin-actions .custom-button {
+		width: 100%;
+		text-align: center;
+	}
+
+}

@@ -160,37 +160,6 @@
 	margin-bottom: 0;
 }
 
-.back-link {
-	/* Style the back link */
-	display: block;
-	/* Make it a block element to allow centering */
-	width: fit-content;
-	/* Adjust width to content + padding */
-	margin: 20px auto 0 auto;
-	/* Center horizontally (top margin 20px, others auto) */
-	padding: 10px 25px;
-	/* Slightly more padding for a button feel */
-	background-color: #2463eb;
-	/* Fond bleu */
-	color: white;
-	/* Texte blanc */
-	border-radius: 8px;
-	/* Coins arrondis comme les autres boutons */
-	text-decoration: none;
-	text-align: center;
-	/* Center text within the block */
-	border: none;
-	/* Remove default border if any */
-	transition: background-color 0.2s;
-}
-
-.back-link:hover {
-	background-color: #1a4acb;
-	/* Darker blue on hover */
-	color: white;
-	text-decoration: none;
-}
-
 #back-to-dashboard {
 	color: white;
 	margin-top: 0;
