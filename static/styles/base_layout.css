@@ -1,5 +1,5 @@
   /* Body set up */
-  body{
+  body {
     background-color: #ecf3fe;
     position: relative;
     font-family: "Lucida Console", "Courier New", monospace;
@@ -12,12 +12,11 @@
   /* Blocking the scroll when the menu bar is on */
   body:has(input[type=checkbox]:checked),
   body:has(#signUpFrmBtn:focus),
-  body:has(#logInFrmBtn:focus)
-  {
+  body:has(#logInFrmBtn:focus) {
     overflow-y: hidden;
   }
 
-  .custom-button{
+  .custom-button {
     background-color: #2463eb;
     border: none;
     color: white;
@@ -26,12 +25,13 @@
 
   }
 
-  .custom-button.disabled{
-    opacity: 0.6 ;
+  .custom-button.disabled {
+    opacity: 0.6;
     cursor: not-allowed;
-    
+
 
   }
+
   .button-signup {
     padding: 7px 30px;
     text-decoration: none;
@@ -39,14 +39,17 @@
     border-radius: 20px;
     cursor: pointer;
   }
-  .custom-ul button{
+
+  .custom-ul button {
     margin-left: auto;
   }
-  .nav-container{
+
+  .nav-container {
     display: flex;
     justify-content: center;
     height: auto;
   }
+
   nav {
     background-color: white;
     color: #2463eb;
@@ -56,59 +59,62 @@
     width: 70%;
     padding: 10px 20px;
     border-radius: 10px;
-    box-shadow: 2px 4px 8px rgba(0,0,0,.2);
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, .2);
     padding-top: 20px;
     padding-bottom: 20px;
   }
-  
+
   .logo {
     font-size: 1.5rem;
   }
-  
+
   .custom-ul {
     display: flex;
     list-style: none;
     padding: 0;
     margin: 0;
     align-items: center;
-    
+
   }
-  
+
   .custom-ul li {
     margin-right: 20px;
   }
-  
+
   .custom-ul li a,
   a:visited {
     color: #2463eb;
     transition: color 0.3s;
   }
-  a:hover{
-    color:#a7c1f7;
+
+  a:hover {
+    color: #a7c1f7;
   }
-  a{
+
+  a {
     text-decoration: none;
   }
-  
+
   .custom-ul li a:hover {
     color: #a7c1f7;
   }
-   
+
   .checkbtn {
     font-size: 30px;
     color: #2463eb;
     cursor: pointer;
     display: none;
   }
-  
+
   #check {
     display: none;
   }
+
   /* Form functions*/
 
-  .form-diag input ,
+  .form-diag input,
   .form-diag select,
-  .form-diag button{
+  .form-diag button {
     height: 40px;
     margin-bottom: 20px;
     width: 70%;
@@ -121,8 +127,8 @@
       order: 1;
       margin-right: 20px;
     }
-    
-   nav .custom-ul {
+
+    nav .custom-ul {
       position: fixed;
       z-index: 1;
       top: 80px;
@@ -135,11 +141,11 @@
       justify-content: center;
       align-items: center;
       transition: all 0.3s;
-      box-shadow: 2px 4px 8px rgba(0,0,0,.2);
+      box-shadow: 2px 4px 8px rgba(0, 0, 0, .2);
 
     }
-    
-    nav .custom-ul> li {
+
+    nav .custom-ul>li {
       margin: 20px 0;
     }
 
@@ -147,27 +153,30 @@
       font-size: 20px;
     }
 
-    #check:checked ~ ul {
+    #check:checked~ul {
       right: 0;
     }
-    #footer-info ul{
+
+    #footer-info ul {
       display: block;
 
     }
 
   }
 
- 
-  footer ul{
+
+  footer ul {
     margin-top: 20px;
     justify-content: space-between;
-    color:#2463eb;
+    color: #2463eb;
   }
+
   footer p {
     font-size: smaller;
-    color:gray;
+    color: gray;
   }
-  .wrapper{
+
+  .wrapper {
     min-height: 20%;
     margin-bottom: -20px;
   }
@@ -180,14 +189,15 @@
     bottom: 0;
     width: 100%;
   }
-  #footer-info{
+
+  #footer-info {
     display: flex;
     justify-content: center;
   }
 
-  .custom-container{
+  .custom-container {
     background-color: white;
     border-radius: 10px;
     margin-top: 20px;
     padding-top: 2px;
-}
+  }
