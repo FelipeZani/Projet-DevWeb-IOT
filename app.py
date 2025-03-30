@@ -130,7 +130,7 @@ def login():
 
     if action == "signin":
         user = User.query.filter_by(username=username).first()
-        if not user:  # User does not exist
+        if not user: # User does not exist
             list_messages.append({'sin-form': "Incorrect username or password"})
         elif check_password_hash(user.password, password) and user.is_verified:
             # Set session variables
@@ -143,6 +143,9 @@ def login():
             session["level"] = user.level
             session["email"] = user.email
             session["verified"] = 1
+
+            add_points(session["username"], 1)
+            log_user_login(session["username"])
 
             # Return a success message and redirect URL
             return jsonify({"success": True, "redirect": url_for('dashboard')}), 200
