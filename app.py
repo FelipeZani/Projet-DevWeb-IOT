@@ -607,11 +607,15 @@ def config_maison():
 
 @app.route("/config_maison", methods=["GET"])
 def config_maison():
+    if 'username' not in session or not session.get("verified"):
+        return redirect(url_for("home", message="Veuillez vous connecter pour accéder au tableau de bord."))
     rooms = Room.query.all()
     return render_template("config_maison.html", rooms=rooms, selected_room=None)
 
 @app.route('/create_piece', methods=['POST'])
 def create_piece():
+    if 'username' not in session or not session.get("verified"):
+        return redirect(url_for("home", message="Veuillez vous connecter pour accéder au tableau de bord."))
     name = request.form.get('new_room')
     if name:
         new_room = Room(name=name)
@@ -622,6 +626,8 @@ def create_piece():
 
 @app.route('/select_piece', methods=['GET'])
 def select_piece():
+    if 'username' not in session or not session.get("verified"):
+        return redirect(url_for("home", message="Veuillez vous connecter pour accéder au tableau de bord."))
     room_id = request.args.get('room_id')
     selected_room = Room.query.get(room_id)
     rooms = Room.query.all()
@@ -629,6 +635,8 @@ def select_piece():
 
 @app.route('/add_object2', methods=['POST'])
 def add_object2():
+    if 'username' not in session or not session.get("verified"):
+        return redirect(url_for("home", message="Veuillez vous connecter pour accéder au tableau de bord."))
     room_id = request.form.get('room_id')
     name = request.form.get('object_name')
     type_ = request.form.get('object_type')
@@ -671,6 +679,28 @@ def delete_room2():
         db.session.commit()
 
     return redirect(url_for('config_maison'))
+
+
+@app.route('/edit_object2', methods=['POST'])
+def edit_object2():
+    if 'username' not in session or not session.get("verified"):
+        return redirect(url_for("home", message="Veuillez vous connecter pour accéder au tableau de bord."))
+
+    object_id = request.form.get('object_id')
+    room_id = request.form.get('room_id')
+    new_name = request.form.get('object_name')
+    new_type = request.form.get('object_type')
+    new_description = request.form.get('object_description')
+
+    obj = Object.query.get(object_id)
+    if obj:
+        obj.name = new_name
+        obj.type = new_type
+        obj.description = new_description
+        db.session.commit()
+
+    return redirect(url_for('select_piece', room_id=room_id))
+
 
 @app.route("/edit_object", methods=["GET", "POST"])
 def edit_object():

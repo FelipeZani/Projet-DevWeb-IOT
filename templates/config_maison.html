@@ -104,6 +104,39 @@ new CSS file #}
             {% endif %}
         </details>
 
+        <!-- Modifier un objet -->
+        <details>
+            <summary>✏️ Modifier un objet</summary>
+            {% if selected_room.objects %}
+            <form method="POST" action="/edit_object2">
+                <input type="hidden" name="room_id" value="{{ selected_room.id }}">
+
+                <label for="object_id_edit">Choisir un objet à modifier :</label>
+                <select id="object_id_edit" name="object_id" required>
+                    <option value="" disabled selected>-- Sélectionnez un objet --</option>
+                    {% for obj in selected_room.objects %}
+                    <option value="{{ obj.id }}">{{ obj.name }} ({{ obj.type or "type inconnu" }})</option>
+                    {% endfor %}
+                </select>
+
+                <label for="object_name">Nouveau nom :</label>
+                <input type="text" id="object_name" name="object_name" placeholder="Ex: Lampe salon" required>
+
+                <label for="object_type">Nouveau type :</label>
+                <input type="text" id="object_type" name="object_type" placeholder="Ex: Lumière, Capteur..." required>
+
+                <label for="object_description">Nouvelle description :</label>
+                <textarea id="object_description" name="object_description"
+                    placeholder="Mettre à jour la description de l'objet..."></textarea>
+
+                <button type="submit" class="custom-button">Modifier l'objet</button>
+            </form>
+            {% else %}
+            <p>Aucun objet à modifier dans cette pièce.</p>
+            {% endif %}
+        </details>
+
+
         <!-- Supprimer la pièce -->
         <details>
             <summary>❌ Supprimer cette pièce</summary>
