@@ -1,29 +1,58 @@
-<!DOCTYPE html>
+{% extends "base_layout.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <title>Login history</title>
-</head>
+{% block head %}
+{{ super() }}
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/login_history.css') }}">
+{% endblock %}
 
-<body>
-  <h1>Login History</h1>
+{% block title %}Historique de Connexion - {{ user.username }}{% endblock %}
 
-  <table border="1">
-    <thead>
-      <tr>
-        <th>Username</th>
-        <th>Login Time</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for entry in history %}
-      <tr>
-        <td>{{ entry.username }}</td>
-        <td>{{ entry.login_time }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+{% block list %}
+{# Navigation similaire à admin_panel #}
+<ul class="custom-ul">
+  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+  <li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
+  <li><a href="{{ url_for('profile') }}">Profile</a></li>
+  <li>
+    <a href="{{url_for('logout')}}"><button class="button-signup custom-button">LogOut</button></a>
+  </li>
+</ul>
+{% endblock %}
 
-  <a href="{{ url_for('admin_panel') }}">Back to Admin Panel</a>
-</body>
+{% block content %}
+<div class="custom-container history-container">
+
+  <h1>Historique de Connexion</h1>
+  <p class="history-user-info">Utilisateur : <strong>{{ user.username }}</strong></p>
+
+  <div class="history-table-container">
+    <table class="history-table">
+      <thead>
+        <tr>
+          {# SUPPRIMÉ: <th>Nom d'utilisateur</th> #}
+          <th>Date et Heure de Connexion</th> {# La seule colonne restante dans l'en-tête #}
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in history %}
+        <tr>
+          {# SUPPRIMÉ: <td>{{ entry.username }}</td> #}
+          <td>{{ entry.login_time.strftime('%Y-%m-%d %H:%M:%S') }}</td> {# La seule donnée restante #}
+        </tr>
+        {% else %}
+        <tr>
+          {# MODIFIÉ: colspan="1" car il ne reste qu'une colonne #}
+          <td colspan="1" style="text-align: center; padding: 20px; color: #777;">Aucun historique de connexion trouvé
+            pour cet utilisateur.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <br>
+  <a href="{{ url_for('admin_panel') }}" class="back-link" id="back-to-dashboard">← Retour au Panneau Admin</a>
+
+</div><!-- End history-container -->
+{% endblock %}

@@ -143,11 +143,7 @@
 
 /* Table Actions Column */
 .admin-table td:last-child {
-	/* Actions column */
 	white-space: nowrap;
-	/* Keep buttons on one line if possible */
-	text-align: right;
-	/* Align actions to the right */
 }
 
 .admin-table td form,
@@ -229,7 +225,6 @@
 
 	.admin-table td:last-child {
 		text-align: left;
-		/* Align actions left on small screens maybe? */
 	}
 
 	.admin-actions {
