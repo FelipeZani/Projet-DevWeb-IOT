@@ -1,54 +1,85 @@
-<!DOCTYPE html>
+{% extends "base_layout.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <title>Edit user</title>
-</head>
+{% block head %}
+{{ super() }}
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/edit_user.css') }}">
+{% endblock %}
 
-<body>
+{% block title %}Modifier {{ user.username }}{% endblock %}
+
+{% block list %}
+<ul class="custom-ul">
+  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+  <li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
+  <li><a href="{{ url_for('profile') }}">Profile</a></li>
+  <li>
+    <a href="{{url_for('logout')}}"><button class="button-signup custom-button">LogOut</button></a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="custom-container edit-user-container"> {# Ajout classe edit-user-container #}
+
+  <h2>Modifier le profil de {{ user.username }}</h2>
+
   {% if message %}
-  <div style="color: red; font-weight: bold;">
+  <div class="flash-message"> {# Utilisation classe flash-message #}
     <p>{{ message }}</p>
   </div>
   {% endif %}
-  <h2>Edit {{ user.username }}'s profile</h2>
-  <form method="POST">
-    <label>First name :</label>
-    <input type="text" name="fname" value="{{ user.fname }}" required minlength="3" maxlength="32">
-    <br>
 
-    <label>Last name:</label>
-    <input type="text" name="lname" value="{{ user.lname }}" required minlength="3" maxlength="32">
-    <br>
+  <form method="POST" class="edit-user-form">
+    <div class="form-group">
+      <label for="fname">Prénom :</label> {# Ajout 'for' pour l'accessibilité #}
+      <input type="text" id="fname" name="fname" value="{{ user.fname }}" required minlength="3" maxlength="32">
+    </div>
 
-    <label>Email:</label>
-    <input type="email" name="email" value="{{ user.email }}" required minlength="3" maxlength="64">
-    <br>
+    <div class="form-group">
+      <label for="lname">Nom :</label> {# Ajout 'for' #}
+      <input type="text" id="lname" name="lname" value="{{ user.lname }}" required minlength="3" maxlength="32">
+    </div>
 
-    <label>Gender:</label>
-    <select name="gender">
-      <option value="male" {% if user.gender=='male' %}selected{% endif %}>male</option>
-      <option value="female" {% if user.gender=='female' %}selected{% endif %}>female</option>
-    </select>
-    <br>
+    <div class="form-group">
+      <label for="email">Email :</label> {# Ajout 'for' #}
+      <input type="email" id="email" name="email" value="{{ user.email }}" required minlength="3" maxlength="64">
+    </div>
 
-    <label>Role:</label>
-    <select name="role">
-      <option value="parent" {% if user.role=='parent' %}selected{% endif %}>parent</option>
-      <option value="child" {% if user.role=='child' %}selected{% endif %}>child</option>
-    </select>
-    <br>
+    <div class="form-group">
+      <label for="gender">Genre :</label> {# Ajout 'for' #}
+      <select id="gender" name="gender">
+        <option value="male" {% if user.gender=='male' %}selected{% endif %}>Homme</option>
+        <option value="female" {% if user.gender=='female' %}selected{% endif %}>Femme</option>
+      </select>
+    </div>
 
-    <label>Level (simple, complex, admin: 0, 10, 20):</label>
-    <input type="number" name="level" value="{{ user.level }}" required min="0">
-    <br>
-    <label for="birthdate">Birthdate</label>
-    <input type="date" id="birthdate" name="birthdate" value="{{ user.birthdate }}" required>
-    <br>
+    <div class="form-group">
+      <label for="role">Rôle :</label> {# Ajout 'for' #}
+      <select id="role" name="role">
+        <option value="parent" {% if user.role=='parent' %}selected{% endif %}>Parent</option>
+        <option value="child" {% if user.role=='child' %}selected{% endif %}>Enfant</option>
+      </select>
+    </div>
 
-    <button type="submit">Save</button>
+    <div class="form-group">
+      <label for="level">Niveau (0: Normal, 10: Avancé, 20: Admin) :</label> {# Ajout 'for' et clarification #}
+      <input type="number" id="level" name="level" value="{{ user.level }}" required min="0">
+    </div>
+
+    <div class="form-group">
+      <label for="birthdate">Date de naissance :</label> {# Label plus clair #}
+      <input type="date" id="birthdate" name="birthdate"
+        value="{{ user.birthdate.strftime('%Y-%m-%d') if user.birthdate else '' }}" required> {# Formatage date et
+      gestion None #}
+    </div>
+
+    {# Application classe custom-button #}
+    <button type="submit" class="custom-button">Enregistrer les modifications</button>
   </form>
-  <a href="{{ url_for('admin_panel') }}">Back to admin panel</a>
-</body>
 
-</html>
+  {# Utilisation classe back-link #}
+  <a href="{{ url_for('admin_panel') }}" class="back-link" id="back-to-dashboard">← Retour au Panneau Admin</a>
+
+</div>
+{% endblock %}

@@ -1,0 +1,109 @@
+/* static/styles/edit_user.css */
+
+.edit-user-container h2 {
+	color: #333;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	margin-top: 0;
+	margin-bottom: 25px;
+	text-align: center;
+	/* Centrer le titre */
+}
+
+/* Style pour le message d'erreur (si réutilisé) */
+.flash-message {
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+	text-align: center;
+}
+
+/* Structure du formulaire */
+.edit-user-form {
+	max-width: 600px;
+	/* Limite la largeur du formulaire */
+	margin: 0 auto;
+	/* Centre le formulaire dans son conteneur */
+	padding: 20px;
+	background-color: #fdfdfd;
+	/* Fond très légèrement différent */
+	border: 1px solid #eee;
+	border-radius: 8px;
+}
+
+.form-group {
+	margin-bottom: 18px;
+	/* Espace entre les groupes label/input */
+}
+
+.form-group label {
+	display: block;
+	/* Label au-dessus de l'input */
+	margin-bottom: 6px;
+	/* Espace entre label et input */
+	font-weight: bold;
+	color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select {
+	width: 100%;
+	/* Prend toute la largeur disponible */
+	padding: 10px 12px;
+	/* Espacement intérieur */
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+	/* Inclut padding/border dans la largeur */
+	font-size: 1rem;
+	/* Taille de police lisible */
+	transition: border-color 0.2s ease;
+}
+
+/* Effet au focus */
+.form-group input:focus,
+.form-group select:focus {
+	border-color: #2463eb;
+	outline: none;
+	/* Supprime l'outline par défaut parfois disgracieux */
+	box-shadow: 0 0 0 2px rgba(36, 99, 235, 0.2);
+	/* Ajoute un léger halo */
+}
+
+
+/* Style pour les selects (pour cohérence) */
+.form-group select {
+	appearance: none;
+	/* Style natif moins beau */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.6-3.6%205.4-7.9%205.4-12.8%200-5-1.8-9.2-5.4-12.8z%22/%3E%3C/svg%3E');
+	background-repeat: no-repeat;
+	background-position: right 10px top 50%;
+	background-size: 10px auto;
+	padding-right: 30px;
+}
+
+/* Bouton Submit */
+.edit-user-form .custom-button[type="submit"] {
+	width: 100%;
+	/* Bouton pleine largeur */
+	padding: 12px 20px;
+	font-size: 1.1em;
+	margin-top: 10px;
+	/* Espace au-dessus du bouton */
+}
+
+/* Le style du back-link est déjà dans base_layout.css */
+/* Il sera centré par défaut car il est direct enfant de .edit-user-container */
+.edit-user-container>.back-link {
+	margin-top: 25px;
+	/* Espace supplémentaire au-dessus du lien retour */
+}
