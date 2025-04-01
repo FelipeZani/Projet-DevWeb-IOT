@@ -63,17 +63,28 @@ new CSS file #}
         <h3>Actions sur la pièce</h3>
 
         <!-- Ajouter un objet -->
-        <details> {# Start closed by default maybe? Remove 'open' attribute #}
+        <details>
             <summary>➕ Ajouter un objet</summary>
             <form method="POST" action="/add_object2">
                 <input type="hidden" name="room_id" value="{{ selected_room.id }}">
 
                 <label for="object_name">Nom de l'objet :</label>
-                <input type="text" id="object_name" name="object_name" required
-                    placeholder="Ex: Lampe bureau, Thermostat...">
+                <input type="text" id="object_name" name="object_name" required placeholder="Ex: Lampe bureau, Thermostat...">
 
                 <label for="object_type">Type :</label>
-                <input type="text" id="object_type" name="object_type" placeholder="Ex: Lumière, Chauffage, Capteur...">
+                <select name="object_type" id="object_type" required>
+                    <option value="" disabled selected>-- Sélectionnez un type --</option>
+                    <option value="Lumière">Lumière</option>
+                    <option value="Chauffage">Chauffage</option>
+                    <option value="Sécurité">Sécurité</option>
+                    <option value="Capteur">Capteur</option>
+                    <option value="Multimédia">Multimédia</option>
+                    <option value="Autre">Autre</option>
+                </select>
+
+                <label for="object_consumption">Consommation estimée (kWh / jour) :</label>
+                <input type="number" step="0.01" id="object_consumption" name="object_consumption" required
+                    placeholder="Ex: 1.5">
 
                 <label for="object_description">Description (optionnel) :</label>
                 <textarea id="object_description" name="object_description"
@@ -109,7 +120,7 @@ new CSS file #}
             {% if selected_room.objects %}
             <form method="POST" action="/edit_object2">
                 <input type="hidden" name="room_id" value="{{ selected_room.id }}">
-
+        
                 <label for="object_id_edit">Choisir un objet à modifier :</label>
                 <select id="object_id_edit" name="object_id" required>
                     <option value="" disabled selected>-- Sélectionnez un objet --</option>
@@ -117,17 +128,29 @@ new CSS file #}
                     <option value="{{ obj.id }}">{{ obj.name }} ({{ obj.type or "type inconnu" }})</option>
                     {% endfor %}
                 </select>
-
-                <label for="object_name">Nouveau nom :</label>
-                <input type="text" id="object_name" name="object_name" placeholder="Ex: Lampe salon" required>
-
+        
+                <!-- <label for="object_name">Nouveau nom :</label>
+                <input type="text" id="object_name" name="object_name" placeholder="Ex: Lampe salon" required>-->
+        
                 <label for="object_type">Nouveau type :</label>
-                <input type="text" id="object_type" name="object_type" placeholder="Ex: Lumière, Capteur..." required>
-
+                <select name="object_type" id="object_type" required>
+                    <option value="" disabled selected>-- Sélectionnez un type --</option>
+                    <option value="Lumière">Lumière</option>
+                    <option value="Chauffage">Chauffage</option>
+                    <option value="Sécurité">Sécurité</option>
+                    <option value="Capteur">Capteur</option>
+                    <option value="Multimédia">Multimédia</option>
+                    <option value="Autre">Autre</option>
+                </select>
+        
+                <label for="object_consumption">Nouvelle consommation estimée (kWh / jour) :</label>
+                <input type="number" step="0.01" id="object_consumption" name="object_consumption" required
+                    placeholder="Ex: 1.5">
+        
                 <label for="object_description">Nouvelle description :</label>
                 <textarea id="object_description" name="object_description"
                     placeholder="Mettre à jour la description de l'objet..."></textarea>
-
+        
                 <button type="submit" class="custom-button">Modifier l'objet</button>
             </form>
             {% else %}

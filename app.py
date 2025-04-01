@@ -74,6 +74,9 @@ class Object(db.Model):
     name = db.Column(db.String(100), nullable=False)
     type = db.Column(db.String(100))
     description = db.Column(db.Text)
+    consommation_kw_jour = db.Column(db.Float, nullable=True)  
+    status = db.Column(db.Boolean, default=True)               
+    date_ajout = db.Column(db.DateTime, default=datetime.today) 
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'), nullable=False)
 
 
@@ -221,8 +224,8 @@ def confirm_email(userid):
             gender = user_data["gender"],
             role = user_data["role"],
             birthdate = user_data["birthdate"],
-            level=20,
-            is_verified=1,
+            level=0,
+            is_verified=0,
         )
 
         db.session.add(new_user)
@@ -644,13 +647,15 @@ def add_object2():
     name = request.form.get('object_name')
     type_ = request.form.get('object_type')
     description = request.form.get('object_description')
+    conso = request.form.get('object_consumption')
 
-    if room_id and name:
+    if room_id and name and type_ and conso:
         new_object = Object(
             name=name,
             type=type_,
             description=description,
-            room_id=room_id
+            room_id=room_id,
+            consommation_kw_jour=conso
         )
         db.session.add(new_object)
         db.session.commit()
@@ -694,12 +699,14 @@ def edit_object2():
     new_name = request.form.get('object_name')
     new_type = request.form.get('object_type')
     new_description = request.form.get('object_description')
+    conso = request.form.get('object_consumption')
 
     obj = Object.query.get(object_id)
     if obj:
-        obj.name = new_name
+        #obj.name = new_name
         obj.type = new_type
         obj.description = new_description
+        obj.consommation_kw_jour=conso
         db.session.commit()
 
     return redirect(url_for('select_piece', room_id=room_id))
