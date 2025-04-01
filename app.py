@@ -652,7 +652,9 @@ def add_object2():
     type_ = request.form.get('object_type')
     description = request.form.get('object_description')
     conso = request.form.get('object_consumption')
+    conso = request.form.get('object_consumption')
 
+    if room_id and name and type_ and conso:
     if room_id and name and type_ and conso:
         new_object = Object(
             name=name,
@@ -787,7 +789,7 @@ def edit_object2():
 
     obj = Object.query.get(object_id)
     if obj:
-        obj.name = new_name
+        #obj.name = new_name
         obj.type = new_type
         obj.description = new_description
         obj.consommation_kw_jour=conso
