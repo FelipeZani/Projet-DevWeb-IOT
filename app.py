@@ -434,187 +434,6 @@ def backup_db():
     except :
         return redirect(url_for('admin_panel', message="Error while backing up"))
 
-@app.route("/new_object", methods=["GET", "POST"])
-def new_object():
-    if 'username' not in session or session["level"] < 20 or not session["verified"]:
-        return redirect(url_for("dashboard"))
-
-    if request.method == "POST":
-        table_name = request.form.get("table_name").strip()
-        field_names = request.form.getlist("field_names[]")
-        field_types = request.form.getlist("field_types[]")
-
-        if not table_name or not re.match(r"^[a-zA-Z_][a-zA-Z0-9_]*$", table_name):
-            return render_template("new_object.html", message="Invalid table name format.")
-        if not field_names:
-            return render_template("new_object.html", message="Please add at least one field.")
-        
-        if len(set(field_names)) != len(field_names):
-            return render_template("new_object.html", message="Field names must be unique.")
-
-        columns = [Column("id", Integer, primary_key=True)]
-
-        for field_name, field_type in zip(field_names, field_types):
-            if not re.match(r"^[a-zA-Z_][a-zA-Z0-9_]*$", field_name):
-                return render_template("new_object.html", message=f"Invalid field name: {field_name}")
-            
-            if field_type == "Integer":
-                columns.append(Column(field_name, Integer))
-            elif field_type == "String":
-                columns.append(Column(field_name, String(32)))
-            elif field_type == "Boolean":
-                columns.append(Column(field_name, Boolean))
-            else:
-                return render_template("new_object.html", message=f"Invalid field type: {field_type}")
-
-        try:
-            new_table = Table(table_name, metadata, *columns, extend_existing=True)
-            new_table.create(db.engine)
-        except Exception as e:
-            return render_template("new_object.html", message=f"Error creating table: {str(e)}")
-
-        return redirect(url_for("admin_panel", message="Successfully created new object type"))
-
-    return render_template("new_object.html")
-
-@app.route("/remove_object", methods=["GET", "POST"])
-def remove_object():
-    if 'username' not in session or session["level"] < 20 or not session["verified"]:
-        return redirect(url_for("dashboard"))
-    
-    if request.method == "POST":
-        table_name = request.form.get("table_name").strip()
-        
-        if not table_name:
-            return render_template("remove_object.html", message="Please enter a table name.")
-
-        inspector = inspect(db.engine)
-        if table_name in inspector.get_table_names():
-            metadata.reflect(bind=db.engine)
-            table = metadata.tables.get(table_name)
-
-            if table is not None:
-                table.drop(db.engine)
-                return redirect(url_for("admin_panel", message="Successfully removed object type."))
-            else:
-                return render_template("remove_object.html", message="Table not found.")
-        else:
-            return render_template("remove_object.html", message="Table does not exist.")
-
-    inspector = inspect(db.engine)
-    all_tables = [table for table in inspector.get_table_names() if table not in ['user', 'login_history', 'del_suggestion']]
-
-    return render_template("remove_object.html", tables=all_tables)
-
-#add_objet
-@app.route("/add_object", methods=["GET", "POST"])
-def add_object():
-    if 'username' not in session:
-        return redirect(url_for("login"))
-
-    inspector = inspect(db.engine)
-    tables = [table for table in inspector.get_table_names() if table not in ["user", "login_history", 'del_suggestion']]
-    columns = []
-
-    if request.method == "POST":
-        table_name = request.form.get("table_name")
-        if not table_name or table_name not in tables:
-            return render_template("add_object.html", tables=tables, message="Invalid table selected.", columns=[])
-
-        metadata.reflect(bind=db.engine)
-        table = metadata.tables.get(table_name)
-
-        if table is None:
-            return render_template("add_object.html", tables=tables, message="Table not found.", columns=[])
-
-        columns = [{"name": col.name, "type": str(col.type)} for col in table.columns if col.name != "id"]
-
-        if "submit" in request.form:
-            data = {}
-            for col in columns:
-                value = request.form.get(col["name"])
-                if "BOOLEAN" in col["type"]:
-                    data[col["name"]] = value == "True" # converts str True to Bool True
-                else:
-                    data[col["name"]] = value
-
-            with db.engine.connect() as conn:
-                conn.execute(table.insert().values(**data))
-                conn.commit()
-
-            return redirect(url_for('dashboard', message="Sucessfully added object"))
-
-    return render_template("add_object.html", tables=tables, columns=columns)
-
-"""
-@app.route("/delete_object/<table_name>/<int:object_id>", methods=["POST"])
-def delete_object(table_name, object_id):
-    if 'username' not in session or not session["verified"]:
-        return redirect(url_for("login"))
-
-    inspector = inspect(db.engine)
-    if table_name not in inspector.get_table_names():
-        return redirect(url_for("dashboard", message="Invalid table"))
-
-    metadata.reflect(bind=db.engine)
-    table = metadata.tables.get(table_name)
-
-    if table is None:
-        return redirect(url_for("dashboard", message="Table not found"))
-
-    with db.engine.connect() as conn:
-        query = table.delete().where(table.c.id == object_id)
-        conn.execute(query)
-        conn.commit()
-
-    return redirect(url_for("dashboard"))
-
-@app.route("/suggest_delete", methods=["POST"])
-def suggest_delete():
-    if "username" not in session or not session["verified"]:
-        return redirect(url_for("home"))
-
-    table_name = request.form.get("table_name")
-    if not table_name:
-        return redirect(url_for("dashboard", message="Invalid table name"))
-
-    suggestion = DelSuggestion(table_name=table_name, username=session["username"])
-    db.session.add(suggestion)
-    db.session.commit()
-
-    return redirect(url_for("dashboard", message="Delete suggestion sent !"))
-
-
-@app.route("/delete_table", methods=["POST"])
-def delete_table():
-    if "level" not in session or session["level"] < 20 or not session["verified"]:
-        return redirect(url_for("dashboard"))
-
-    table_name = request.form.get("table_name")
-    if not table_name:
-        return redirect(url_for("admin_panel", message="Table name missing"))
-
-    try:
-        with db.engine.connect() as conn:
-            conn.execute(text(f"DROP TABLE IF EXISTS {table_name}"))
-            conn.commit()
-
-        DelSuggestion.query.filter_by(table_name=table_name).delete()
-        db.session.commit()
-
-        return redirect(url_for("admin_panel", message="Deleted table successfully"))
-    except Exception as e:
-        return redirect(url_for("admin_panel", message=f"Error: {str(e)}"))
-
-@app.route("/test_max", methods=["GET","POST"])
-def config_maison():
-
-    if 'username' not in session or not session["verified"]:
-        return redirect(url_for("dashboard"))
-    
-    return render_template("config_maison.html")
-"""
-
 @app.route("/config_maison", methods=["GET"])
 def config_maison():
     if 'username' not in session or not session.get("verified"):
@@ -651,7 +470,6 @@ def add_object2():
     name = request.form.get('object_name')
     type_ = request.form.get('object_type')
     description = request.form.get('object_description')
-    conso = request.form.get('object_consumption')
     conso = request.form.get('object_consumption')
 
     if room_id and name and type_ and conso:
@@ -733,7 +551,6 @@ def approve_room_deletion(suggestion_id):
 
     return redirect(url_for('admin_panel', message="Room deletion approved."))
 
-
 @app.route('/reject_room_deletion/<int:suggestion_id>', methods=['POST'])
 def reject_room_deletion(suggestion_id):
     if 'username' not in session or session.get("level", 0) < 20 or not session.get("verified"):
@@ -795,71 +612,6 @@ def edit_object2():
         db.session.commit()
 
     return redirect(url_for('select_piece', room_id=room_id))
-
-
-@app.route("/edit_object", methods=["GET", "POST"])
-def edit_object():
-    if 'username' not in session or not session["verified"]:
-        return redirect(url_for("dashboard"))
-    
-    table_name = request.args.get("table_name") or request.form.get("table_name") # we need variables both from get and post
-    object_id = request.args.get("object_id") or request.form.get("object_id")
-
-    # makes sure table exists
-    inspector = inspect(db.engine)
-    valid_tables = inspector.get_table_names()
-    if table_name not in valid_tables:
-        return redirect(url_for("dashboard", message="Table does not exist"))
-
-    metadata.reflect(bind=db.engine)
-    table = metadata.tables.get(table_name)
-    if table is None:
-        return redirect(url_for("dashboard", message="Invalid table"))
-
-    with db.engine.connect() as conn:
-        query = table.select().where(table.c.id == object_id)
-        result = conn.execute(query).fetchone()
-        if result is None:
-            return redirect(url_for("dashboard", message="Object not found"))
-
-    object_data = dict(result._mapping)
-    
-    if request.method == "POST":
-        new_data = {}
-        for col in table.columns:
-            if col.name != "id":  # do not modify id
-                value = request.form.get(col.name)
-                if value is not None:
-                    # convert according to column type
-                    if "INTEGER" in str(col.type) and value.isdigit():
-                        new_data[col.name] = int(value)
-                    elif "BOOLEAN" in str(col.type): # converts 1 and 0 to True and False
-                        new_data[col.name] = value == "1"
-                    else:
-                        new_data[col.name] = value
-
-        # update the object in the database
-        with db.engine.connect() as conn:
-            query = table.update().where(table.c.id == object_id).values(**new_data)
-            conn.execute(query)
-            conn.commit()
-
-        return redirect(url_for("dashboard", message="object updated successfully!"))
-
-    # get column info and their type for better form
-    columns_info = []
-    for col in table.columns:
-        col_type = "text"
-        if isinstance(col.type, Integer):
-            col_type = "number"
-        elif isinstance(col.type, Boolean):
-            col_type = "boolean"
-        
-        columns_info.append({"name": col.name, "type": col_type})
-
-    # display the form to modify the object
-    return render_template("edit_object.html", table_name=table_name, object_id=object_id, object_data=object_data, columns_info=columns_info)
-
 
 # Functions
 def add_points(username, points):
