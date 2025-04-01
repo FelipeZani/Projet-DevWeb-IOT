@@ -58,9 +58,10 @@ class LoginHistory(db.Model):
     login_time = db.Column(db.DateTime, default=datetime.today, nullable=False)
 
 class DelSuggestion(db.Model):
-    id = Column(Integer, primary_key=True)
-    table_name = Column(String, nullable=False)
-    username = Column(String, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.Integer, nullable=False)
+    room_name = db.Column(db.String, nullable=False)
+    username = db.Column(db.String, nullable=False) 
 
 class Room(db.Model):
     __tablename__ = 'rooms'
@@ -74,6 +75,9 @@ class Object(db.Model):
     name = db.Column(db.String(100), nullable=False)
     type = db.Column(db.String(100))
     description = db.Column(db.Text)
+    consommation_kw_jour = db.Column(db.Float, nullable=True)  
+    status = db.Column(db.Boolean, default=True)               
+    date_ajout = db.Column(db.DateTime, default=datetime.today)
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'), nullable=False)
 
 
@@ -221,8 +225,8 @@ def confirm_email(userid):
             gender = user_data["gender"],
             role = user_data["role"],
             birthdate = user_data["birthdate"],
-            level=20,
-            is_verified=1,
+            level=0,
+            is_verified=0,
         )
 
         db.session.add(new_user)
@@ -303,12 +307,14 @@ def change_email():
 
 @app.route("/admin_panel")
 def admin_panel():
-    if 'username'not in session or session["level"] < 20 or not session["verified"]:
-        return redirect(url_for("dashboard"))
-    
-    suggestions = DelSuggestion.query.all()
+    if 'username' not in session or session.get("level", 0) < 20 or not session.get("verified"):
+         return redirect(url_for("dashboard"))
+
+    all_room_suggestions = DelSuggestion.query.order_by(DelSuggestion.id.desc()).all()
+
     users = User.query.filter(User.username != session["username"]).all()
-    return render_template("admin_panel.html", users=users, suggestions=suggestions)
+
+    return render_template("admin_panel.html", users=users, room_suggestions=all_room_suggestions)
 
 @app.route("/verify_user/<int:user_id>", methods=["POST"])
 def verify_user(user_id):
@@ -540,6 +546,7 @@ def add_object():
 
     return render_template("add_object.html", tables=tables, columns=columns)
 
+"""
 @app.route("/delete_object/<table_name>/<int:object_id>", methods=["POST"])
 def delete_object(table_name, object_id):
     if 'username' not in session or not session["verified"]:
@@ -577,6 +584,7 @@ def suggest_delete():
 
     return redirect(url_for("dashboard", message="Delete suggestion sent !"))
 
+
 @app.route("/delete_table", methods=["POST"])
 def delete_table():
     if "level" not in session or session["level"] < 20 or not session["verified"]:
@@ -598,7 +606,6 @@ def delete_table():
     except Exception as e:
         return redirect(url_for("admin_panel", message=f"Error: {str(e)}"))
 
-""" 
 @app.route("/test_max", methods=["GET","POST"])
 def config_maison():
 
@@ -644,19 +651,101 @@ def add_object2():
     name = request.form.get('object_name')
     type_ = request.form.get('object_type')
     description = request.form.get('object_description')
+    conso = request.form.get('object_consumption')
 
-    if room_id and name:
+    if room_id and name and type_ and conso:
         new_object = Object(
             name=name,
             type=type_,
             description=description,
-            room_id=room_id
+            room_id=room_id,
+            consommation_kw_jour=conso,
         )
         db.session.add(new_object)
         db.session.commit()
 
     return redirect(url_for('select_piece', room_id=room_id))
 
+
+@app.route('/delete_room2', methods=['POST'])
+def delete_or_suggest_room():
+    if 'username' not in session or not session.get("verified"): 
+        return redirect(url_for("home"))
+    
+    room_id = request.form.get('room_id');
+    if not room_id: 
+        return redirect(url_for('config_maison'))
+    
+    room = Room.query.get(room_id);
+    if not room: 
+        return redirect(url_for('config_maison'))
+
+    is_admin = session.get("level", 0) >= 20
+
+    if is_admin:
+        try:
+            db.session.delete(room)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            print(f"Erreur lors de la suppression de la pièce (Admin): {str(e)}") # DEBUG
+    else:
+        # not admin
+        try:
+            existing_suggestion = DelSuggestion.query.filter_by(
+                room_id=room.id,
+                username=session['username']
+            ).first()
+
+            if not existing_suggestion:
+                suggestion = DelSuggestion(
+                    room_id=room.id,
+                    room_name=room.name,
+                    username=session['username']
+                )
+                db.session.add(suggestion)
+                db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            print(f"Erreur lors de l'enregistrement de la suggestion (Non-Admin): {str(e)}") # DEBUG
+
+    return redirect(url_for('config_maison'))
+
+@app.route('/approve_room_deletion/<int:suggestion_id>', methods=['POST'])
+def approve_room_deletion(suggestion_id):
+    if 'username' not in session or session.get("level", 0) < 20 or not session.get("verified"):
+         return redirect(url_for("dashboard"))
+
+    suggestion = DelSuggestion.query.get(suggestion_id)
+    if not suggestion:
+         return redirect(url_for('admin_panel', message="Suggestion not found."))
+
+    room_id_to_delete = request.form.get('room_id_to_delete')
+
+    room_to_delete = Room.query.get(room_id_to_delete)
+    if room_to_delete:
+        db.session.delete(room_to_delete)
+    
+    db.session.delete(suggestion)
+    db.session.commit()
+
+    return redirect(url_for('admin_panel', message="Room deletion approved."))
+
+
+@app.route('/reject_room_deletion/<int:suggestion_id>', methods=['POST'])
+def reject_room_deletion(suggestion_id):
+    if 'username' not in session or session.get("level", 0) < 20 or not session.get("verified"):
+         return redirect(url_for("dashboard"))
+
+    suggestion = DelSuggestion.query.get(suggestion_id)
+    if not suggestion:
+         return redirect(url_for('admin_panel', message="Suggestion not found."))
+
+    db.session.delete(suggestion)
+    db.session.commit()
+
+    return redirect(url_for('admin_panel', message="Suggestion rejected."))
 
 @app.route('/delete_object2', methods=['POST'])
 def delete_object2():
@@ -670,7 +759,7 @@ def delete_object2():
 
     return redirect(url_for('select_piece', room_id=room_id))
 
-
+"""
 @app.route('/delete_room2', methods=['POST'])
 def delete_room2():
     room_id = request.form.get('room_id')
@@ -682,7 +771,7 @@ def delete_room2():
         db.session.commit()
 
     return redirect(url_for('config_maison'))
-
+"""
 
 @app.route('/edit_object2', methods=['POST'])
 def edit_object2():
@@ -694,12 +783,14 @@ def edit_object2():
     new_name = request.form.get('object_name')
     new_type = request.form.get('object_type')
     new_description = request.form.get('object_description')
+    conso = request.form.get('object_consumption')
 
     obj = Object.query.get(object_id)
     if obj:
         obj.name = new_name
         obj.type = new_type
         obj.description = new_description
+        obj.consommation_kw_jour=conso
         db.session.commit()
 
     return redirect(url_for('select_piece', room_id=room_id))

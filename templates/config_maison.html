@@ -11,13 +11,13 @@ new CSS file #}
 {% block list %}
 {# Optional: Define specific navigation for this page or inherit from base #}
 {# Example: Keeping it simple like the profile page #}
-    {{super()}}
-    <li><a href="{{ url_for('dashboard') }}">Tableau de Bord</a></li>
-    {# Add other relevant links if needed #}
-    <li><a href="{{ url_for('profile') }}">Profil</a></li>
-    <li>
-        <a href="{{url_for('logout')}}"><button class="button-signup custom-button">Déconnexion</button></a>
-    </li>
+{{super()}}
+<li><a href="{{ url_for('dashboard') }}">Tableau de Bord</a></li>
+{# Add other relevant links if needed #}
+<li><a href="{{ url_for('profile') }}">Profil</a></li>
+<li>
+  <a href="{{url_for('logout')}}"><button class="button-signup custom-button">Déconnexion</button></a>
+</li>
 {% endblock %}
 
 
@@ -25,179 +25,230 @@ new CSS file #}
 {# The main content from the previous version goes here, wrapped in the container #}
 <div class="custom-container">
 
-    <!-- Section: Gestion Globale -->
-    <section class="config-section">
-        <h1>Gestion de la Maison</h1>
+  <!-- Section: Gestion Globale -->
+  <section class="config-section">
+    <h1>Gestion de la Maison</h1>
 
-        <!-- Formulaire pour créer une nouvelle pièce -->
-        <form method="POST" action="/create_piece">
-            <label for="new_room">Créer une nouvelle pièce :</label>
-            <input type="text" name="new_room" id="new_room" required placeholder="Ex: Salon, Cuisine...">
-            <button type="submit" class="custom-button">Créer Pièce</button>
-        </form>
+    <!-- Formulaire pour créer une nouvelle pièce -->
+    <form method="POST" action="/create_piece">
+      <label for="new_room">Créer une nouvelle pièce :</label>
+      <input type="text" name="new_room" id="new_room" required placeholder="Ex: Salon, Cuisine...">
+      <button type="submit" class="custom-button">Créer Pièce</button>
+    </form>
 
-        <hr style="margin: 25px 0; border-top: 1px solid #eee;">
+    <hr style="margin: 25px 0; border-top: 1px solid #eee;">
 
-        <!-- Formulaire pour sélectionner une pièce existante -->
-        <form method="GET" action="/select_piece">
-            <label for="room_id">Choisir une pièce existante :</label>
-            <select name="room_id" id="room_id" required>
-                <option value="" disabled {% if not selected_room %}selected{% endif %}>-- Sélectionnez une pièce --
-                </option>
-                {% for room in rooms %}
-                <option value="{{ room.id }}" {% if selected_room and selected_room.id==room.id %}selected{% endif %}>{{
-                    room.name }}</option>
+    <!-- Formulaire pour sélectionner une pièce existante -->
+    <form method="GET" action="/select_piece">
+      <label for="room_id">Choisir une pièce existante :</label>
+      <select name="room_id" id="room_id" required>
+        <option value="" disabled {% if not selected_room %}selected{% endif %}>-- Sélectionnez une pièce --
+        </option>
+        {% for room in rooms %}
+        <option value="{{ room.id }}" {% if selected_room and selected_room.id==room.id %}selected{% endif %}>{{
+          room.name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="custom-button">Gérer la Pièce</button>
+    </form>
+  </section>
+
+
+  {% if selected_room %}
+  <!-- Section: Gestion de la Pièce Sélectionnée -->
+  <section class="config-section">
+    <h2>Pièce : {{ selected_room.name }}</h2>
+
+    <!-- ACTIONS DISPONIBLES -->
+    <h3>Actions sur la pièce</h3>
+
+    <!-- Ajouter un objet -->
+    <details>
+      <summary>➕ Ajouter un objet</summary>
+      <form method="POST" action="/add_object2">
+        <input type="hidden" name="room_id" value="{{ selected_room.id }}">
+
+        <label for="object_name">Nom de l'objet :</label>
+        <input type="text" id="object_name" name="object_name" required placeholder="Ex: Lampe bureau, Thermostat...">
+
+        <label for="object_type">Type :</label>
+        <select name="object_type" id="object_type" required>
+          <option value="" disabled selected>-- Sélectionnez un type --</option>
+          <option value="Lumière">Lumière</option>
+          <option value="Chauffage">Chauffage</option>
+          <option value="Sécurité">Sécurité</option>
+          <option value="Capteur">Capteur</option>
+          <option value="Multimédia">Multimédia</option>
+          <option value="Autre">Autre</option>
+        </select>
+
+        <label for="object_consumption">Consommation estimée (kWh / jour) :</label>
+        <input type="number" step="0.01" id="object_consumption" name="object_consumption" required
+          placeholder="Ex: 1.5">
+
+        <label for="object_description">Description (optionnel) :</label>
+        <textarea id="object_description" name="object_description"
+          placeholder="Plus de détails sur l'objet..."></textarea>
+
+        <button type="submit" class="custom-button">Ajouter l'objet</button>
+      </form>
+    </details>
+
+    <!-- Supprimer un objet -->
+    <details>
+      <summary>🗑️ Supprimer un objet</summary>
+      {% if selected_room.objects %}
+      <form method="POST" action="/delete_object2">
+        <input type="hidden" name="room_id" value="{{ selected_room.id }}">
+        <label for="object_id_del">Choisir un objet à supprimer :</label> {# Changed ID to avoid conflict #}
+        <select id="object_id_del" name="object_id" required>
+          <option value="" disabled selected>-- Sélectionnez un objet --</option>
+          {% for obj in selected_room.objects %}
+          <option value="{{ obj.id }}">{{ obj.name }} ({{ obj.type or "type inconnu" }})</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="custom-button">Confirmer Suppression</button>
+      </form>
+      {% else %}
+      <p>Aucun objet à supprimer dans cette pièce.</p>
+      {% endif %}
+    </details>
+
+    <!-- Modifier un objet -->
+    <details>
+      <summary>✏️ Modifier un objet</summary>
+      {% if selected_room.objects %}
+      <form method="POST" action="/edit_object2">
+        <input type="hidden" name="room_id" value="{{ selected_room.id }}">
+
+        <label for="object_id_edit">Choisir un objet à modifier :</label>
+        <select id="object_id_edit" name="object_id" required>
+          <option value="" disabled selected>-- Sélectionnez un objet --</option>
+          {% for obj in selected_room.objects %}
+          <option value="{{ obj.id }}">{{ obj.name }} ({{ obj.type or "type inconnu" }})</option>
+          {% endfor %}
+        </select>
+
+        <label for="object_name">Nouveau nom :</label>
+        <input type="text" id="object_name" name="object_name" placeholder="Ex: Lampe salon" required>
+
+        <label for="object_type">Nouveau type :</label>
+        <select name="object_type" id="object_type" required>
+          <option value="" disabled selected>-- Sélectionnez un type --</option>
+          <option value="Lumière">Lumière</option>
+          <option value="Chauffage">Chauffage</option>
+          <option value="Sécurité">Sécurité</option>
+          <option value="Capteur">Capteur</option>
+          <option value="Multimédia">Multimédia</option>
+          <option value="Autre">Autre</option>
+        </select>
+
+        <label for="object_consumption">Nouvelle consommation estimée (kWh / jour) :</label>
+
+
+        <input type="number" step="0.01" id="object_consumption" name="object_consumption" required
+          placeholder="Ex: 1.5">
+
+        <label for="object_description">Nouvelle description :</label>
+        <textarea id="object_description" name="object_description"
+          placeholder="Mettre à jour la description de l'objet..."></textarea>
+
+        <button type="submit" class="custom-button">Modifier l'objet</button>
+      </form>
+      {% else %}
+      <p>Aucun objet à modifier dans cette pièce.</p>
+      {% endif %}
+    </details>
+
+
+    <!-- Supprimer la pièce -->
+    <details>
+      <summary>❌ Supprimer cette pièce</summary>
+      <form method="POST" action="{{ url_for('delete_or_suggest_room') }}">
+        <input type="hidden" name="room_id" value="{{ selected_room.id }}">
+
+        {% set is_admin = session.get('level', 0) >= 20 %}
+
+        {% if is_admin %}
+        {% set confirm_message = "Êtes-vous absolument sûr de vouloir supprimer la pièce '" ~ selected_room.name ~ "' et
+        tous ses objets ?" %}
+        {% else %}
+        {% set confirm_message = "Êtes-vous sûr de vouloir suggérer la suppression de la pièce '" ~ selected_room.name ~
+        "' ?" %}
+        {% endif %}
+
+        <p>
+          {% if is_admin %}
+          ⚠️ **Attention :** L'action suivante supprimera définitivement la pièce "{{ selected_room.name }}" et tous ses
+          objets.
+          {% else %}
+          L'action suivante enverra une demande de suppression pour la pièce "{{ selected_room.name }}" à un
+          administrateur.
+          {% endif %}
+        </p>
+
+        <button type="submit" class="custom-button"
+          style="background-color: {{ '#dc3545' if is_admin else '#ffc107' }}; border-color: {{ '#dc3545' if is_admin else '#ffc107' }}; color: {{ '#fff' if is_admin else '#000' }};"
+          {# 2. Utiliser le filtre | tojson pour l'échappement correct dans l'attribut onclick #}
+          onclick="return confirm({{ confirm_message | tojson }})">
+          {% if is_admin %}
+          Supprimer Définitivement
+          {% else %}
+          Suggérer la Suppression
+          {% endif %}
+        </button>
+      </form>
+    </details>
+  </section>
+  {% endif %}
+
+
+  <!-- Section: Configuration Actuelle -->
+  <section class="config-section">
+    <h3>Configuration Actuelle de la Maison</h3>
+    <div class="config-table-container">
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th>Nom de la pièce</th>
+            <th>Objets dans la pièce</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for room in rooms %}
+          <tr>
+            <td><strong>{{ room.name }}</strong></td>
+            <td>
+              {% if room.objects %}
+              <ul>
+                {% for obj in room.objects %}
+                <li>
+                  <strong>{{ obj.name }}</strong>
+                  {% if obj.type %} ({{ obj.type }}) {% endif %}
+                  {% if obj.description %} <br><small style="color: #666;">{{ obj.description
+                    }}</small> {% endif %}
+                </li>
                 {% endfor %}
-            </select>
-            <button type="submit" class="custom-button">Gérer la Pièce</button>
-        </form>
-    </section>
+              </ul>
+              {% else %}
+              <span style="color: #888;">Aucun objet dans cette pièce.</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="2" style="text-align: center; padding: 20px; color: #777;">Aucune pièce n'a été
+              créée pour le moment. Utilisez le formulaire ci-dessus pour commencer.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-
-    {% if selected_room %}
-    <!-- Section: Gestion de la Pièce Sélectionnée -->
-    <section class="config-section">
-        <h2>Pièce : {{ selected_room.name }}</h2>
-
-        <!-- ACTIONS DISPONIBLES -->
-        <h3>Actions sur la pièce</h3>
-
-        <!-- Ajouter un objet -->
-        <details> {# Start closed by default maybe? Remove 'open' attribute #}
-            <summary>➕ Ajouter un objet</summary>
-            <form method="POST" action="/add_object2">
-                <input type="hidden" name="room_id" value="{{ selected_room.id }}">
-
-                <label for="object_name">Nom de l'objet :</label>
-                <input type="text" id="object_name" name="object_name" required
-                    placeholder="Ex: Lampe bureau, Thermostat...">
-
-                <label for="object_type">Type :</label>
-                <input type="text" id="object_type" name="object_type" placeholder="Ex: Lumière, Chauffage, Capteur...">
-
-                <label for="object_description">Description (optionnel) :</label>
-                <textarea id="object_description" name="object_description"
-                    placeholder="Plus de détails sur l'objet..."></textarea>
-
-                <button type="submit" class="custom-button">Ajouter l'objet</button>
-            </form>
-        </details>
-
-        <!-- Supprimer un objet -->
-        <details>
-            <summary>🗑️ Supprimer un objet</summary>
-            {% if selected_room.objects %}
-            <form method="POST" action="/delete_object2">
-                <input type="hidden" name="room_id" value="{{ selected_room.id }}">
-                <label for="object_id_del">Choisir un objet à supprimer :</label> {# Changed ID to avoid conflict #}
-                <select id="object_id_del" name="object_id" required>
-                    <option value="" disabled selected>-- Sélectionnez un objet --</option>
-                    {% for obj in selected_room.objects %}
-                    <option value="{{ obj.id }}">{{ obj.name }} ({{ obj.type or "type inconnu" }})</option>
-                    {% endfor %}
-                </select>
-                <button type="submit" class="custom-button">Confirmer Suppression</button>
-            </form>
-            {% else %}
-            <p>Aucun objet à supprimer dans cette pièce.</p>
-            {% endif %}
-        </details>
-
-        <!-- Modifier un objet -->
-        <details>
-            <summary>✏️ Modifier un objet</summary>
-            {% if selected_room.objects %}
-            <form method="POST" action="/edit_object2">
-                <input type="hidden" name="room_id" value="{{ selected_room.id }}">
-
-                <label for="object_id_edit">Choisir un objet à modifier :</label>
-                <select id="object_id_edit" name="object_id" required>
-                    <option value="" disabled selected>-- Sélectionnez un objet --</option>
-                    {% for obj in selected_room.objects %}
-                    <option value="{{ obj.id }}">{{ obj.name }} ({{ obj.type or "type inconnu" }})</option>
-                    {% endfor %}
-                </select>
-
-                <label for="object_name">Nouveau nom :</label>
-                <input type="text" id="object_name" name="object_name" placeholder="Ex: Lampe salon" required>
-
-                <label for="object_type">Nouveau type :</label>
-                <input type="text" id="object_type" name="object_type" placeholder="Ex: Lumière, Capteur..." required>
-
-                <label for="object_description">Nouvelle description :</label>
-                <textarea id="object_description" name="object_description"
-                    placeholder="Mettre à jour la description de l'objet..."></textarea>
-
-                <button type="submit" class="custom-button">Modifier l'objet</button>
-            </form>
-            {% else %}
-            <p>Aucun objet à modifier dans cette pièce.</p>
-            {% endif %}
-        </details>
-
-
-        <!-- Supprimer la pièce -->
-        <details>
-            <summary>❌ Supprimer cette pièce</summary>
-            <form method="POST" action="/delete_room2">
-                <input type="hidden" name="room_id" value="{{ selected_room.id }}">
-                <p>⚠️ **Attention :** Cette action est irréversible et supprimera la pièce "{{ selected_room.name }}"
-                    ainsi que tous les objets qu'elle contient.</p>
-                <button type="submit" class="custom-button" style="background-color: #dc3545; border-color: #dc3545;"
-                    onclick="return confirm('Êtes-vous absolument sûr de vouloir supprimer la pièce \'{{ selected_room.name }}\' et tous ses objets ?')">Supprimer
-                    Définitivement</button>
-            </form>
-        </details>
-    </section>
-    {% endif %}
-
-
-    <!-- Section: Configuration Actuelle -->
-    <section class="config-section">
-        <h3>Configuration Actuelle de la Maison</h3>
-        <div class="config-table-container">
-            <table class="config-table">
-                <thead>
-                    <tr>
-                        <th>Nom de la pièce</th>
-                        <th>Objets dans la pièce</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for room in rooms %}
-                    <tr>
-                        <td><strong>{{ room.name }}</strong></td>
-                        <td>
-                            {% if room.objects %}
-                            <ul>
-                                {% for obj in room.objects %}
-                                <li>
-                                    <strong>{{ obj.name }}</strong>
-                                    {% if obj.type %} ({{ obj.type }}) {% endif %}
-                                    {% if obj.description %} <br><small style="color: #666;">{{ obj.description
-                                        }}</small> {% endif %}
-                                </li>
-                                {% endfor %}
-                            </ul>
-                            {% else %}
-                            <span style="color: #888;">Aucun objet dans cette pièce.</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="2" style="text-align: center; padding: 20px; color: #777;">Aucune pièce n'a été
-                            créée pour le moment. Utilisez le formulaire ci-dessus pour commencer.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <br>
-    <!-- Use a class for consistent link styling if desired -->
-    <a id="back-to-dashboard" href="{{ url_for('dashboard') }}" class="back-link">← Retour au Tableau de Bord</a>
+  <br>
+  <!-- Use a class for consistent link styling if desired -->
+  <a id="back-to-dashboard" href="{{ url_for('dashboard') }}" class="back-link">← Retour au Tableau de Bord</a>
 
 </div><!-- End custom-container -->
 {% endblock %}

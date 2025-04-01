@@ -2,46 +2,44 @@
 
 {% block head %}
 {{ super() }}
-<meta charset="UTF-8"> {# Already likely in base, but doesn't hurt #}
+<meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/admin_panel.css') }}">
 {% endblock %}
 
 {% block title %}Admin Panel{% endblock %}
 
 {% block list %}
-{# Define Admin Navigation #}
-  {{super()}}
-  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-  <li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li> {# Link to self or main admin page #}
-  <li><a href="{{ url_for('profile') }}">Profile</a></li>
-  <li>
-    <a href="{{url_for('logout')}}"><button class="button-signup custom-button">LogOut</button></a>
-  </li>
+{{super()}}
+<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+<li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
+<li><a href="{{ url_for('profile') }}">Profile</a></li>
+<li>
+  <a href="{{url_for('logout')}}"><button class="button-signup custom-button">LogOut</button></a>
+</li>
 {% endblock %}
 
 {% block content %}
-<div class="custom-container admin-container"> {# Added admin-container class #}
+<div class="custom-container admin-container">
   <h1>Admin Panel</h1>
-  {# Display Flash Message/Request Arg Message #}
   {% if request.args.get('message') %}
   <p class="flash-message">{{ request.args.get('message') }}</p>
   {% endif %}
 
-  {# --- Admin Actions --- #}
+  {# --- Admin Actions (inchangé) --- #}
   <div class="admin-actions">
     <form action="{{ url_for('backup_db') }}" method="POST">
       <button type="submit" class="custom-button">Backup Database</button>
     </form>
     <form method="POST" action="{{ url_for('kill_admins') }}"
       onsubmit="return confirm('Are you sure you want to reset the level of users with level >= 20, except yourself?');">
-      <button type="submit" class="custom-button">Revoke Admin Rights</button> {# Renamed for clarity #}
+      <button type="submit" class="custom-button">Revoke Admin Rights</button>
     </form>
   </div>
 
-  {# --- Users List --- #}
+  {# --- Users List (inchangé) --- #}
   <h2>Users List</h2>
   <div class="admin-table-container">
-    <table class="admin-table"> {# Added class #}
+    <table class="admin-table">
       <thead>
         <tr>
           <th>Username</th>
@@ -74,19 +72,20 @@
           </td>
           <td>
             {% if not user.is_verified %}
-            <form action="{{ url_for('verify_user', user_id=user.id) }}" method="POST">
+            <form action="{{ url_for('verify_user', user_id=user.id) }}" method="POST" style="display: inline-block;">
               <button type="submit" class="custom-button">Verify</button>
             </form>
             {% endif %}
             <form action="{{ url_for('delete_user', user_id=user.id) }}" method="POST"
-              onsubmit="return confirm('Are you sure you want to delete user \'{{ user.username }}\'?');">
+              onsubmit="return confirm('Are you sure you want to delete user \'{{ user.username }}\'?');"
+              style="display: inline-block;">
               <button type="submit" class="custom-button">Delete</button>
             </form>
             <a href="{{ url_for('edit_user', user_id=user.id) }}">
               <button class="custom-button">Modify</button>
             </a>
             <a href="{{ url_for('view_login_history', user_id=user.id) }}">
-              <button class="custom-button">History</button> {# Shorter label #}
+              <button class="custom-button">History</button>
             </a>
           </td>
         </tr>
@@ -99,28 +98,44 @@
     </table>
   </div>
 
-  {# --- Deletion Suggestions --- #}
-  <h2>Deletion Suggestions</h2>
-  {% if suggestions %}
+  {# --- Deletion Suggestions (SIMPLIFIÉ) --- #}
+  <h2>Room Deletion Suggestions</h2>
+  {# On utilise la variable passée par la route : room_suggestions #}
+  {% if room_suggestions %}
   <div class="admin-table-container">
-    <table class="admin-table"> {# Added class #}
+    <table class="admin-table">
       <thead>
         <tr>
-          <th>Object Type</th>
+          <th>Room Name</th>
+          <th>Room ID</th>
           <th>Suggested By</th>
-          <th>Action</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {% for suggestion in suggestions %}
+        {# On itère sur la liste d'objets DelSuggestion #}
+        {% for suggestion in room_suggestions %}
         <tr>
-          <td>{{ suggestion.table_name }}</td>
-          <td>{{ suggestion.username }}</td>
+          <td>{{ suggestion.room_name }}</td> {# Accès direct à l'attribut #}
+          <td>{{ suggestion.room_id }}</td> {# Accès direct à l'attribut #}
+          <td>{{ suggestion.username }}</td> {# Accès direct à l'attribut #}
           <td>
-            <form action="{{ url_for('delete_table') }}" method="post"
-              onsubmit="return confirm('Delete table \'{{ suggestion.table_name }}\' and all objects in it?');">
-              <input type="hidden" name="table_name" value="{{ suggestion.table_name }}">
-              <button type="submit" class="custom-button">Delete Table</button>
+            {# Formulaire pour Approuver la suppression #}
+            {# L'action pointe vers une NOUVELLE route qu'il faudra créer #}
+            <form action="{{ url_for('approve_room_deletion', suggestion_id=suggestion.id) }}" method="POST"
+              style="display: inline-block;"
+              onsubmit="return confirm('Approve deletion of room \'{{ suggestion.room_name }}\' (ID: {{ suggestion.room_id }})? This will delete the room and the suggestion.');">
+              {# On passe l'ID de la pièce à supprimer en caché #}
+              <input type="hidden" name="room_id_to_delete" value="{{ suggestion.room_id }}">
+              <button type="submit" class="custom-button approve-button">Approve</button> {# Classe CSS optionnelle #}
+            </form>
+
+            {# Formulaire pour Rejeter la suggestion #}
+            {# L'action pointe vers une NOUVELLE route qu'il faudra créer #}
+            <form action="{{ url_for('reject_room_deletion', suggestion_id=suggestion.id) }}" method="POST"
+              style="display: inline-block;"
+              onsubmit="return confirm('Reject suggestion to delete room \'{{ suggestion.room_name }}\'? This will only remove the suggestion.');">
+              <button type="submit" class="custom-button reject-button">Reject</button> {# Classe CSS optionnelle #}
             </form>
           </td>
         </tr>
@@ -129,15 +144,11 @@
     </table>
   </div>
   {% else %}
-  <p class="no-suggestions">No object deletion suggestions at the moment.</p> {# Added class #}
+  <p class="no-suggestions">No room deletion suggestions at the moment.</p>
   {% endif %}
 
   <br>
-  {# Link back to dashboard using general link style from base_layout.css #}
   <a href="{{ url_for('dashboard') }}" class="back-link" id="back-to-dashboard">← Back to Dashboard</a>
 
 </div><!-- End admin-container -->
 {% endblock %}
-
-{# Optional: Add specific footer content if needed #}
-{# {% block footer_li %} {{ super() }} {% endblock %} #}
