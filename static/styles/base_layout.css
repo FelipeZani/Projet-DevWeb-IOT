@@ -8,6 +8,7 @@
   --link-color: #a7c1f7;
   --p-color: gray;
   --nav-color:white;
+  --custom-container-color:white;
 }
 .dark-mode{
   --main-bg-color: #071c48;
@@ -17,11 +18,14 @@
   --link-color: #3069db;
   --p-color: gray;
   --nav-color:#ebebeb;
+  --custom-container-color:#ebebeb;
+
 }
 .d-font{
   font-family:"OpenDyslexic";
   font-size: small;
 }
+
 /* Body set up */
 body {
   background-color: var(--main-bg-color);
@@ -196,7 +200,7 @@ footer p {
 }
 
 footer {
-  background-color: var(--text-color);
+  background-color: var(--nav-color);
   text-align: center;
   left: 0;
   bottom: 0;
@@ -210,7 +214,7 @@ footer {
 }
 
 .custom-container {
-  background-color: var(--text-color);
+  background-color: var(--custom-container-color);
   border-radius: 10px;
   margin-top: 20px;
   padding-top: 2px;
@@ -254,4 +258,19 @@ footer {
 }
 #font-icon{
   cursor: pointer;
+}
+
+select,input,button{
+  font-family: var(--main-font-fam);
+}
+
+.d-font select,
+.d-font option,
+.d-font input,
+.d-font button{
+  font-family:"OpenDyslexic";
+  font-size: small;
+}
+.d-font button{
+  font-size: x-small;
 }
