@@ -11,14 +11,13 @@ new CSS file #}
 {% block list %}
 {# Optional: Define specific navigation for this page or inherit from base #}
 {# Example: Keeping it simple like the profile page #}
-<ul class="custom-ul">
+    {{super()}}
     <li><a href="{{ url_for('dashboard') }}">Tableau de Bord</a></li>
     {# Add other relevant links if needed #}
     <li><a href="{{ url_for('profile') }}">Profil</a></li>
     <li>
         <a href="{{url_for('logout')}}"><button class="button-signup custom-button">Déconnexion</button></a>
     </li>
-</ul>
 {% endblock %}
 
 

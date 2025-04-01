@@ -11,8 +11,9 @@
 {%block list%}
 
 <ul class="custom-ul">
+  {{super()}}
   <li><a href="{{ url_for('dashboard')}}">DashBoard</a></li>
-  <li><a href="#">Devices</a></li>
+  <li><a href="#">Manage home</a></li>
   <li><a href="{{ url_for('profile') }}">Profile</a></li>
 
   <li>

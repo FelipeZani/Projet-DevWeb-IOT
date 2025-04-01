@@ -22,11 +22,12 @@
   <link rel="shortcut icon" href="#">
 
   <script defer src="{{ url_for('static', filename='scripts/home.js') }}"></script>
+
 {%endblock%}
 
 
   {%block list%}
-  <ul class="custom-ul">
+    {{super()}}
     <li><a href="#">Home</a></li>
     <li><a href="#">About</a></li>
     <li><a href="#">Our solution</a></li>
@@ -35,7 +36,6 @@
     <li>
       <button class="button-signup custom-button" onclick="openDiag(false);">Signup</button>
     </li>
-  </ul>
   {%endblock%}
 
 

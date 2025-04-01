@@ -9,14 +9,13 @@
 {% block title %}Modifier {{ user.username }}{% endblock %}
 
 {% block list %}
-<ul class="custom-ul">
+  {{super()}}
   <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
   <li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
   <li><a href="{{ url_for('profile') }}">Profile</a></li>
   <li>
     <a href="{{url_for('logout')}}"><button class="button-signup custom-button">LogOut</button></a>
   </li>
-</ul>
 {% endblock %}
 
 {% block content %}

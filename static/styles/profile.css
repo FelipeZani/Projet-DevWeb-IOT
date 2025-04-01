@@ -78,7 +78,6 @@
     grid-template-rows: 1fr 1fr;
     justify-items: center;
     grid-row-gap: 20px;
-    min-width: 380px;
 }
 
 .hide-form,
