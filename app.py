@@ -655,7 +655,6 @@ def add_object2():
     conso = request.form.get('object_consumption')
 
     if room_id and name and type_ and conso:
-    if room_id and name and type_ and conso:
         new_object = Object(
             name=name,
             type=type_,
