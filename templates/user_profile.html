@@ -1,9 +1,7 @@
-
-
 {% extends "base_layout.html"%}
 {%block head%}
-  {{super()}}
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/user_profile.css') }}">
+{{super()}}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/user_profile.css') }}">
 
 {%endblock%}
 {% block title%}{{user.username}}'s profile{%endblock%}
@@ -13,7 +11,7 @@
 <ul class="custom-ul">
   {{super()}}
   <li><a href="{{ url_for('dashboard')}}">DashBoard</a></li>
-  <li><a href="#">Manage home</a></li>
+  <li><a href="{{ url_for('config_maison')}}">Manage home</a></li>
   <li><a href="{{ url_for('profile') }}">Profile</a></li>
 
   <li>
@@ -25,27 +23,28 @@
 
 {% block content%}
 
-  <div id="info-member-container">
-    <div class="custom-container" >
-      <h1>{{ user.username }}'s Profile</h1>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-      </svg>
-      <p>Username : {{ user.username }}</p>
-      <p>Email : {{ user.email }}</p>
-      <p>Gender : {{ user.gender }}</p>
-      <p>Role : {{ user.role }}</p>
-      <p>Birthdate : {{ user.birthdate.strftime("%d-%m-%Y") }}</p> <!-- Format de la date -->
-      <p>Level : {{ user.level }}</p>
-    </div>
+<div id="info-member-container">
+  <div class="custom-container">
+    <h1>{{ user.username }}'s Profile</h1>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+      <path fill-rule="evenodd"
+        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+    </svg>
+    <p>Username : {{ user.username }}</p>
+    <p>Email : {{ user.email }}</p>
+    <p>Gender : {{ user.gender }}</p>
+    <p>Role : {{ user.role }}</p>
+    <p>Birthdate : {{ user.birthdate.strftime("%d-%m-%Y") }}</p> <!-- Format de la date -->
+    <p>Level : {{ user.level }}</p>
   </div>
-  
+</div>
+
 
 
 {%endblock%}
 
 
 {%block footer_li%}
-  {{super()}}
+{{super()}}
 {%endblock%}
