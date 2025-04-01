@@ -40,8 +40,6 @@
 
 
 {%block content%}
-  <a href="{{ url_for('signin')}}">SIGN IN, SIGN UP</a>
-  {{message}}
   <dialog class="dialog">
     <div class="ls-buttons">
       <button class="custom-button" id="logInFrmBtn" onclick="handleDiagFormOptions(true)">Login</button>
@@ -95,6 +93,10 @@
   </form>
   </dialog>
 
+  <!-- <section id="hero-section"> not finished yet
+    <img id="heroImg" src="../static/assets/heroSectionBg.jpeg" alt="Displayed image of house where appear alongside gagdets ilustrating services of the web site">
+    <p style="position: absolute; font-size: 3em; top: 40%; left: 10%; color: whitesmoke;"> <span style="color: #2463eb;"> Make</span> yourself at <span style="color: #2463eb;"> home</span><br/><span style="color: #2463eb;">smarter</span> than ever</p>
+  </section> -->
 {%endblock%}
 
 

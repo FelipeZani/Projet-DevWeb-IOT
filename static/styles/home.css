@@ -74,3 +74,14 @@ border-radius: 20px;
     border: 2px solid red;
 }
 
+#hero-section {
+    position: relative;
+    max-width: 100dvw;
+}
+
+#heroImg{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
