@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport Maison Connectée</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            color: #333;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .meta {
+            margin-bottom: 30px;
+        }
+
+        .meta p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .section {
+            margin-top: 40px;
+        }
+
+        .graph-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .graph-container img {
+            max-width: 500px;
+            height: auto;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📄 Rapport Maison Connectée</h1>
+
+    <div class="meta">
+        <p><strong>Utilisateur :</strong> {{ username }}</p>
+        <p><strong>Date de génération :</strong> {{ date }}</p>
+        <p><strong>Total de pièces :</strong> {{ total_pieces }}</p>
+        <p><strong>Total d'objets :</strong> {{ total_objets }}</p>
+        <p><strong>Consommation totale :</strong> {{ total_conso }} kWh / jour</p>
+    </div>
+
+    <div class="section">
+        <h2>📋 Objets connectés</h2>
+        {% if objets %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Pièce</th>
+                    <th>Consommation (kWh/jour)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in objets %}
+                <tr>
+                    <td>{{ obj.name }}</td>
+                    <td>{{ obj.type }}</td>
+                    <td>{{ obj.piece }}</td>
+                    <td>{{ obj.conso }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Aucun objet enregistré.</p>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>📊 Statistiques de consommation</h2>
+
+        {% if img_pie %}
+        <div class="graph-container">
+            <h3>Répartition par pièce</h3>
+            <img src="{{ img_pie }}">
+        </div>
+        {% endif %}
+
+        {% if img_bar %}
+        <div class="graph-container">
+            <h3>Répartition par type d'objet</h3>
+            <img src="{{ img_bar }}">
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

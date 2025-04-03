@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for,jsonify
+from flask import Flask, render_template, request, redirect, session, url_for,jsonify,send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Integer, String, Boolean, MetaData, inspect, text
@@ -7,9 +7,12 @@ from flask_mailman import Mail
 from sqlalchemy.orm import joinedload
 from datetime import datetime
 from time import time
+from weasyprint import HTML
+import matplotlib.pyplot as plt
 import os
 import re
 import uuid
+from io import BytesIO
 
 
 app= Flask(__name__)
@@ -81,9 +84,44 @@ class Object(db.Model):
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'), nullable=False)
 
 
+
+def generate_pie_chart(data, title):
+    if not data:
+        return None
+    os.makedirs("static/tmp", exist_ok=True)
+
+    labels = list(data.keys())
+    values = list(data.values())
+    plt.figure(figsize=(5, 5))
+    plt.pie(values, labels=labels, autopct='%1.1f%%')
+    plt.title(title)
+    filename = f"static/tmp/pie_{uuid.uuid4()}.png"
+    plt.savefig(filename, bbox_inches='tight')
+    plt.close()
+    return filename
+
+def generate_bar_chart(data, title):
+    if not data:
+        return None
+    os.makedirs("static/tmp", exist_ok=True)
+
+    labels = list(data.keys())
+    values = list(data.values())
+    plt.figure(figsize=(6, 4))
+    plt.bar(labels, values)
+    plt.title(title)
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    filename = f"static/tmp/bar_{uuid.uuid4()}.png"
+    plt.savefig(filename)
+    plt.close()
+    return filename
+
 # Routes
 @app.route("/")
 def home():
+    if 'username' in session :
+        return redirect(url_for("dashboard"))
     return render_template("home.html")
 
 @app.route("/signin")
@@ -530,6 +568,58 @@ def delete_or_suggest_room():
             print(f"Erreur lors de l'enregistrement de la suggestion (Non-Admin): {str(e)}") # DEBUG
 
     return redirect(url_for('config_maison'))
+
+@app.route('/generate_report_global')
+def generate_report_global():
+    if 'username' not in session or not session.get("verified"):
+        return redirect(url_for("home", message="Veuillez vous connecter."))
+
+    rooms = Room.query.all()
+    objets = []
+    conso_totale = 0
+    conso_par_piece = {}
+    conso_par_type = {}
+
+    for room in rooms:
+        objets_room = room.objects
+        for obj in objets_room:
+            obj_data = {
+                'name': obj.name,
+                'type': obj.type,
+                'piece': room.name,
+                'conso': obj.consommation_kw_jour or 0
+            }
+            objets.append(obj_data)
+
+            # Conso par pièce
+            conso_par_piece[room.name] = conso_par_piece.get(room.name, 0) + obj_data['conso']
+            # Conso par type
+            if obj.type:
+                conso_par_type[obj.type] = conso_par_type.get(obj.type, 0) + obj_data['conso']
+
+            conso_totale += obj_data['conso']
+
+    img_path_pie = generate_pie_chart(conso_par_piece, "Consommation par pièce")
+    img_path_bar = generate_bar_chart(conso_par_type, "Consommation par type")
+
+    html = render_template(
+        "rapport_pdf.html", #
+        username=session["username"],
+        date=datetime.now().strftime("%d/%m/%Y %H:%M"),
+        total_conso=round(conso_totale, 2),
+        total_objets=len(objets),
+        total_pieces=len(rooms),
+        objets=objets,
+        img_pie=img_path_pie,
+        img_bar=img_path_bar
+    )
+
+    # Génération du PDF avec WeasyPrint
+    pdf = HTML(string=html, base_url=request.host_url).write_pdf()
+
+    # Envoi du fichier en tant que téléchargement
+    return send_file(BytesIO(pdf), as_attachment=True, download_name="rapport_maison.pdf", mimetype='application/pdf')
+
 
 @app.route('/approve_room_deletion/<int:suggestion_id>', methods=['POST'])
 def approve_room_deletion(suggestion_id):
