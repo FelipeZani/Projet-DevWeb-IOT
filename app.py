@@ -614,7 +614,7 @@ def generate_report_global():
         img_bar=img_path_bar
     )
 
-    # Génération du PDF avec WeasyPrint
+    # Génération du PDF 
     pdf = HTML(string=html, base_url=request.host_url).write_pdf()
 
     # Envoi du fichier en tant que téléchargement
