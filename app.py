@@ -667,20 +667,6 @@ def delete_object2():
 
     return redirect(url_for('select_piece', room_id=room_id))
 
-"""
-@app.route('/delete_room2', methods=['POST'])
-def delete_room2():
-    room_id = request.form.get('room_id')
-    print("ID de la pièce à supprimer :", room_id)  # DEBUG
-
-    room = Room.query.get(room_id)
-    if room:
-        db.session.delete(room)
-        db.session.commit()
-
-    return redirect(url_for('config_maison'))
-"""
-
 @app.route('/edit_object2', methods=['POST'])
 def edit_object2():
     if 'username' not in session or not session.get("verified"):
@@ -703,7 +689,6 @@ def edit_object2():
 
     return redirect(url_for('select_piece', room_id=room_id))
 
-# Functions
 def add_points(username, points):
     user = User.query.filter_by(username=username).first()
     
