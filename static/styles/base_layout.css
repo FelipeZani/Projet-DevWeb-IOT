@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import url('https://jeffreymaniac.github.io/OpenDyslexic-font-for-css/opendyslexic.css');
+
 :root {
   --main-bg-color: #ecf3fe;
   --main-font-fam: "Roboto", "Courier New";
@@ -44,7 +45,7 @@ body, html {
 }
 
 /* Blocking the scroll when the menu bar is on */
-body:has(input[type=checkbox]:checked),
+body:has( input#check[type=checkbox]:checked),
 body:has(#signUpFrmBtn:focus),
 body:has(#logInFrmBtn:focus) {
   overflow-y: hidden;
@@ -78,6 +79,10 @@ body:has(#logInFrmBtn:focus) {
   display: flex;
   justify-content: center;
   height: auto;
+  position: fixed;
+  z-index: 1;
+  margin-top: 20px;
+  width: 100%;
 }
 
 nav {

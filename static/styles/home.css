@@ -85,3 +85,269 @@ border-radius: 20px;
     object-fit: cover;
     object-position: center;
 }
+
+/* Styling free tour page */
+
+#group-paragraph{
+    position: absolute; top: 40%;
+    left: 18%;
+}
+#group-paragraph h1{
+    font-size: 3em; margin: 0; 
+    color: #1849b1 ;
+}
+#group-paragraph p{
+    font-size: 2em;
+    color: whitesmoke; margin: 0;
+}
+#group-paragraph span{
+    color: #1849b1;
+}
+#group-paragraph button{
+   padding: 10px; 
+   font-size: 2em;
+   border-radius: 30px;
+}
+
+#product {
+    margin-bottom: 20px;
+}
+
+#product img{
+    height: 100%;
+
+}
+
+#product-image-container{
+    display: flex;
+    justify-content: center;
+    height: 200px;
+
+}
+
+#product > .custom-container,
+#available-services > .custom-container{
+    padding: 0 20px;
+    
+}
+.cercle-shape{
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background-color: gray;
+    box-shadow: 0 0 5px 0 gray;
+
+}
+.card-element input:checked ~ .icon-container span,
+.card-element input:checked ~ p{
+    color:black;
+}
+#card0 input:checked ~ .icon-container .cercle-shape{
+    background-color: red;
+    box-shadow: 0 0 5px 0 red;
+}
+
+#card1 input:checked ~ .icon-container .cercle-shape{
+  
+    background-color: rgb(120, 197, 5);
+    box-shadow: 0 0 5px 0 rgb(120, 197, 5);
+}
+
+#card2 input:checked ~ .icon-container .cercle-shape{
+    background-color: violet;
+    box-shadow: 0 0 5px 0 violet;
+}
+#card3 input:checked ~ .icon-container .cercle-shape{
+    background-color: #2463eb;
+    box-shadow: 0 0 5px 0 #2463eb;
+}
+#card4 input:checked ~ .icon-container .cercle-shape{
+    background-color: rgb(218, 218, 7);
+    box-shadow: 0 0 5px 0  rgb(218, 218, 7);
+}
+#card5 input:checked ~ .icon-container .cercle-shape{
+    background-color: orange;
+    box-shadow: 0 0 5px 0 orange;
+}
+#services-container{
+    display: grid;
+    grid-template-columns: repeat(3,100px);
+    grid-template-rows: repeat(2,1fr);
+
+    justify-items: center;
+    align-items: end;
+    gap: 10px;
+    
+}
+
+#services-container p{
+    margin: 0;
+    font-size: small;
+    padding-left: 5px;
+}
+#outer-services-container{
+    display: flex; 
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 5px;
+}
+.card-element{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    word-wrap: break-word;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 10px;
+    transition: scale 0.2s;
+    cursor: pointer;
+    background: white;
+    border: none;
+    color: gray;
+
+}
+.card-element input[type="checkbox"]{
+  position: absolute;
+  display: none;
+}
+.icon-container{
+    display: flex;
+
+}
+
+.card-element:hover{
+    scale: 1.1;
+
+}
+
+.card0-content,
+.card1-content,
+.card2-content,
+.card3-content,
+.card4-content,
+.card5-content{
+    display: none;
+}
+
+
+div:has(label#card0 input:checked) ~ .card-content-container .card0-content,
+div:has(label#card1 input:checked) ~ .card-content-container .card1-content,
+div:has(label#card2 input:checked) ~ .card-content-container .card2-content,
+div:has(label#card3 input:checked) ~ .card-content-container .card3-content,
+div:has(label#card4 input:checked) ~ .card-content-container .card4-content,
+div:has(label#card5 input:checked) ~ .card-content-container .card5-content{
+    display: block;
+    font-size: medium;
+}
+
+div:has(label#card0 input:checked) ~ .card-content-container .card0-content{color: red;}
+div:has(label#card1 input:checked) ~ .card-content-container .card1-content{color:rgb(120, 197, 5);}
+div:has(label#card2 input:checked) ~ .card-content-container .card2-content{color:violet;}
+div:has(label#card3 input:checked) ~ .card-content-container .card3-content{color:#2463eb;}
+div:has(label#card4 input:checked) ~ .card-content-container .card4-content{color:rgb(218, 218, 7);}
+div:has(label#card5 input:checked) ~ .card-content-container .card5-content{color:orange;}
+
+.card-content-container{
+    display: grid;
+    grid-template-columns: 150px 150px;
+    column-gap: 5px;
+}
+
+#pricing{
+    margin-bottom: 20px;
+}
+#pricing-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #pricing-table td, #pricing-table th {
+    padding: 8px;
+  }
+  
+  #pricing-table tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #pricing-table tr:hover {background-color: #ddd;}
+  
+  #pricing-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+  }
+ 
+  
+
+  #pricing-table td:nth-child(2),
+  #pricing-table thead th:nth-child(2){ color: rgb(241, 75, 103); }
+
+  #pricing-table td:nth-child(3),
+  #pricing-table thead th:nth-child(3)
+    { color: rgb(12, 109, 201); }
+    
+  #pricing-table td:nth-child(4),
+  #pricing-table thead th:nth-child(4){ color: rgb(0, 212, 106); }
+
+  .pricing-sub-header{
+    column-count: 3;
+  }
+
+  .title-pricing{
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+}
+
+
+@media (min-width: 768px){
+   
+    #available-services #text-container{
+        width: 50%;
+
+    }
+    #available-services{
+        display: flex;
+        justify-content: center;
+    }
+    #research-section{
+        display: flex;
+        column-gap: 10%;
+        width: 100%;
+
+    }
+    #text-container h2 {
+        font-size: 2.5em;
+    }
+    #text-container p{
+        font-size: x-large;
+    }
+    .cercle-shape{
+        height: xx-large;
+        width: xx-large;
+    }
+    #services-container{
+        grid-template-columns: repeat(2,1fr);
+    }
+    #services-container p {
+        font-size: medium;
+
+    }
+    #pricing .custom-container{
+        padding: 20px;
+    }
+    .card-content-container{
+        position: absolute;
+        top:inherit;
+    }
+
+    #product .custom-container{
+        display: flex;
+        justify-content: space-between;
+        column-gap: 10%;
+        align-items: center;
+
+
+    }
+  
+}

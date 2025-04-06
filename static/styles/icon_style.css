@@ -1,0 +1,15 @@
+.material-symbols-outlined {
+ 
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+span.material-symbols-outlined{
+  font-size: 3em;
+}
+td.title-pricing .material-symbols-outlined,
+.qmark{
+  font-size: 2em !important;
+}
