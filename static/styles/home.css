@@ -232,22 +232,22 @@ border-radius: 20px;
 }
 
 
-div:has(label#card0 input:checked) ~ .card-content-container .card0-content,
-div:has(label#card1 input:checked) ~ .card-content-container .card1-content,
-div:has(label#card2 input:checked) ~ .card-content-container .card2-content,
-div:has(label#card3 input:checked) ~ .card-content-container .card3-content,
-div:has(label#card4 input:checked) ~ .card-content-container .card4-content,
-div:has(label#card5 input:checked) ~ .card-content-container .card5-content{
+div:has(label#card0 input:checked) ~ div .card-content-container .card0-content,
+div:has(label#card1 input:checked) ~ div .card-content-container .card1-content,
+div:has(label#card2 input:checked) ~ div .card-content-container .card2-content,
+div:has(label#card3 input:checked) ~ div .card-content-container .card3-content,
+div:has(label#card4 input:checked) ~ div .card-content-container .card4-content,
+div:has(label#card5 input:checked) ~ div .card-content-container .card5-content{
     display: block;
     font-size: medium;
 }
 
-div:has(label#card0 input:checked) ~ .card-content-container .card0-content{color: red;}
-div:has(label#card1 input:checked) ~ .card-content-container .card1-content{color:rgb(120, 197, 5);}
-div:has(label#card2 input:checked) ~ .card-content-container .card2-content{color:violet;}
-div:has(label#card3 input:checked) ~ .card-content-container .card3-content{color:#2463eb;}
-div:has(label#card4 input:checked) ~ .card-content-container .card4-content{color:rgb(218, 218, 7);}
-div:has(label#card5 input:checked) ~ .card-content-container .card5-content{color:orange;}
+div:has(label#card0 input:checked) ~ div .card-content-container .card0-content{color: red;}
+div:has(label#card1 input:checked) ~ div .card-content-container .card1-content{color:rgb(120, 197, 5);}
+div:has(label#card2 input:checked) ~ div .card-content-container .card2-content{color:violet;}
+div:has(label#card3 input:checked) ~ div .card-content-container .card3-content{color:#2463eb;}
+div:has(label#card4 input:checked) ~ div .card-content-container .card4-content{color:rgb(218, 218, 7);}
+div:has(label#card5 input:checked) ~ div .card-content-container .card5-content{color:orange;}
 
 .card-content-container{
     display: grid;
@@ -310,6 +310,12 @@ div:has(label#card5 input:checked) ~ .card-content-container .card5-content{colo
         display: flex;
         justify-content: center;
     }
+    section#available-services{
+        height: 100dvh;
+    }
+    #research-section{
+        align-items: center;
+    }
     #research-section{
         display: flex;
         column-gap: 10%;
@@ -337,10 +343,16 @@ div:has(label#card5 input:checked) ~ .card-content-container .card5-content{colo
         padding: 20px;
     }
     .card-content-container{
-        position: absolute;
         top:inherit;
+        row-gap: 16px;
     }
-
+    #cards-wrapper{
+        position: absolute;
+    }
+    .icon-container{
+        justify-content: space-between;
+        padding: 10px;
+    }
     #product .custom-container{
         display: flex;
         justify-content: space-between;

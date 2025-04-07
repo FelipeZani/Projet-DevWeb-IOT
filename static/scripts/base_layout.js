@@ -10,6 +10,17 @@ function doneScrolling(){
 
 }
 
+function setBgImg(isDark){
+    let bgImage = document.getElementById("heroImg")
+
+    if(bgImage != null){
+        if(isDark)
+            bgImage.src="../static/assets/heroSectionBgImgDark.jpg"
+        else
+            bgImage.src="../static/assets/heroSectionBgImgLight.jpg"
+
+    }
+}
 
 window.addEventListener('scroll', function() {
     if (timer !== null) {
@@ -28,7 +39,10 @@ window.onload = function(){
         html.classList.add("dark-mode")
         darkModeOnIcon.style.display = "block"
         darkModeOffIcon.style.display = "none" 
+        setBgImg(true)
 
+    }else{
+        setBgImg(false)
     }
     if(localStorage.getItem("special-font") === "d-font"){
         bd.classList.add("d-font")
@@ -51,6 +65,8 @@ function toggleFont(){
     }
 }
 function toggleTheme(){
+    
+
    
     if(html.classList.contains("dark-mode")){
 
@@ -61,6 +77,9 @@ function toggleTheme(){
         darkModeOnIcon.style.display = "none"
         darkModeOffIcon.style.display = "block"
 
+        setBgImg(false)
+
+
     }else{
 
         html.classList.add("dark-mode")
@@ -69,6 +88,8 @@ function toggleTheme(){
 
         darkModeOnIcon.style.display = "block"
         darkModeOffIcon.style.display = "none" 
+
+        setBgImg(true)
 
     }
 

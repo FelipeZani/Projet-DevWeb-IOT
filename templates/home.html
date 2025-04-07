@@ -103,8 +103,8 @@
 </dialog>
 
 <section id="hero-section">
-  <img id="heroImg" src="../static/assets/heroSectionBg.jpeg"
-    alt="Displayed image of house where appear alongside gagdets ilustrating services of the web site">
+  <img id="heroImg" src=""
+    alt="Displayed image of house which solar panels are installed on the roof">
   <!-- <div id="group-paragraph">
     <h1>Comfy</h1>
     <p> Make your <span> home</span><br /><span>smarter</span> than ever</p>
@@ -154,7 +154,6 @@
         </label>
         {% endfor %}
 
-
       </div>
 
       {% set cards = [
@@ -183,7 +182,8 @@
       {"icon": "window_sensor", "text": "Window sensors"}
       ]
       ]%}
-
+      
+      <div id="cards-wrapper">
       {% for idx in range(cards|length) %}
       <div class="card-content-container">
         {% for item in range(cards[idx]|length)%}
@@ -198,7 +198,7 @@
         {% endfor %}
       </div>
       {% endfor %}
-
+    </div>
 
     </div>
 
