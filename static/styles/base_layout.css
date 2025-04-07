@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import url('https://jeffreymaniac.github.io/OpenDyslexic-font-for-css/opendyslexic.css');
+@font-face {
+  font-family: 'Neo Tech';
+  src: url("../assets/fonts/NeoTech.ttf");
+}
 
 :root {
   --main-bg-color: #ecf3fe;
@@ -25,6 +29,11 @@
 .d-font{
   font-family:"OpenDyslexic";
   font-size: small;
+}
+
+
+a:hover{
+  cursor:pointer;
 }
 
 /* Body set up */
@@ -101,9 +110,7 @@ nav {
   z-index: 1;
 }
 
-.logo {
-  font-size: 1.5rem;
-}
+
 
 .custom-ul {
   display: flex;
@@ -286,4 +293,13 @@ select,input,button{
 }
 .d-font button{
   font-size: x-small;
+}
+
+/*Logo area*/
+.logo {
+  font-size: 1.5rem;
+  font-family: 'Neo Tech';
+}
+.logo a:hover{
+  color: var(--main-color)  ;
 }
