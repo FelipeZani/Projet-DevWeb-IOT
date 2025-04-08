@@ -1,5 +1,6 @@
 // var section
 const dialog = document.querySelector("dialog")
+const navBar = document.getElementsByClassName("home-nav-container")[0]
 const logInBtnFrm = document.getElementById("logInFrmBtn") 
 const signUpBtnFrm = document.getElementById("signUpFrmBtn")
 const signUpSubFrm = document.getElementById("sub-btn") 
@@ -11,6 +12,18 @@ let password = document.getElementById("signup-password")
 let power = document.getElementById("contet-load")
 let invalidInputs = document.getElementsByClassName("incorrect-input-field")
 
+
+
+//scroll effect on the nav bar in the home screen
+window.addEventListener('scroll', function() {
+  if (timer !== null) {
+      clearTimeout(timer);        
+      navBar.style.opacity=0.8 
+
+  }
+
+  timer = setTimeout(doneScrolling, 150);
+}, false);
 
 //Dialog
 dialog.addEventListener("click", onClick)

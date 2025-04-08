@@ -2,7 +2,6 @@ const html = document.querySelector("html")
 const bd = document.querySelector("body")
 const darkModeOnIcon =  document.getElementsByClassName("bi-brightness-high-fill")[0]
 const darkModeOffIcon = document.getElementsByClassName("bi-brightness-high")[0]
-const navBar = document.querySelector("nav")
 
 var timer = null
 function doneScrolling(){
@@ -22,15 +21,7 @@ function setBgImg(isDark){
     }
 }
 
-window.addEventListener('scroll', function() {
-    if (timer !== null) {
-        clearTimeout(timer);        
-        navBar.style.opacity=0.8 
 
-    }
-
-    timer = setTimeout(doneScrolling, 150);
-}, false);
 
 
 window.onload = function(){

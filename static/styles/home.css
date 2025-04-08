@@ -1,3 +1,15 @@
+body{
+    grid-template-rows: 1fr auto;
+}
+
+.nav-container{
+    display: none;
+}
+.home-nav-container{
+    display: flex;
+    position: fixed;
+   
+}
 dialog{
     height: 500px;
     width: 500px;
