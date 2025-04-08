@@ -215,3 +215,12 @@
 </script>
 
 {% endblock %}
+
+{% block foot %}
+  <li><a href="{{ url_for('config_maison') }}">Gérer la Maison</a></li>
+  {% if session.get("level", 0) >= 20 %}
+    <li><a href="{{ url_for('admin_panel') }}">Panneau Admin</a></li>
+  {% endif %}
+
+  <li><a href="{{ url_for('profile') }}">Profil</a></li>
+{%endblock%}

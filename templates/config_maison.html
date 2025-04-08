@@ -254,7 +254,8 @@ new CSS file #}
 </div>
 {% endblock %}
 
-{# No need for footer block unless you want to add specific things #}
-{# {% block footer_li %}
-{{ super() }}
-{% endblock %} #}
+{% block foot %}
+  <li><a href="{{ url_for('dashboard') }}">Tableau de Bord</a></li>
+  <li><a href="{{ url_for('profile') }}">Profil</a></li>
+
+{%endblock%}

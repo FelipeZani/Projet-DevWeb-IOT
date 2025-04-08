@@ -82,3 +82,9 @@
 
 </div>
 {% endblock %}
+
+{% block foot %}
+<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+  <li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
+  <li><a href="{{ url_for('profile') }}">Profile</a></li>
+{%endblock%}

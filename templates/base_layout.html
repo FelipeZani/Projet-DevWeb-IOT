@@ -115,22 +115,24 @@
     </main>
 
     <footer>
-        {%block foot%}
 
         <section id="footer-info">
 
             <ul class="custom-ul">
+            {%block foot%}
+
                 {% for li in nav_list%}
                 <li><a href="{{li.url}}" title="check this profile">{{li.name}}</a></li>
                 {%endfor%}
+            {%endblock%}
             </ul>
+
         </section>
 
         <section>
             <p> © 2025 SomeCompany, Inc. All rights reserved. </p>
         </section>
 
-        {%endblock%}
 
     </footer>
 

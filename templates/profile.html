@@ -148,8 +148,8 @@
 
 {%endblock%}
 
-
-
-{%block footer_li%}
-{{super()}}
+{% block foot %}
+  <li><a href="{{ url_for('dashboard')}}">DashBoard</a></li>
+  <li><a href="{{ url_for('config_maison')}}">Manage home</a></li>
+  <li><a href="{{ url_for('profile') }}">Profile</a></li>
 {%endblock%}
