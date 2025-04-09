@@ -16,11 +16,10 @@
 
 {%block list%}
 {{super()}}
-<li><a href="{{ url_for('dashboard')}}">DashBoard</a></li>
-<li><a href="{{ url_for('config_maison')}}">Manage home</a></li>
-<li><a href="{{ url_for('profile') }}">Profile</a></li>
+<li><a href="{{ url_for('dashboard')}}">Tableau de bord</a></li>
+<li><a href="{{ url_for('config_maison')}}">Gérer maison</a></li>
 <li><a href="{{url_for('logout')}}">
-    <button class="button-signup custom-button">LogOut</button>
+    <button class="button-signup custom-button">Déconnexion</button>
   </a></li>
 
 
@@ -34,7 +33,7 @@
   <div id="user-container">
 
     <div id="user-banner" class="custom-container">
-      <h2>Profile</h2>
+      <h2>Profil</h2>
       <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" fill="currentColor" class="bi bi-person-gear"
         viewBox="0 0 16 16" style="cursor: pointer;">
         <path
@@ -43,23 +42,23 @@
 
 
       <p>{{ session["username"] }}</p>
-      <p>Level {{ session["level"] }}</p>
+      <p>Niveau {{ session["level"] }}</p>
       <p>{{ session["role"] }}</p>
     </div>
     <div id="user-info-container" class="custom-container">
       <div id="account-info">
         <div>
-          <label>Username </label>
+          <label>Nom utilisateur </label>
           <label>{{session["username"]}}</label>
         </div>
 
         <div>
-          <label class="private-info">First Name</label>
+          <label class="private-info">Prénom</label>
           <label>{{ session["fname"] }}</label>
         </div>
 
         <div>
-          <label class="private-info">Last Name</label>
+          <label class="private-info">Nom</label>
           <label>{{ session["lname"] }}</label>
         </div>
 
@@ -69,25 +68,25 @@
         </div>
 
         <div>
-          <label>Gender</label>
+          <label>Genre</label>
           <label>{{ session["gender"] }}</label>
         </div>
 
         <div>
-          <label>Birth date</label>
+          <label>Anniversaire</label>
           <label>{{ session["birthdate"] }}</label>
         </div>
 
         <div>
-          <label>Level</label>
+          <label>Niveau</label>
           <label>{{session["level"]}}</label>
         </div>
 
         <div id="edit-info-button-container">
-          <button class="custom-button display-changes" id="edit-info-button" onclick="displayForm(this,1)">Edit
-            info</button>
+          <button class="custom-button display-changes" id="edit-info-button" onclick="displayForm(this,1)">Modifier
+          </button>
           <button class="custom-button red-btn display-changes hide" id="cancel-info-button"
-            onclick="displayForm(this,0)">Cancel</button>
+            onclick="displayForm(this,0)">Retour</button>
         </div>
 
 
@@ -97,21 +96,21 @@
 
         <form action="{{ url_for('change_password') }}" method="POST" class="change-info-form hide-form">
 
-          <input type="password" id="current_password" name="current_password" required placeholder="current password"
-            minlength="0" maxlength="32">
+          <input type="password" id="current_password" name="current_password" required
+            placeholder="Ancien mot de passe" minlength="0" maxlength="32">
 
-          <input type="password" id="new_password" name="new_password" required placeholder="new password"
+          <input type="password" id="new_password" name="new_password" required placeholder="Nouveau mot de passe"
             autocomplete="off" minlength="0" maxlength="32">
 
-          <button type="submit" class="custom-button">Change Password</button>
+          <button type="submit" class="custom-button">Changer mot de passe</button>
 
         </form>
 
         <form action="{{ url_for('change_email') }}" method="POST" class="change-info-form hide-form">
 
-          <input type="email" id="email" name="email" required placeholder="new email" minlength="3" maxlength="64">
+          <input type="email" id="email" name="email" required placeholder="Nouvel email" minlength="3" maxlength="64">
 
-          <button type="submit" class="custom-button">Change email</button>
+          <button type="submit" class="custom-button">Changer email</button>
 
         </form>
       </div>
@@ -123,7 +122,7 @@
 
     </div>
     <div id="family-container" class="custom-container">
-      <h2>Family list</h2>
+      <h2>Membres de la famille</h2>
       <ul>
         {% for user in users %}
         <li class="family-banner">
@@ -136,7 +135,7 @@
           </a>
         </li>
         {% else %}
-        <p>No users found</p>
+        <p>Aucun utilisateur</p>
         {% endfor %}
       </ul>
 
@@ -149,7 +148,7 @@
 {%endblock%}
 
 {% block foot %}
-  <li><a href="{{ url_for('dashboard')}}">DashBoard</a></li>
-  <li><a href="{{ url_for('config_maison')}}">Manage home</a></li>
-  <li><a href="{{ url_for('profile') }}">Profile</a></li>
+<li>Qui sommes-nous</li>
+<li>FAQ</li>
+<li>En savoir plus</li>
 {%endblock%}

@@ -55,11 +55,11 @@ new CSS file #}
 
 
   {% if selected_room %}
-  
+
   <section class="config-section">
     <h2>Pièce : {{ selected_room.name }}</h2>
 
-    
+
     <h3>Actions sur la pièce</h3>
 
     <!-- Ajouter un objet -->
@@ -166,33 +166,35 @@ new CSS file #}
       <summary>❌ Supprimer cette pièce</summary>
       <form method="POST" action="{{ url_for('delete_or_suggest_room') }}">
         <input type="hidden" name="room_id" value="{{ selected_room.id }}">
-    
+
         {% set is_admin = session.get('level', 0) >= 20 %}
-    
+
         {% if is_admin %}
-          {% set confirm_message = "Êtes-vous absolument sûr de vouloir supprimer la pièce '" ~ selected_room.name ~ "' et tous ses objets ?" %}
+        {% set confirm_message = "Êtes-vous absolument sûr de vouloir supprimer la pièce '" ~ selected_room.name ~ "' et
+        tous ses objets ?" %}
         {% else %}
-          {% set confirm_message = "Êtes-vous sûr de vouloir suggérer la suppression de la pièce '" ~ selected_room.name ~ "' ?" %}
+        {% set confirm_message = "Êtes-vous sûr de vouloir suggérer la suppression de la pièce '" ~ selected_room.name ~
+        "' ?" %}
         {% endif %}
-    
+
         <p>
           {% if is_admin %}
-            ⚠️ <strong>Attention :</strong> L'action suivante supprimera définitivement la pièce "{{ selected_room.name }}" et tous ses objets.
+          ⚠️ <strong>Attention :</strong> L'action suivante supprimera définitivement la pièce "{{ selected_room.name
+          }}" et tous ses objets.
           {% else %}
-            L'action suivante enverra une demande de suppression pour la pièce "{{ selected_room.name }}" à un administrateur.
+          L'action suivante enverra une demande de suppression pour la pièce "{{ selected_room.name }}" à un
+          administrateur.
           {% endif %}
         </p>
-    
-        <button type="submit"
-                class="custom-button"
-                style="background-color: {{ '#dc3545' if is_admin else '#ffc107' }};
+
+        <button type="submit" class="custom-button" style="background-color: {{ '#dc3545' if is_admin else '#ffc107' }};
                        border-color: {{ '#dc3545' if is_admin else '#ffc107' }};
                        color: {{ '#fff' if is_admin else '#000' }};"
-                onclick="return confirm({{ confirm_message | tojson }})">
+          onclick="return confirm({{ confirm_message | tojson }})">
           {% if is_admin %}
-            Supprimer Définitivement
+          Supprimer Définitivement
           {% else %}
-            Suggérer la Suppression
+          Suggérer la Suppression
           {% endif %}
         </button>
       </form>
@@ -247,7 +249,7 @@ new CSS file #}
 
   <form action="/generate_report_global" method="GET">
     <button class="custom-button">📄 Télécharger rapport global</button>
-</form>
+  </form>
 
   <a id="back-to-dashboard" href="{{ url_for('dashboard') }}" class="back-link">← Retour au Tableau de Bord</a>
 
@@ -255,7 +257,7 @@ new CSS file #}
 {% endblock %}
 
 {% block foot %}
-  <li><a href="{{ url_for('dashboard') }}">Tableau de Bord</a></li>
-  <li><a href="{{ url_for('profile') }}">Profil</a></li>
-
+<li>Qui sommes-nous</li>
+<li>FAQ</li>
+<li>En savoir plus</li>
 {%endblock%}

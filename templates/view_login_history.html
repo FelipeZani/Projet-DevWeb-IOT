@@ -10,13 +10,13 @@
 
 {% block list %}
 {# Navigation similaire à admin_panel #}
-  {{super()}}
-  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-  <li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
-  <li><a href="{{ url_for('profile') }}">Profile</a></li>
-  <li>
-    <a href="{{url_for('logout')}}"><button class="button-signup custom-button">LogOut</button></a>
-  </li>
+{{super()}}
+<li><a href="{{ url_for('dashboard') }}">Tableau de bord</a></li>
+<li><a href="{{ url_for('config_maison') }}">Gérer maison</a></li>
+<li><a href="{{ url_for('profile') }}">Profil</a></li>
+<li>
+  <a href="{{url_for('logout')}}"><button class="button-signup custom-button">Déconnexion</button></a>
+</li>
 {% endblock %}
 
 {% block content %}
@@ -57,7 +57,7 @@
 {% endblock %}
 
 {% block foot %}
-  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-  <li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
-  <li><a href="{{ url_for('profile') }}">Profile</a></li>
+<li>Qui sommes-nous</li>
+<li>FAQ</li>
+<li>En savoir plus</li>
 {%endblock%}

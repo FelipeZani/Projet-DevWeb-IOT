@@ -124,10 +124,6 @@ def home():
         return redirect(url_for("dashboard"))
     return render_template("home.html")
 
-@app.route("/signin")
-def signin():
-    session.clear() # avoid creating new account while still having session infos
-    return render_template("signin.html")
 
 @app.route("/dashboard")
 def dashboard():
@@ -211,9 +207,9 @@ def login():
             list_messages.append({'susername': "Username already taken"})
         if User.query.filter_by(email=email).first():
             list_messages.append({'email': "Email already taken"})
-        if gender not in ["male", "female"]:
+        if gender not in ["male", "femelle"]:
             list_messages.append({'gender': "Gender is incorrect"})
-        if role not in ["parent", "child"]:
+        if role not in ["parent", "enfant"]:
             list_messages.append({'role': "Role is incorrect"})
         if birthdate > datetime.today().date():
             list_messages.append({'nif': "You are not Marty McFly"})
@@ -403,7 +399,7 @@ def edit_user(user_id):
             message = "All fields must be œfilled"
         elif User.query.filter_by(email=email).first() and email != user.email:
             message = "Email already taken"
-        elif gender not in ["male", "female"]:
+        elif gender not in ["male", "femelle"]:
             message = "Gender is incorrect"
         elif role not in ["parent", "child"]:
             message = "Role is incorrect"

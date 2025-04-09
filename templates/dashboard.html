@@ -10,16 +10,16 @@
 
 {% block list %}
 {# Navigation spécifique au Dashboard #}
-  {# MODIFIÉ: Lien Dashboard retiré car on est déjà dessus ? À toi de voir #}
-  {{super()}}
-  <li><a href="{{ url_for('config_maison') }}">Gérer la Maison</a></li>
-  {% if session.get("level", 0) >= 20 %}
-  <li><a href="{{ url_for('admin_panel') }}">Panneau Admin</a></li>
-  {% endif %}
-  <li><a href="{{ url_for('profile') }}">Profil</a></li>
-  <li>
-    <a href="{{url_for('logout')}}"><button class="button-signup custom-button">Déconnexion</button></a>
-  </li>
+{# MODIFIÉ: Lien Dashboard retiré car on est déjà dessus ? À toi de voir #}
+{{super()}}
+<li><a href="{{ url_for('config_maison') }}">Gérer Maison</a></li>
+{% if session.get("level", 0) >= 20 %}
+<li><a href="{{ url_for('admin_panel') }}">Panneau Admin</a></li>
+{% endif %}
+<li><a href="{{ url_for('profile') }}">Profil</a></li>
+<li>
+  <a href="{{url_for('logout')}}"><button class="button-signup custom-button">Déconnexion</button></a>
+</li>
 {% endblock %}
 
 {% block content %}
@@ -217,10 +217,7 @@
 {% endblock %}
 
 {% block foot %}
-  <li><a href="{{ url_for('config_maison') }}">Gérer la Maison</a></li>
-  {% if session.get("level", 0) >= 20 %}
-    <li><a href="{{ url_for('admin_panel') }}">Panneau Admin</a></li>
-  {% endif %}
-
-  <li><a href="{{ url_for('profile') }}">Profil</a></li>
+<li>Qui sommes-nous</li>
+<li>FAQ</li>
+<li>En savoir plus</li>
 {%endblock%}

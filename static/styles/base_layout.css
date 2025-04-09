@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import url('https://jeffreymaniac.github.io/OpenDyslexic-font-for-css/opendyslexic.css');
+
 @font-face {
   font-family: 'Neo Tech';
   src: url("../assets/fonts/NeoTech.ttf");
@@ -12,28 +13,30 @@
   --text-color: white;
   --link-color: #a7c1f7;
   --p-color: gray;
-  --nav-color:white;
-  --custom-container-color:white;
+  --nav-color: white;
+  --custom-container-color: white;
 }
-.dark-mode{
+
+.dark-mode {
   --main-bg-color: #071c48;
   --main-font-fam: "Roboto", "Courier New";
   --main-color: #1e3566;
   --text-color: white;
   --link-color: #3069db;
   --p-color: gray;
-  --nav-color:#ebebeb;
-  --custom-container-color:#ebebeb;
+  --nav-color: #ebebeb;
+  --custom-container-color: #ebebeb;
 
 }
-.d-font{
-  font-family:"OpenDyslexic";
+
+.d-font {
+  font-family: "OpenDyslexic";
   font-size: small;
 }
 
 
-a:hover{
-  cursor:pointer;
+a:hover {
+  cursor: pointer;
 }
 
 /* Body set up */
@@ -46,7 +49,8 @@ body {
   grid-template-rows: auto 1fr auto;
 }
 
-body, html {
+body,
+html {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -54,7 +58,7 @@ body, html {
 }
 
 /* Blocking the scroll when the menu bar is on */
-body:has( input#check[type=checkbox]:checked),
+body:has(input#check[type=checkbox]:checked),
 body:has(#signUpFrmBtn:focus),
 body:has(#logInFrmBtn:focus) {
   overflow-y: hidden;
@@ -65,7 +69,8 @@ body:has(#logInFrmBtn:focus) {
   border: none;
   color: var(--text-color);
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 8px;
+  padding: 6px;
 }
 
 .custom-button.disabled {
@@ -83,6 +88,7 @@ body:has(#logInFrmBtn:focus) {
 .custom-ul button {
   margin-left: auto;
 }
+
 .home-nav-container,
 .nav-container {
   display: flex;
@@ -107,7 +113,7 @@ nav {
   padding-bottom: 20px;
 }
 
-.home-nav-container{
+.home-nav-container {
   display: none;
 }
 
@@ -115,7 +121,7 @@ nav {
   display: flex;
   list-style: none;
   padding: 0;
-  margin: 0; 
+  margin: 0;
   align-items: center;
 }
 
@@ -186,7 +192,7 @@ a {
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
   }
 
-  nav .custom-ul > li {
+  nav .custom-ul>li {
     margin: 20px 0;
   }
 
@@ -194,9 +200,9 @@ a {
     font-size: 20px;
   }
 
-  #checkhome:checked ~ ul,
-  #check:checked ~ ul {
-    right: 0 ;
+  #checkhome:checked~ul,
+  #check:checked~ul {
+    right: 0;
   }
 
   #footer-info ul {
@@ -266,7 +272,7 @@ footer {
   color: var(--text-color);
 }
 
-.theme-change-btn{
+.theme-change-btn {
   display: flex;
   border-radius: 100%;
   background-color: var(--nav-color);
@@ -274,25 +280,30 @@ footer {
   border: none;
 
 }
-.theme-change-btn:hover{
+
+.theme-change-btn:hover {
   background-color: var(--nav-color);
 }
-#font-icon{
+
+#font-icon {
   cursor: pointer;
 }
 
-select,input,button{
+select,
+input,
+button {
   font-family: var(--main-font-fam);
 }
 
 .d-font select,
 .d-font option,
 .d-font input,
-.d-font button{
-  font-family:"OpenDyslexic";
+.d-font button {
+  font-family: "OpenDyslexic";
   font-size: small;
 }
-.d-font button{
+
+.d-font button {
   font-size: x-small;
 }
 
@@ -301,6 +312,7 @@ select,input,button{
   font-size: 1.5rem;
   font-family: 'Neo Tech';
 }
-.logo a:hover{
-  color: var(--main-color)  ;
+
+.logo a:hover {
+  color: var(--main-color);
 }

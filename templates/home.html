@@ -1,77 +1,65 @@
-<!-- Page's variable area in case you need to gen automatic header/footer content-->
 {% set nav_list = [
-{"name" :"Home", "url":"#"},
-{"name" :"About", "url":"#"},
-{"name" :"Our solution", "url":"#"},
-{"name" :"Pricing", "url":"#pricing"},
-{"name" :"Login", "url":"#"},
+{"name" :"Accueil", "url":"#"},
+{"name" :"À propos", "url":"#"},
+{"name" :"Notre solution", "url":"#"},
+{"name" :"Tarification", "url":"#pricing"},
+{"name" :"Connexion", "url":"#"},
 ]%}
 
-
-<!-- Page area-->
 {% extends "base_layout.html"%}
 
-{% block title%}Home Page{%endblock%}
+{% block title%}Page d'accueil{%endblock%}
 
 {%block head%}
 {{super()}}
-
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/home.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/icon_style.css') }}">
-
 <link rel="shortcut icon" href="#">
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-
-
 <script defer src="{{ url_for('static', filename='scripts/home.js') }}"></script>
-
 {%endblock%}
-
 
 {%block list_home%}
 {{super()}}
-<li><a href="#product">About</a></li>
-<li><a href="#available-services">Functionalities</a></li>
-<li><a href="#pricing">Pricing</a></li>
-<li><a onclick="openDiag(true)">Login</a></li>
+<li><a href="#product">À propos</a></li>
+<li><a href="#available-services">Fonctionnalités</a></li>
+<li><a href="#pricing">Tarification</a></li>
+<li><a onclick="openDiag(true)">Connexion</a></li>
 <li>
-  <button class="button-signup custom-button" onclick="openDiag(false);">Signup</button>
+  <button class="button-signup custom-button" onclick="openDiag(false);">S'inscrire</button>
 </li>
 {%endblock%}
-
 
 {%block content%}
 <dialog class="dialog">
   <div class="ls-buttons">
-    <button class="custom-button" id="logInFrmBtn" onclick="handleDiagFormOptions(true)">Login</button>
-    <button class="custom-button" id="signUpFrmBtn" onclick="handleDiagFormOptions(false)">Signup</button>
+    <button class="custom-button" id="logInFrmBtn" onclick="handleDiagFormOptions(true)">Connexion</button>
+    <button class="custom-button" id="signUpFrmBtn" onclick="handleDiagFormOptions(false)">Inscription</button>
   </div>
 
   <form class="form-diag" id="logInFrm" method="POST" action="{{url_for('login')}}">
-    <h3>LOG IN</h3>
-    <input type="text" id="username" name="username" class="sin-form" required placeholder="username" minlength="3"
-      maxlength="32">
-
-    <input type="password" id="password" name="password" class="sin-form" required placeholder="password" minlength="0"
-      maxlength="32">
-
-    <button type="button" name="action" value="signin" class="custom-button" onclick="checkLogIn()">Log in</button>
+    <h3>CONNEXION</h3>
+    <input type="text" id="username" name="username" class="sin-form" required placeholder="nom d'utilisateur"
+      minlength="3" maxlength="32">
+    <input type="password" id="password" name="password" class="sin-form" required placeholder="mot de passe"
+      minlength="0" maxlength="32">
+    <button type="button" name="action" value="signin" class="custom-button" onclick="checkLogIn()">Se
+      connecter</button>
   </form>
 
   <form class="form-diag" id="signUpFrm" method="POST" action="{{url_for('login')}}">
-    <h3>SIGN UP</h3>
-    <input type="text" id="susername" name="username" class="sup-form susername" required placeholder="username"
-      minlength="3" maxlength="32" title="Special characters are not allowed">
-
-    <input type="text" id="fname" name="fname" class="sup-form fname" required placeholder="first name" minlength="3"
-      maxlength="32" title="Special characters are not allowed">
-
-    <input type="text" id="lname" name="lname" class="sup-form lname" required placeholder="last name" minlength="3"
-      maxlength="32" title="Special characters are not allowed">
-
-    <input type="password" id="signup-password" name="password" title="Only letters, numbers and $@#&!€ are accepted"
-      required placeholder="password" minlength="6" maxlength="32">
+    <h3>INSCRIPTION</h3>
+    <input type="text" id="susername" name="username" class="sup-form susername" required
+      placeholder="nom d'utilisateur" minlength="3" maxlength="32"
+      title="Les caractères spéciaux ne sont pas autorisés">
+    <input type="text" id="fname" name="fname" class="sup-form fname" required placeholder="prénom" minlength="3"
+      maxlength="32" title="Les caractères spéciaux ne sont pas autorisés">
+    <input type="text" id="lname" name="lname" class="sup-form lname" required placeholder="nom" minlength="3"
+      maxlength="32" title="Les caractères spéciaux ne sont pas autorisés">
+    <input type="password" id="signup-password" name="password"
+      title="Seules les lettres, chiffres et $@#&!€ sont acceptés" required placeholder="mot de passe" minlength="6"
+      maxlength="32">
 
     <div id="power-container">
       <div id="power-border">
@@ -82,63 +70,61 @@
     <input id="email" name="email" placeholder="Email" class="sup-form" required minlength="3" maxlength="64">
 
     <select id="gender" name="gender" class="gender" required>
-      <option value="" disabled selected>Select your gender</option>
-      <option value="male">Male</option>
-      <option value="female">Female</option>
+      <option value="" disabled selected>Sélectionnez votre genre</option>
+      <option value="male">Homme</option>
+      <option value="femelle">Femme</option>
     </select>
 
     <select id="role" name="role" class="sup-form role" required>
-      <option value="" disabled selected>Select your role</option>
+      <option value="" disabled selected>Sélectionnez votre rôle</option>
       <option value="parent">Parent</option>
-      <option value="child">Child</option>
+      <option value="enfant">Enfant</option>
     </select>
 
-    <label for="birthdate">Birthdate:</label>
+    <label for="birthdate">Date de naissance :</label>
     <input type="date" id="birthdate" name="birthdate" class="sup-form" min="1920-01-01" max="2007-12-31" required>
 
-    <button type="button" name="action" value="signup" class="custom-button" id="sub-btn" onclick="checkSignUp()">Sign
-      up</button>
-
+    <button type="button" name="action" value="signup" class="custom-button" id="sub-btn"
+      onclick="checkSignUp()">S'inscrire</button>
   </form>
 </dialog>
 
 <section id="hero-section">
-  <img id="heroImg" src=""
-    alt="Displayed image of house which solar panels are installed on the roof">
+  <img id="heroImg" src="" alt="Image d'une maison avec panneaux solaires installés sur le toit">
 </section>
+
 <section id="product">
-    <div class="custom-container">
-      <div id="text-container">
-        <h2>One Hub to control them all.</h2>
-        <p>Say goodbye to juggling multiple apps and remotes—our Smart Hub brings all your smart devices together in perfect harmony. From lights and locks to thermostats and security cameras, control everything from one sleek, easy-to-use interface.</p>
-      </div>
-      <div id="product-image-container">
-        <img src="../static/assets/smarthings-img.jpeg" alt="Image of a serie of items on a table">
-      </div>
+  <div class="custom-container">
+    <div id="text-container">
+      <h2>"One Hub to rule them all"</h2>
+      <p>Fini de jongler entre plusieurs applis et télécommandes — notre Smart Hub regroupe tous vos appareils
+        intelligents en parfaite harmonie. Lumières, serrures, thermostats, caméras de sécurité : tout est contrôlable
+        depuis une interface unique et élégante.</p>
     </div>
-  
+    <div id="product-image-container">
+      <img src="../static/assets/smarthings-img.jpeg" alt="Image d'une série d'objets sur une table">
+    </div>
+  </div>
 </section>
 
 <section id="available-services">
-
   <div class="custom-container" id="research-section">
     <div id="text-container">
-      <h2>Your entire smart home in one place.</h2>
-      <p>Access the Smart Things' app from anywhere in the world and control all your devices from one central place.</p>
+      <h2>Toute votre maison connectée en un seul endroit.</h2>
+      <p>Accédez à l'application Smart Things depuis n'importe où dans le monde et contrôlez tous vos appareils depuis
+        un centre unique.</p>
     </div>
 
     <div id="outer-services-container">
       <div id="services-container" class="card-filter">
-
         {% set menu_cards = [
-        ("lightbulb", "Ilumination control"),
-        ("device_thermostat", "Temperature control"),
-        ("offline_bolt", "Power Consumption Analysis"),
-        ("supervisor_account", "Account management"),
-        ("doorbell", "Smart doorbell"),
-        ("room_preferences", "Room control")
+        ("lightbulb", "Contrôle de l'éclairage"),
+        ("device_thermostat", "Contrôle de température"),
+        ("offline_bolt", "Analyse de la consommation"),
+        ("supervisor_account", "Gestion de compte"),
+        ("doorbell", "Sonnette intelligente"),
+        ("room_preferences", "Contrôle des pièces")
         ] %}
-
         {% for i in range(menu_cards|length) %}
         <label class="card-element" id="card{{ i }}">
           <input type="checkbox">
@@ -149,124 +135,97 @@
           <p>{{ menu_cards[i][1] }}</p>
         </label>
         {% endfor %}
-
       </div>
 
       {% set cards = [
       [
-      {"icon": "reset_brightness", "text": "Smart Illumination"},
-      {"icon": "nest_eco_leaf", "text": "Eco-friendly Illumination"}
+      {"icon": "reset_brightness", "text": "Éclairage intelligent"},
+      {"icon": "nest_eco_leaf", "text": "Éclairage éco-responsable"}
       ],
       [
-      {"icon": "mode_dual", "text": "Friendly temperature control"},
-      {"icon": "thermostat_auto", "text": "Automatic temperature regulation"}
+      {"icon": "mode_dual", "text": "Température personnalisée"},
+      {"icon": "thermostat_auto", "text": "Régulation automatique"}
       ],
       [
-      {"icon": "analytics", "text": "Consumption report"},
-      {"icon": "table_chart_view", "text": "Data analytics"}
+      {"icon": "analytics", "text": "Rapport de consommation"},
+      {"icon": "table_chart_view", "text": "Analyse des données"}
       ],
       [
-      {"icon": "admin_panel_settings", "text": "Supervision system"},
-      {"icon": "manage_accounts", "text": "Account management"}
+      {"icon": "admin_panel_settings", "text": "Système de supervision"},
+      {"icon": "manage_accounts", "text": "Gestion de compte"}
       ],
       [
-      {"icon": "wifi_notification", "text": "Wifi notification"},
-      {"icon": "notifications_paused", "text": "Do not disturb"}
+      {"icon": "wifi_notification", "text": "Notification wifi"},
+      {"icon": "notifications_paused", "text": "Ne pas déranger"}
       ],
       [
-      {"icon": "mfg_nest_yale_lock", "text": "Smart lock"},
-      {"icon": "window_sensor", "text": "Window sensors"}
+      {"icon": "mfg_nest_yale_lock", "text": "Serrure connectée"},
+      {"icon": "window_sensor", "text": "Capteurs de fenêtre"}
       ]
-      ]%}
-      
+      ] %}
+
       <div id="cards-wrapper">
-      {% for idx in range(cards|length) %}
-      <div class="card-content-container">
-        {% for item in range(cards[idx]|length)%}
-        <div class="card-element card{{ idx }}-content">
-          <div class="icon-container">
-            <span class="material-symbols-outlined">
-              {{cards[idx][item].icon }}
-            </span>
+        {% for idx in range(cards|length) %}
+        <div class="card-content-container">
+          {% for item in range(cards[idx]|length)%}
+          <div class="card-element card{{ idx }}-content">
+            <div class="icon-container">
+              <span class="material-symbols-outlined">
+                {{cards[idx][item].icon }}
+              </span>
+            </div>
+            <p>{{ cards[idx][item].text }}</p>
           </div>
-          <p>{{ cards[idx][item].text }}</p>
+          {% endfor %}
         </div>
         {% endfor %}
       </div>
-      {% endfor %}
     </div>
-
-    </div>
-
   </div>
-
 </section>
 
 <section id="pricing">
-
   <div class="custom-container">
     <div id="text-container">
-      <h2>Our offers</h2>
-      <p>Whether you prefer a subscription or a one-time purchase, there’s always a Smart Things' app version for you.</p>
+      <h2>Nos offres</h2>
+      <p>Que vous préfériez un abonnement ou un achat unique, il y a toujours une version de l'application Smart Things
+        faite pour vous.</p>
     </div>
     <table id="pricing-table">
       <thead>
         <th></th>
-        <th>Monthly <br>5$/mo</th>
+        <th>Mensuel<br>5$/mois</th>
         <th>Standard<br>279$</th>
-        <th>Custom<br></th>
+        <th>Personnalisé<br></th>
       </thead>
       <tbody>
         <tr>
-          <td class="title-pricing"> <span class="material-symbols-outlined">phone_android</span>Mobile App</td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-            <td><span class="material-symbols-outlined qmark">
-              question_mark
-            </span></td>
-
+          <td class="title-pricing"> <span class="material-symbols-outlined">phone_android</span>Appli mobile</td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined qmark">question_mark</span></td>
         </tr>
         <tr>
-          <td class="title-pricing"> <span class="material-symbols-outlined">computer</span>Desktop App</td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-          
-            <td><span class="material-symbols-outlined qmark">
-              question_mark
-            </span></td>
+          <td class="title-pricing"> <span class="material-symbols-outlined">computer</span>Appli de bureau</td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined qmark">question_mark</span></td>
         </tr>
         <tr>
-          <th>
-            Compability
-          </th>
+          <th>Compatibilité</th>
           <th></th>
           <th></th>
           <th></th>
         </tr>
-
         <tr>
           <td class="title-pricing"> <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
               class="bi bi-google" viewBox="0 0 16 16">
               <path
                 d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z" />
             </svg> Google Assistant</td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
         </tr>
         <tr>
           <td class="title-pricing"> <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
@@ -274,67 +233,40 @@
               <path
                 d="M7.996 0A8 8 0 0 0 0 8a8 8 0 0 0 6.93 7.93v-1.613a1.06 1.06 0 0 0-.717-1.008A5.6 5.6 0 0 1 2.4 7.865 5.58 5.58 0 0 1 8.054 2.4a5.6 5.6 0 0 1 5.535 5.81l-.002.046-.012.192-.005.061a5 5 0 0 1-.033.284l-.01.068c-.685 4.516-6.564 7.054-6.596 7.068A7.998 7.998 0 0 0 15.992 8 8 8 0 0 0 7.996.001Z" />
             </svg> Amazon Alexa</td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
         </tr>
         <tr>
-          <th>Monitor</th>
+          <th>Surveillance</th>
           <th></th>
           <th></th>
           <th></th>
         </tr>
-        
         <tr>
           <td class="title-pricing">
-            <span class="material-symbols-outlined">
-              query_stats
-            </span>
-            Insigths
+            <span class="material-symbols-outlined">query_stats</span>
+            Statistiques
           </td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-            
-            <td><span class="material-symbols-outlined qmark">
-              question_mark
-            </span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined qmark">question_mark</span></td>
         </tr>
-        <th class="title-pricing">Community</th>
+        <th class="title-pricing">Communauté</th>
         <th></th>
         <th></th>
         <th></th>
         <tr>
-          <td class="title-pricing"><span class="material-symbols-outlined">
-              group
-            </span>
-            Unlimited members</td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-          <td><span class="material-symbols-outlined">
-              check_small
-            </span></td>
-            <td><span class="material-symbols-outlined qmark">
-              question_mark
-            </span></td>
+          <td class="title-pricing"><span class="material-symbols-outlined">group</span>Membres illimités</td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined">check_small</span></td>
+          <td><span class="material-symbols-outlined qmark">question_mark</span></td>
         </tr>
       </tbody>
     </table>
   </div>
 </section>
-
 {%endblock%}
-
 
 {%block footer_li%}
 {% for li in nav_list%}

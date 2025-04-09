@@ -9,13 +9,13 @@
 {% block title %}Modifier {{ user.username }}{% endblock %}
 
 {% block list %}
-  {{super()}}
-  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-  <li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
-  <li><a href="{{ url_for('profile') }}">Profile</a></li>
-  <li>
-    <a href="{{url_for('logout')}}"><button class="button-signup custom-button">LogOut</button></a>
-  </li>
+{{super()}}
+<li><a href="{{ url_for('dashboard') }}">Tableau de bord</a></li>
+<li><a href="{{ url_for('admin_panel') }}">Panel Admin</a></li>
+<li><a href="{{ url_for('profile') }}">Profil</a></li>
+<li>
+  <a href="{{url_for('logout')}}"><button class="button-signup custom-button">Déconnexion</button></a>
+</li>
 {% endblock %}
 
 {% block content %}
@@ -49,7 +49,7 @@
       <label for="gender">Genre :</label> {# Ajout 'for' #}
       <select id="gender" name="gender">
         <option value="male" {% if user.gender=='male' %}selected{% endif %}>Homme</option>
-        <option value="female" {% if user.gender=='female' %}selected{% endif %}>Femme</option>
+        <option value="femelle" {% if user.gender=='femelle' %}selected{% endif %}>Femme</option>
       </select>
     </div>
 
@@ -57,7 +57,7 @@
       <label for="role">Rôle :</label> {# Ajout 'for' #}
       <select id="role" name="role">
         <option value="parent" {% if user.role=='parent' %}selected{% endif %}>Parent</option>
-        <option value="child" {% if user.role=='child' %}selected{% endif %}>Enfant</option>
+        <option value="enfant" {% if user.role=='enfant' %}selected{% endif %}>Enfant</option>
       </select>
     </div>
 
@@ -84,7 +84,7 @@
 {% endblock %}
 
 {% block foot %}
-<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-  <li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
-  <li><a href="{{ url_for('profile') }}">Profile</a></li>
+<li>Qui sommes-nous</li>
+<li>FAQ</li>
+<li>En savoir plus</li>
 {%endblock%}
