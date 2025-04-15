@@ -17,13 +17,4 @@ then
 fi
 python3 app.py
 ```
-## Parties Manquantes du cahier de charge
-- Contrôler l'état d'un objet (activer/désactiver, mettre à jour);
-
-- Configurer les paramètres d'utilisation des objets connectés (par ex. température cible pour un thermostat, horaire de fonctionnement pour une lumière);
-
-- Identifier les objets inefficaces (selon les paramètres d'utilisation) ou nécessitant une maintenance. (prendre objets random et les mettre dans le rapport);
-
-- Définir les règles de fonctionnement globales des objets et des outils/services (par exemple, priorités énergétiques, gestion des alertes, etc.);
-
 
