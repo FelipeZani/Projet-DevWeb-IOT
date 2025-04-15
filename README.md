@@ -1,12 +1,10 @@
-#Projet-DevWeb-IOT
-
+# Projet-DevWeb-IOT
 Le but de ce projet est de développer une plateforme numérique intelligente qui regroupe divers services/fonctionnalités pour les utilisateurs dans le cadre d'une maison intélligente. 
 
 ## Pré-requis
-    - SE : Distribuitions Linux (Ubuntu, Debian, Manjaro, etc);
+- SE : Distribuitions Linux (Ubuntu, Debian, Manjaro, etc)
 ## Lacement du projet
-    - `git clone git@github.com:FelipeZani/Projet-DevWeb-IOT.git`
-    - `bash rac.sh`
+    git clone git@github.com:FelipeZani/Projet-DevWeb-IOT.git && bash rac.sh
 
 ## Contenu rac.sh
 ```
@@ -27,4 +25,5 @@ python3 app.py
 - Identifier les objets inefficaces (selon les paramètres d'utilisation) ou nécessitant une maintenance. (prendre objets random et les mettre dans le rapport);
 
 - Définir les règles de fonctionnement globales des objets et des outils/services (par exemple, priorités énergétiques, gestion des alertes, etc.);
+
 
